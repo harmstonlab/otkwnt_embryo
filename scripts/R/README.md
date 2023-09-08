@@ -1,1 +1,1 @@
-Contains user-defined, frequently used R functions that are too long to include individually in notebooks. Sourced in `notebooks`. 
+Contains user-defined, frequently used R functions that are too long to include individually in notebooks. Sourced in `analysis`. 
