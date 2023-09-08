@@ -1,0 +1,1 @@
+Contains `STAR` and `RSEM` bash scripts used to preprocess raw RNA-seq reads.

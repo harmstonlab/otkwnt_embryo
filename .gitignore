@@ -1,0 +1,31 @@
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Temporary files
+~$*.xlsx
+/.quarto/
+*.css
+*.woff
+*.js
+
+# Mac-specific files that can be ignored
+.DS_Store
+
+# Raw gene read files
+*.genes.results
+
+# Large files
+*.gtf
+*.RDS
+
+# Rproj files
+.Rproj.user
+.Rproj
+
+# Specific folders
+sandbox/
+*/Archive
+results/
+*/*/*/figure-html/*
+*.html
