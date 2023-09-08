@@ -1,1 +1,0 @@
-Contains all outputs produced by analysis in `notebooks`. This could include `RDS` files, `xlsx` files, `csv` files, etc. 
