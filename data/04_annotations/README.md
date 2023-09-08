@@ -1,1 +1,1 @@
-Contains the genome annotations for MODELORGANISM.
+Contains the genome annotations for Drosophila melanogaster. File name: Drosophila_melanogaster.BDGP6.22.97.chr.gtf
