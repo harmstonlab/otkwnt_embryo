@@ -1,0 +1,40 @@
+﻿sample_id,condition,batch,description
+Ctrl_1,Ctrl,1,Embryos from control flies.
+Ctrl_2,Ctrl,2,Embryos from control flies.
+Ctrl_3,Ctrl,3,Embryos from control flies.
+,,,
+O1O2_KO_1,O1O2_KO,1,Embryos in which Otk1 and Otk2 are both downregulated.
+O1O2_KO_2,O1O2_KO,2,Embryos in which Otk1 and Otk2 are both downregulated.
+O1O2_KO_3,O1O2_KO,3,Embryos in which Otk1 and Otk2 are both downregulated.
+,,,
+O1W4_KO_1,O1W4_KO,1,Embryos in which Otk1 and Wnt4 are both downregulated.
+O1W4_KO_2,O1W4_KO,2,Embryos in which Otk1 and Wnt4 are both downregulated.
+O1W4_KO_3,O1W4_KO,3,Embryos in which Otk1 and Wnt4 are both downregulated.
+,,,
+O1W4_OE_1,O1W4_OE,1,Embryos in which Otk1 and Wnt4 are both over-expressed.
+O1W4_OE_2,O1W4_OE,2,Embryos in which Otk1 and Wnt4 are both over-expressed.
+O1W4_OE_3,O1W4_OE,3,Embryos in which Otk1 and Wnt4 are both over-expressed.
+,,,
+O1_KO_1,O1_KO,1,Embryos in which Otk1 is downregulated.
+O1_KO_2,O1_KO,2,Embryos in which Otk1 is downregulated.
+O1_KO_3,O1_KO,3,Embryos in which Otk1 is downregulated.
+,,,
+O1_OE_1,O1_OE,1,Embryos in which Otk1 is over-expressed.
+O1_OE_2,O1_OE,2,Embryos in which Otk1 is over-expressed.
+O1_OE_3,O1_OE,3,Embryos in which Otk1 is over-expressed.
+,,,
+O2W4_KO_1,O2W4_KO,1,Embryos in which Otk2 and Wnt4 are both downregulated.
+O2W4_KO_2,O2W4_KO,2,Embryos in which Otk2 and Wnt4 are both downregulated.
+O2W4_KO_3,O2W4_KO,3,Embryos in which Otk2 and Wnt4 are both downregulated.
+,,,
+O2_KO_1,O2_KO,1,Embryos in which Otk2 is downregulated.
+O2_KO_2,O2_KO,2,Embryos in which Otk2 is downregulated.
+O2_KO_3,O2_KO,3,Embryos in which Otk2 is downregulated.
+,,,
+W4_KO_1,W4_KO,1,Embryos in which Wnt4 is downregulated.
+W4_KO_2,W4_KO,2,Embryos in which Wnt4 is downregulated.
+W4_KO_3,W4_KO,3,Embryos in which Wnt4 is downregulated.
+,,,
+W4_OE_1,W4_OE,1,Embryos in which Wnt4 is over-expressed.
+W4_OE_2,W4_OE,2,Embryos in which Wnt4 is over-expressed.
+W4_OE_2,W4_OE,3,Embryos in which Wnt4 is over-expressed.
