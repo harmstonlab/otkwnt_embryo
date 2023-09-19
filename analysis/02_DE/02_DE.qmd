@@ -1,0 +1,498 @@
+---
+title: 02_DE
+author: Qian Hui TAN
+date: '`r format(Sys.time(), "%d %B %Y")`'
+format:
+  html: 
+    keep-md: true
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    smooth-scroll: true
+    code-tools: true
+    code-line-numbers: true
+  gfm: 
+    df-print: kable
+    toc: true 
+    toc-depth: 3
+    number-sections: true
+    prefer-html: true
+---
+
+# 02_DE
+
+In this notebook, we run quick DE volcano plots, p-value histograms and pairwise cross plots for our conditions. 
+
+
+
+```{r}
+#| label = "setup",
+#| include = FALSE
+
+knitr::opts_chunk$set(fig.path='../figures/02_DE/',
+                      dev=c("png"))
+
+```
+
+
+```{r}
+source("../../scripts/R/de_functions.R")
+source("../../scripts/R/go_kegg_functions.R")
+
+suppressPackageStartupMessages({
+  library(DESeq2)
+  library(GenomicFeatures)
+  library(RColorBrewer)
+  library(gplots)
+  library(biomaRt)
+  library(grid)
+  library(gridExtra)
+  library(ggplot2)
+  library(lattice)
+  library(reshape)
+  library(geneplotter)
+  library(ggrepel)
+  library(limma)
+  library(tidyverse)
+  library(eulerr)
+  library(gghighlight)
+  library(clusterProfiler) # install from github
+  library(org.Dm.eg.db)
+})
+
+
+```
+
+
+## Functions
+
+
+```{r}
+## If the output directory doesn't exist, create it
+if(!dir.exists("../output/02_DE")){
+  dir.create("../output/02_DE")
+}
+
+output_dir <- "../output/02_DE/"
+```
+
+Loading data: 
+
+```{r}
+#| label = "load data"
+
+dds = readRDS("../output/01_QC/dds_filt.RDS")
+ensembl.genes= readRDS("../output/01_QC/ensembl_genes.RDS")
+lfc.threshold = log2(1.5)
+
+
+dim(dds)
+```
+
+
+Remove lowly expressed genes: 
+```{r}
+# Set control as reference
+#colData(dds)$condition <- relevel(colData(dds)$condition, ref = "WT")
+
+
+# Removing lowly expressed genes, only to be done once at the start of the differential expression step
+filter = apply(counts(dds, normalized = TRUE), 1, function(x){ mean(x) >= 10 })
+dds = dds[filter, ]
+dim(dds)
+```
+
+Run DESeq: 
+```{r}
+dds <- DESeq(dds, test = "Wald", parallel = TRUE)
+rld <- rlog(dds, blind = FALSE) # blind = FALSE for downstream DE
+
+design(dds) 
+```
+
+List of samples in here
+```{r}
+colData(dds)$sample_id
+```
+
+
+
+## RLE plot
+```{r}
+#| label: rle-plot
+
+assay(rld) %>%
+  as.data.frame() %>%
+  gather() %>%
+  ggplot(aes(x=key, y=value)) + 
+  geom_boxplot() + ylab("Log Expression ") + xlab("Sample") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+Run Wald test
+```{r}
+wald_dds = nbinomWaldTest(dds)
+```
+
+Check names of coefficients
+```{r}
+resultsNames(wald_dds)
+```
+
+# Wald Tests
+
+## W4_OE
+:::{.panel-tabset}
+
+### Histogram
+
+```{r w4oe_ctrl}
+#| label: W4OE_CTRL
+### Note the order of W4_OE and CTRL - W4_OE here is the numerator, CTRL is the denominator
+
+results_W4OE_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "W4_OE", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_W4OE_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+Compile and export: 
+```{r}
+## Saving this to compile later
+
+compname <- "W4OE_vs_Ctrl"
+
+df_res <- res[ ,c("baseMean", "log2FoldChange", "padj")]
+colnames(df_res) <- c(paste0(compname, "_baseMean"),
+                         paste0(compname, "_log2fc"), 
+                         paste0(compname, "_padj"))
+
+write.csv(df_res, file = paste0(output_dir, "compile_W4OEvsCTRL.csv"))
+
+### Writing out .csv files
+write_files(res, "W4OE", "CTRL")
+```
+
+
+### MA plot
+
+```{r}
+#| label: W4OE-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: C11-WT-vlc
+### Volcano plot
+generate_volcano(res, "W4_OE", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+```
+
+```{r}
+ego
+```
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+```
+
+```{r}
+ego
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: up-ekegg
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+#write.csv(up_ekegg, file = paste0(output_dir, "upregulated_kegg.csv"))
+```
+
+### KEGG - down
+
+```{r}
+#| label: down-ekegg
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+write.csv(down_ekegg, file = paste0(output_dir, "kegg_down_w4oe_vs_ctrl.csv"))
+```
+
+:::
+
+
+## O1_OE
+:::{.panel-tabset}
+
+### Histogram
+
+```{r o1oe_ctrl}
+#| label: O1OE_CTRL
+### Note the order of W4_OE and CTRL - W4_OE here is the numerator, CTRL is the denominator
+
+results_O1OE_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O1_OE", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O1OE_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+Compile and export: 
+```{r}
+## Saving this to compile later
+
+compname <- "O1OE_vs_Ctrl"
+
+df_res <- res[ ,c("baseMean", "log2FoldChange", "padj")]
+colnames(df_res) <- c(paste0(compname, "_baseMean"),
+                         paste0(compname, "_log2fc"), 
+                         paste0(compname, "_padj"))
+
+write.csv(df_res, file = paste0(output_dir, "compile_O1OEvsCTRL.csv"))
+
+### Writing out .csv files
+write_files(res, "O1OE", "CTRL")
+```
+
+
+### MA plot
+
+```{r}
+#| label: O1OE-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O1OE-CTRL-vlc
+### Volcano plot
+generate_volcano(res, "O1_OE", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: o1oe-up-go
+ego_up <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+```
+
+```{r}
+#ego_up
+```
+
+
+### Custom GO, up
+```{r}
+#| label: o1oe-custom-go-up
+
+interesting_pathways <- c("nuclear division", 
+                          "regulation of cell cycle",
+                          "blastoderm segmentation",
+                          "embryonic pattern specification",
+                          "anterior/posterior axis specification", 
+                          "nuclear chromosome segregation", 
+                          "mitotic cell cycle",
+                          "DNA repair", 
+                          "mismatch repair",
+                          "spindle organization")
+
+# Takes in an ego tibble, subsets interesting pathways. 
+custom_ego_table(ego_up, interesting_pathways)
+
+
+custom_ego(ego_up, interesting_pathways,
+           title = "GO, O1_OE vs Ctrl")
+```
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: o1oe-go-down
+ego_down <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+```
+### Custom GO, down
+```{r}
+#| label: o1oe-custom-go-down
+interesting_pathways <- c("DNA replication", 
+                          "DNA repair",
+                          "recombinational repair",
+                          "double-strand break repair")
+
+custom_ego(ego_down, interesting_pathways, 
+           title = "GO, downregulated, O1OE vs Ctrl")
+
+custom_ego_table(ego_down, interesting_pathways)
+```
+
+### KEGG, up
+
+```{r}
+#| label: o1oe-up-ekegg
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+### Custom KEGG, up
+```{r}
+#| label: o1oe-kegg-up
+custom_ekegg(up_ekegg, interesting_pathways = up_ekegg$Description,
+             title = "KEGG, up, O1OE vs Ctrl")
+```
+
+
+```{r}
+write.csv(up_ekegg, file = paste0(output_dir, "o1oe_ctrl_kegg_up.csv"))
+```
+
+### KEGG - down
+
+```{r}
+#| label: o1oe-kegg-down
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+
+```{r}
+down_ekegg
+```
+### Custom KEGG, down
+
+```{r}
+#| label: o1oe-kegg-custom-down
+
+interesting_pathways = c("DNA replication",
+                         "Base excision repair",
+                         "Mismatch repair",
+                         "Nucleotide excision repair")
+
+custom_ekegg(down_ekegg, 
+             interesting_pathways, 
+             title = "KEGG, down, O1OE vs Ctrl")
+```
+
+
+```{r}
+write.csv(down_ekegg, file = paste0(output_dir, "kegg_down_o1oe_vs_ctrl.csv"))
+```
+
+:::
+
+
+
+
+
+
+```{r}
+sessionInfo()
+```
+

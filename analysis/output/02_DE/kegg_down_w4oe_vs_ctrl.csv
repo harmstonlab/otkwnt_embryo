@@ -1,0 +1,8 @@
+"","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"dme01240","dme01240","Biosynthesis of cofactors - Drosophila melanogaster (fruit fly)","8/21","138/3487",6.47427710072568e-07,2.07176867223222e-05,1.43115599068673e-05,"cn/Naprt/Alp7/Alp8/Alp10/Ugt37D1/Ugt37C2/sgl",8
+"dme00730","dme00730","Thiamine metabolism - Drosophila melanogaster (fruit fly)","3/21","21/3487",0.000233631272182721,0.00373810035492354,0.0025822403767564,"Alp7/Alp8/Alp10",3
+"dme00053","dme00053","Ascorbate and aldarate metabolism - Drosophila melanogaster (fruit fly)","3/21","35/3487",0.00108893985400816,0.0116153584427537,0.00802376734532326,"Ugt37D1/Ugt37C2/sgl",3
+"dme00790","dme00790","Folate biosynthesis - Drosophila melanogaster (fruit fly)","3/21","40/3487",0.00161224593571956,0.0128979674857565,0.00890978017108177,"Alp7/Alp8/Alp10",3
+"dme00040","dme00040","Pentose and glucuronate interconversions - Drosophila melanogaster (fruit fly)","3/21","50/3487",0.0030767800440017,0.0196913922816109,0.0136026065103233,"Ugt37D1/Ugt37C2/sgl",3
+"dme00982","dme00982","Drug metabolism - cytochrome P450 - Drosophila melanogaster (fruit fly)","3/21","66/3487",0.00675164821542895,0.033542020469823,0.0231704746666541,"Ugt37D1/Ugt37C2/GstE5",3
+"dme00980","dme00980","Metabolism of xenobiotics by cytochrome P450 - Drosophila melanogaster (fruit fly)","3/21","68/3487",0.00733731697777378,0.033542020469823,0.0231704746666541,"Ugt37D1/Ugt37C2/GstE5",3

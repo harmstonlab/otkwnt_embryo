@@ -1,0 +1,735 @@
+---
+title: 03_clust
+author: Qian Hui TAN
+date: '`r format(Sys.time(), "%d %B %Y")`'
+format:
+  html: 
+    keep-md: true
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 4
+    code-fold: true
+    number-sections: true
+    smooth-scroll: true
+    code-tools: true
+    code-line-numbers: true
+  gfm: 
+    df-print: kable
+    toc: true 
+    toc-depth: 4
+    number-sections: true
+    prefer-html: true
+---
+```{r}
+#| label = "setup",
+#| include = FALSE
+
+knitr::opts_chunk$set(#fig.width=12, fig.height=8, 
+                      fig.path='../figures/03_clust/',
+                      dev=c("png"))
+
+```
+
+# Clustering 
+
+
+# Setup
+
+
+```{r}
+suppressPackageStartupMessages({
+    library(DESeq2)
+
+    library(DT)
+    library(pheatmap)
+    library(clusterProfiler)
+    library(ComplexHeatmap)
+    library(circlize)
+    library(RColorBrewer)
+    library(org.Dm.eg.db)
+    library(cluster)
+    # General tidying up
+    library(janitor)
+    library(ggrepel)
+    library(tidyverse)
+    library(reshape2)
+    library(knitr)
+})
+
+source("../../scripts/R/clustering_functions.R")
+source("../../scripts/R/go_kegg_functions.R")
+```
+
+
+```{r}
+# Initialize the starting seed
+set.seed(1)
+```
+
+```{r}
+## If the output directory doesn't exist, create it
+if(!dir.exists("../output/03_clust")){
+  dir.create("../output/03_clust")
+}
+
+output_dir <- "../output/03_clust/"
+```
+
+# Read in data
+
+Run DESeq: 
+
+```{r}
+dds = readRDS("../output/01_QC/dds_filt.RDS")
+ensembl.genes= readRDS("../output/01_QC/ensembl_genes.RDS")
+lfc.threshold = log2(1.5)
+
+# Removing lowly expressed genes, only to be done once at the start of the differential expression step
+filter = apply(counts(dds, normalized = TRUE), 1, function(x){ mean(x) >= 10 })
+dds = dds[filter, ]
+
+# Check for typos - number of samples in sample_order and colData(dds) should be 
+
+  design(dds)
+  
+  dds <- DESeq(dds, test = "LRT", 
+               reduced = ~ 1, 
+               parallel = TRUE)
+  
+  # use blind = FALSE to account for experimental design
+  rld <- rlog(dds, blind = FALSE)
+
+```
+
+# Likelihood ratio test
+
+```{r}
+res_lrt <- results(dds)
+
+res_lrt$gene_biotype= ensembl.genes$gene_biotype[match(row.names(res_lrt), ensembl.genes$gene_id)]
+res_lrt$external_gene_name= ensembl.genes$external_gene_name[match(row.names(res_lrt), ensembl.genes$gene_id)]
+#head(res_lrt)
+```
+
+```{r}
+#| label: hist-pval
+hist(res_lrt$pvalue)
+```
+
+Number of significant genes (padj < 0.1):
+
+```{r}
+sum(res_lrt$padj < 0.1, na.rm = TRUE)
+```
+
+
+```{r}
+summary(res_lrt)
+```
+
+Checking coefficients: 
+```{r}
+resultsNames(dds)
+```
+
+
+```{r}
+# Select significant results
+significant_results = res_lrt[!is.na(res_lrt$padj) & 
+                                    res_lrt$padj < 0.1, ]
+
+
+rld_signif = assay(rld)[rownames(significant_results), ]
+
+rld_z = t(apply(rld_signif, 1, function(x){ (x - mean(x)) / sd(x)}))
+```
+
+
+
+# Determining optimal number of clusters
+
+:::{.panel-tabset}
+
+## Elbow plot
+
+```{r}
+#| label: optclust-wss
+#| warning: FALSE
+
+k.max <- 15
+wss <- sapply(1:k.max,
+ function(k){kmeans(rld_z, k, nstart=100,
+ iter.max = 20 )$tot.withinss})
+
+plot(1:k.max, wss,
+ type="b", pch = 19, frame = FALSE,
+ xlab="Number of clusters K",
+ ylab="Total within-clusters sum of squares")
+```
+
+That looks like 5 or 6 clusters - it's hard to tell. 
+
+
+## Average silhouette width
+
+We perform kmeans for 2-10 clusters, and calculate the average silhouette width for each kmeans. 
+
+
+What's the best k (maximum average silhouette width)?
+```{r}
+#| warning: false
+# We will use different methods and try 1-10 clusters.
+
+d <- dist(rld_z)
+summary(d)
+set.seed(1)
+ks <- 2:10
+ASW <- sapply(ks, FUN = function(k) {
+  fpc::cluster.stats(d, kmeans(rld_z, centers=k, nstart = 5)$cluster)$avg.silwidth
+  })
+
+best_k <- ks[which.max(ASW)]
+best_k
+```
+
+
+```{r}
+#| label: optclust-asw
+ggplot(as.data.frame(ks, ASW), aes(ks, ASW)) + geom_line() +
+  geom_vline(xintercept = best_k, color = "red", linetype = 2) +
+  ggtitle("Average silhouette width for varying k clusters")
+```
+
+:::
+
+2 clusters looks best, but silhouette width constantly decreases until we reach k = 7. Which means either 3 clusters, or 8 clusters. 
+
+Given that our samples have very distinct transcriptional profiles (from the previous DE section), it is unlikely that 3 clusters will capture the complexity we need. Hence, we will use 8 clusters instead. 
+
+
+
+We plot all of these: 
+
+
+## Silhouette plots
+
+:::{.panel-tabset}
+
+
+### k = 2
+```{r}
+#| label: silplot-k2
+k2_coef <- cluster_kmeans(rld_z = rld_z, nclust = 2, 
+                          plot_sil = TRUE)
+```
+
+### k = 3
+```{r}
+#| label: silplot-k3
+#| warning: FALSE
+k3_coef <- cluster_kmeans(rld_z = rld_z, nclust = 3, 
+                          plot_sil = TRUE)
+```
+
+### k = 4
+```{r}
+#| label: silplot-k4
+#| warning: FALSE
+k4_coef <- cluster_kmeans(rld_z = rld_z, nclust = 4, 
+                          plot_sil = TRUE)
+```
+
+
+
+### k = 8
+```{r}
+#| label: silplot-k8
+#| warning: FALSE
+k8_coef <- cluster_kmeans(rld_z = rld_z, nclust = 8, 
+                          plot_sil = TRUE)
+```
+:::
+
+Either 3 or 6 clusters looks correct. 8 clusters is overclustering. 
+
+# Heatmap, varying k
+
+:::{.panel-tabset}
+
+## k = 2
+```{r}
+#| label: heatmap-k2
+
+sample_order = colData(dds)$sample_id
+
+plot_kmeans_heatmap(rld_z, k_coef = k2_coef,  
+                    sample_order = sample_order)
+```
+
+## k = 3
+```{r}
+#| label: heatmap-k3
+
+row_ann <- as.data.frame(k3_coef$cluster)
+colnames(row_ann) = "cluster"
+
+row_ann$cluster = factor(row_ann$cluster, 
+                         levels = (1:length(row_ann$cluster)))
+
+
+sample_order = colData(dds)$sample_id
+
+plot_kmeans_heatmap(rld_z, k_coef = k3_coef,  
+                    sample_order = sample_order,
+                    annotation_row = row_ann)
+```
+
+## k = 8
+
+```{r}
+#| label: heatmap-k8
+row_ann <- as.data.frame(k8_coef$cluster)
+colnames(row_ann) = "cluster"
+
+row_ann$cluster = factor(row_ann$cluster, 
+                         levels = (1:length(row_ann$cluster)))
+
+# Todo: fix the ugly colors
+
+#| label: heatmap-k6
+plot_kmeans_heatmap(rld_z, k_coef = k8_coef,  
+                    sample_order = sample_order, 
+                    annotation_row = row_ann)
+```
+:::
+
+
+Honestly, k = 3 looks the best. We can proceed with that. 
+
+
+# Kmeans, 3 clusters
+
+
+```{r}
+row_ann <- as.data.frame(k3_coef$cluster)
+colnames(row_ann) = "cluster"
+
+row_ann$cluster = factor(row_ann$cluster, 
+                         levels = (1:length(row_ann$cluster)))
+
+
+sample_order = colData(dds)$sample_id
+
+plot_kmeans_heatmap(rld_z, k_coef = k3_coef,  
+                    sample_order = sample_order,
+                    annotation_row = row_ann)
+```
+
+
+```{r}
+kmeans_cl <- get_cluster_genes(k3_coef, nclust = 3)
+```
+
+
+
+## Cluster 1
+```{r}
+#| label: c1-heatmap
+clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
+               clust_num = 1,
+               sample_order = sample_order,
+              cluster_rows = FALSE)
+```
+
+:::{.panel-tabset}
+
+### Zscore boxplot
+
+```{r}
+#| label: c1-zscorebox
+
+condition_order = c("Ctrl", "W4_OE", "O1_OE", "O1W4_OE", "O2_KO",
+                    "W4_KO", "O1_KO", "O1W4_KO",
+                    "O2W4_KO", "O1O2_KO")
+
+zscore_boxcondition(kmeans_cl, clust_num = 1, 
+                    condition_order = condition_order)
+```
+
+
+
+### GO - c1
+
+```{r}
+#| label: c1-ego
+k3_c1_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[1]]), 
+                     universe = rownames(dds), 
+                     title = "GO, k=3, cluster 1")
+```
+
+How many enrichments? 
+
+```{r}
+nrow(k3_c1_ego)
+```
+
+### Finding enrichments
+```{r}
+findEGO(k3_c1_ego, "Wnt", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "hippo", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "signaling", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "mito[st]", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "senes|apop|death", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "transcript|transl", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "adhes", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "diff|prolif", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "migrat|taxi", print_top_matches = FALSE)
+```
+
+
+### Custom EGO
+```{r}
+#| label: c1-ego-custom
+interesting_pathways <- c("Wnt signaling pathway", 
+                          "hippo signaling",
+                          "smoothened signaling pathway",
+                          "mitotic cell cycle",
+                          "programmed cell death", 
+                          "cell population proliferation")
+
+custom_ego(k3_c1_ego, interesting_pathways,
+           title = "GO, k=3, cluster 1", 
+           font_size = 12)
+
+c1_go_table <- custom_ego_table(k3_c1_ego, interesting_pathways)
+
+c1_go_table
+```
+
+```{r}
+write_csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"))
+```
+
+
+### KEGG - c1
+
+```{r}
+#| label: c1-ekegg
+#| 
+# Get entrez ids
+c1_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[1]]), ]$entrezgene_id)
+
+# Run KEGG
+k3_c1_ekegg <- plotKEGG_dm(c1_entrez, title = "KEGG, cluster 1")
+```
+
+```{r}
+k3_c1_ekegg
+```
+
+
+```{r}
+#| label: c1-kegg-custom
+interesting_pathways = c("Ubiquitin mediated proteolysis",
+                         "Basal transcription factors",
+                         "Nucleotide excision repair",
+                         "Notch signaling pathway")
+
+custom_ekegg(k3_c1_ekegg, interesting_pathways,
+             title = "KEGG, cluster 1")
+
+c1_kegg_table <- custom_kegg_table(k3_c1_ekegg, interesting_pathways)
+
+c1_kegg_table
+```
+
+
+### Summary
+
+
+
+:::
+
+
+
+## Cluster 2
+
+```{r}
+#| label: c2-heatmap
+clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
+               clust_num = 2, sample_order = sample_order,
+              cluster_rows = FALSE)
+```
+
+:::{.panel-tabset}
+
+### Zscore-boxplot
+```{r}
+#| label: c2-zscorebox
+zscore_boxcondition(kmeans_cl, clust_num = 2, condition_order)
+```
+
+### GO - c2
+
+```{r}
+#| label: c2-ego
+k3_c2_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[2]]), 
+                     universe = rownames(dds), 
+                     title = "GO, k=8, cluster 2")
+```
+
+
+### Finding enrichments
+```{r}
+findEGO(k3_c2_ego, "Wnt", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "DNA", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "signal", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "repair", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "mito[st]", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "immun|interleuk", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "autophag", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "splic", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "senes|apop|death", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "transcript|transl", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "adhes", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "diff|prolif", print_top_matches = FALSE)
+findEGO(k3_c2_ego, "migrat|taxi", print_top_matches = FALSE)
+```
+
+
+### Custom EGO
+```{r}
+#| label: c2-ego-custom
+#| fig-width: 10
+#| fig-height: 8
+
+interesting_pathways <- c(
+  # Wnt
+  "negative regulation of Wnt signaling pathway",
+  # pathways
+  "ERBB signaling pathway", 
+  "epidermal growth factor receptor signaling pathway", 
+  "Ras protein signal transduction",
+  "insulin receptor signaling pathway",
+  "vascular endothelial growth factor receptor signaling pathway", 
+  "fibroblast growth factor receptor signaling pathway",
+  "cell death",
+  "cell adhesion",
+  "chemotaxis"
+  
+  )
+
+custom_ego(k3_c2_ego, interesting_pathways, 
+           title = "GO, k=3, cluster 2", 
+           font_size = 10)
+
+c2_go_table <- custom_ego_table(k3_c2_ego, interesting_pathways)
+
+c2_go_table
+```
+
+
+
+```{r}
+write_csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
+```
+
+### KEGG - c2
+```{r}
+#| label: c2-ekegg
+# Get the entrez IDs
+c2_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[2]]), ]$entrezgene_id)
+# Run KEGG
+k3_c2_ekegg <- plotKEGG_dm(c2_entrez, title = "KEGG, cluster 2")
+```
+
+```{r}
+interesting_pathways = c("Endocytosis", 
+                         "MAPK signaling pathway - fly",
+                         "Hippo signaling pathway - fly")
+
+c2_kegg_table <- custom_kegg_table(k3_c2_ekegg, 
+                                   interesting_pathways)
+
+c2_kegg_table
+```
+
+
+```{r}
+write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"))
+```
+
+### Summary
+
+
+
+:::
+
+
+
+## Cluster 3
+
+```{r}
+#| label: c3-heatmap
+clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
+               clust_num = 3, sample_order = sample_order,
+              cluster_rows = FALSE)
+```
+
+:::{.panel-tabset}
+
+### Zscore boxplot
+
+```{r}
+#| label: c3-zscorebox
+zscore_boxcondition(kmeans_cl, clust_num = 3, condition_order)
+```
+### GO - c3
+
+```{r}
+#| label: c3-ego
+k3_c3_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[3]]), 
+                     universe = rownames(dds), 
+                     title = "GO, k=3, cluster 3")
+```
+
+
+### Finding enrichments
+```{r}
+findEGO(k3_c3_ego, "Wnt", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "hippo", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "signaling", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "mito[st]", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "senes|apop|death", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "transcript|transl", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "adhes", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "diff|prolif", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "migrat|taxi", print_top_matches = FALSE)
+findEGO(k3_c3_ego, "devel", print_top_matches = FALSE)
+```
+
+
+```{r}
+interesting_pathways <- c("cell adhesion", 
+                          "chemotaxis", 
+                          "cuticle development")
+
+c3_go_table <- custom_ego_table(k3_c3_ego, interesting_pathways)
+
+c3_go_table
+
+custom_ego(k3_c3_ego, interesting_pathways, 
+           title = "GO, k=3, cluster 3")
+```
+
+
+
+```{r}
+write_csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"))
+```
+
+### KEGG - c3
+
+
+ Run KEGG enrichment
+```{r}
+#| label: c3-ekegg
+c3_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[3]]), ]$entrezgene_id)
+
+k3_c3_ekegg <- plotKEGG_dm(c3_entrez, title = "KEGG, cluster 3")
+
+```
+
+### Custom KEGG
+
+```{r}
+#| label: c3-kegg-custom
+
+
+k3_c3_ekegg
+
+custom_ego_table(k3_c3_ekegg, 
+                 interesting_pathways = c("Coronavirus disease - COVID-19", 
+                                          "Ribosome"))
+```
+
+```{r}
+interesting_pathways <- c("ECM-receptor interaction", "Lysosome", 
+                          "Fatty acid metabolism")
+
+c3_kegg_table <- custom_kegg_table(k3_c3_ekegg, interesting_pathways)
+
+c3_kegg_table
+```
+
+
+### Summary
+
+
+
+:::
+
+
+
+# Export cluster genes for compilation 
+
+```{r}
+# Convert cluster genes to data frame
+df_cluster <- as.data.frame(unlist(kmeans_cl))
+colnames(df_cluster) <- "cluster"
+df_cluster$ensembl_gene_id <- rownames(df_cluster)
+
+# Genes that are expressed but not in cluster - not significant. 
+not_signif <- rownames(dds)[!rownames(dds) %in% df_cluster$ensembl_gene_id]
+df_ns <- data.frame(ensembl_gene_id = not_signif, 
+                    cluster = "NS")
+
+# Combine both
+df_combined <- rbind(df_cluster, df_ns)
+
+# Add gene biotype
+df_combined$gene_biotype = ensembl.genes$gene_biotype[match(df_combined$ensembl_gene_id, 
+                                                            ensembl.genes$gene_id)]
+# Add gene name
+df_combined$gene_name = ensembl.genes$external_gene_name[match(df_combined$ensembl_gene_id, 
+                                                            ensembl.genes$gene_id)]
+
+# Export
+
+write.csv(df_combined, file = paste0(output_dir, "cluster_genes.csv"))
+```
+
+
+## Export GO and KEGG for figure
+
+```{r}
+c1_go_table$cluster = 1
+c2_go_table$cluster = 2
+c3_go_table$cluster = 3
+
+go_tables <- rbind(c1_go_table, c2_go_table, c3_go_table)
+
+write.csv(go_tables, file = paste0(output_dir, "go_tables.csv"))
+
+c1_kegg_table$cluster = 1
+c2_kegg_table$cluster = 2
+c3_kegg_table$cluster = 3
+
+kegg_tables <- rbind(c1_kegg_table, c2_kegg_table, c3_kegg_table)
+
+write.csv(kegg_tables, file = paste0(output_dir, "kegg_tables.csv"))
+```
+
+
+
+
+# Summary and discussion
+
+
+# Session info
+
+```{r}
+sessionInfo()
+```
+

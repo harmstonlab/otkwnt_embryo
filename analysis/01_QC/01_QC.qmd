@@ -1,0 +1,1089 @@
+---
+title: 01_QC
+author: Qian Hui TAN
+date: '`r format(Sys.time(), "%d %B %Y")`'
+format:
+  html: 
+    keep-md: true
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    smooth-scroll: true
+    code-tools: true
+    code-line-numbers: true
+  gfm: 
+    df-print: kable
+    toc: true 
+    toc-depth: 3
+    number-sections: true
+---
+
+# 01_QC
+
+In this notebook, we perform quality control on bulk RNA-seq data obtained from Drosophila embryos. The various conditions are summarized below: 
+
+
+RNA-seq label| Experimental label | Description
+--|--|-----
+Ctrl | Control | Embryos from control flies.
+W4_OE | UAS-Wnt4 | Embryos in which Wnt4 is over-expressed.
+O1_OE | UAS-Otk1| Embryos in which Otk1 is over-expressed.
+O1W4_OE | UAS-Otk1, UAS-Wnt4 | Embryos in which Otk1 and Wnt4 are both over-expressed.
+O2_KO | Otk2 RNAi | Embryos in which Otk2 is downregulated.
+W4_KO | Wnt4 RNAi | Embryos in which Wnt4 is downregulated.
+O1_KO | Otk1 RNAi | Embryos in which Otk1 is downregulated.
+O1W4_KO | Otk1, Wnt4 RNAi | Embryos in which Otk1 and Wnt4 are both downregulated.
+O2W4_KO | Otk2, Wnt4 RNAi | Embryos in which Otk2 and Wnt4 are both downregulated.
+O1O2_KO | Otk1, Otk2 RNAi | Embryos in which Otk1 and Otk2 are both downregulated.
+
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(fig.path='../figures/01_QC/',
+                      dev = c("png"))
+```
+
+# Setup
+
+```{r}
+## If output directory doesn't exist, create it
+if(!dir.exists("../output")){
+    dir.create("../output")
+  }
+  
+if(!dir.exists("../output/01_QC")){
+    dir.create("../output/01_QC")
+  }
+  
+output_dir <- "../output/01_QC/"
+
+
+manual_colors = c("darkgrey",
+                   "#1f78b4", "#33a02c","#6600FF","#e31a1c",
+                  
+                   "#a6cee3", "#b2df8a","#CC99FF", "lightpink", 
+                   "coral")
+  
+```
+
+
+```{r}
+suppressPackageStartupMessages({
+    library(dplyr)
+    library(readr)
+    library(tidyr)
+    library(ggplot2)
+    library(janitor)
+    library(GEOquery)
+    library(DESeq2)
+    library(reshape2) # melt function
+    library(biomaRt)
+    library(GenomicFeatures)
+    library(scales)
+    library(ggrepel)
+    library(pheatmap)
+    library(viridis)
+    library(lubridate)
+    library(DT)
+})
+
+source("../../scripts/R/qc_functions.R")
+source("../../scripts/R/ma_plot_function.R")
+```
+
+
+
+```{r}
+# Generic theme
+th <- theme(
+         plot.title = element_text(size = 15),
+         plot.subtitle = element_text(size = 12),
+         axis.title.x = element_blank(),
+         axis.title.y = element_blank())
+
+# PCA theme
+pca_th <- theme(plot.title = element_text(size = 15),
+         axis.title.x = element_text(size = 10), 
+         axis.title.y = element_text(size = 10),
+         axis.text.x = element_text(size = 10),
+         axis.text.y = element_text(size = 10))
+```
+
+We first create gene-level annotations:
+
+```{r}
+#| eval: FALSE
+
+# Create transcript annotations from the Drosophila genome
+fg.gtf.db <- makeTxDbFromGFF("../../data/04_annotations/Drosophila_melanogaster.BDGP6.22.97.chr.gtf", format = "gtf")
+
+# Extract genes from the transcript annotation.
+ensembl.genes = genes(fg.gtf.db)
+
+## -- Retrieving biomaRt annotations -- ##
+
+# For each ensembl gene in the drosophila genome, we retrieve additional 
+# information such as the gene biotype, gene name, entrez id. These will be
+# useful for downstream analysis steps. 
+
+# Set fly 
+fly = useEnsembl(
+  biomart = "ENSEMBL_MART_ENSEMBL",
+  host = "https://asia.ensembl.org",
+  dataset = "dmelanogaster_gene_ensembl",
+  version = "97"
+)
+
+# For each gene, retrieve the following annotations from biomaRt
+bm.annotations = getBM(
+  attributes = c("ensembl_gene_id",# FBgn, highly specific identifier"
+                 "external_gene_name", # normal gene name
+                 "gene_biotype",
+                 "go_id", # go term accession
+                 "name_1006", # go term name,
+                 "entrezgene_id",# entrezid for pathway
+                 "description"
+  ),
+  mart = fly,
+  filters = "ensembl_gene_id",
+  values = ensembl.genes$gene_id,
+  uniqueRows = TRUE
+)
+
+# Checking bm.annotations
+head(bm.annotations)
+
+## -- Creating the object -- ##
+# Create ensembl.genes object
+ensembl.genes$ensembl_gene_id = bm.annotations$ensembl_gene_id[
+  match(ensembl.genes$gene_id, bm.annotations$ensembl_gene_id)]
+ensembl.genes$external_gene_name = bm.annotations$external_gene_name[
+  match(ensembl.genes$gene_id, bm.annotations$ensembl_gene_id)]
+ensembl.genes$gene_biotype = bm.annotations$gene_biotype[
+  match(ensembl.genes$gene_id,bm.annotations$ensembl_gene_id)]
+ensembl.genes$go_id = bm.annotations$go_id[
+  match(ensembl.genes$gene_id,bm.annotations$ensembl_gene_id)]
+ensembl.genes$name_1006 = bm.annotations$name_1006[
+  match(ensembl.genes$gene_id, bm.annotations$ensembl_gene_id)]
+ensembl.genes$entrezgene_id = bm.annotations$entrezgene_id[
+  match(ensembl.genes$gene_id, bm.annotations$ensembl_gene_id)]
+
+head(ensembl.genes)
+
+# Save the output
+saveRDS(ensembl.genes, file = "../output/01_QC/ensembl_genes.RDS")
+```
+
+```{r}
+ensembl.genes <- readRDS("../output/01_QC/ensembl_genes.RDS")
+```
+
+# Preparing objects for DESeq
+
+## Metadata wrangling
+
+```{r}
+experimental_metadata = na.omit(read.delim("../../data/03_metadata/metadata.csv", 
+                                           sep = ",", 
+                                   header = TRUE, stringsAsFactors = FALSE,
+                                   blank.lines.skip = TRUE))
+
+# Remove empty row(s), if any 
+experimental_metadata <- experimental_metadata[!experimental_metadata$condition == "", ]
+
+dim(experimental_metadata)
+
+experimental_metadata
+```
+
+
+## Creating the data matrix
+
+```{r loading data}
+# Create a matrix of the data (nrow can be obtained by calling wc -l *.genes.results in terminal; note -1 for header)
+data = matrix(0, ncol = length(experimental_metadata$sample_id), 
+              nrow = 17714) 
+colnames(data) = experimental_metadata$sample_id
+
+for (i in experimental_metadata$sample_id){
+ data[ ,i] = read.table(paste("../../data/02_aligned/02_RSEM/", i, ".genes.results",
+                              sep = ""),
+                         header = TRUE)$expected_count
+  row.names(data) = read.table(paste("../../data/02_aligned/02_RSEM/", i, ".genes.results", 
+                                     sep=""), 
+                               header=TRUE)$gene_id
+}
+
+
+# DESeq needs read counts to be integers
+data_mat = apply(round(data), c(1,2), as.integer)
+
+head(data_mat)
+```
+
+## Create DESeq object
+
+```{r}
+# Create DESeq object
+dds = DESeqDataSetFromMatrix(data_mat, experimental_metadata, ~ condition)
+colnames(dds) = colnames(data_mat)
+
+head(colData(dds)) # Check that condition matches sample
+```
+
+```{r}
+#Estimates the size factors using the "median ratio method" described by Equation 5 in Anders and Huber (2010)
+dds <- estimateSizeFactors(dds) 
+#This function obtains dispersion estimates for a count data set
+dds <- estimateDispersions(dds)
+#This function transforms the count data to the log2 scale in a way which minimizes differences between samples for rows with small counts
+rld <- rlog(dds, blind = TRUE) # use blind = TRUE for QC
+
+```
+
+```{r}
+data_mat_nonzero = data_mat[rowSums(data_mat) > 0, ] # Remove non-zero rows
+```
+
+## How many non-zero rows?
+
+How many genes are there in the human genome? 
+```{r}
+nrow(data_mat)
+```
+
+How many genes are expressed (at least 1 read in at least 1 sample)? 
+```{r}
+nrow(data_mat_nonzero)
+```
+
+What percentage is this? 
+
+```{r}
+nrow(data_mat_nonzero)/nrow(data_mat) * 100
+```
+
+89% of all rows are nonzero.
+
+
+# DESeq QC 
+
+## Dispersion estimates
+
+```{r}
+#| label: prefilt-disp-est
+## Plot dispersion estimates
+plotDispEsts(dds, main = "Dispersion estimates, before filtering")
+```
+
+## QC - number of detected genes
+
+Examining our dataset:
+
+```{r}
+dds
+```
+
+We plot a few key metrics to check our data quality: 
+
+
+```{r}
+plt_title = "Before Filtering"
+```
+
+::: {.panel-tabset}
+### Read counts per sample
+
+```{r}
+total_counts <- as.data.frame(colSums(counts(dds)))
+colnames(total_counts) <- "total_counts"
+total_counts$name = rownames(total_counts)
+# Convert to factor to preserve order
+total_counts$name <- factor(total_counts$name, 
+                            levels = rev(experimental_metadata$sample_id))
+```
+
+```{r}
+#| label: prefilt-qc-rcpersample
+# Plot
+ggplot(total_counts, aes(x = name, y = total_counts)) +
+    geom_bar(stat = "identity") +
+    scale_y_continuous("Read counts", 
+                       limits = c(0, 5e7),
+                       expand = c(0, 0),
+                       breaks = seq(0, 5e7, 1e7)) +
+    geom_hline(yintercept = 3e7, color = "blue", linetype = "dashed") +
+    labs(title = "Read counts per sample",
+         x = element_blank()) +
+    theme_minimal() +
+    coord_flip()
+```
+
+### Number of genes detected per sample
+
+```{r}
+#| label: prefilt-qc-ngenes
+
+detected = apply(counts(dds), 2, function(col) sum(col > 0 ))
+detected = as.data.frame(detected)
+detected$name = row.names(detected)
+detected$name = factor(detected$name, rev(experimental_metadata$sample_id))
+                 
+ggplot(detected, aes(x=name, y=detected)) + 
+                 geom_bar(stat="identity") + 
+                 theme_minimal() + 
+                 coord_flip() + 
+                 scale_y_continuous("Number of Genes detected", expand=c(0,0),
+                                    breaks = seq(0, 15000, 2500),
+                                    limits = c(0, 1.5e4)
+                                    ) + 
+                 scale_x_discrete("") +
+                 labs(title = "# of genes detected", 
+                     subtitle = plt_title) +
+                 geom_hline(yintercept = 12500, color = "blue", linetype = "dashed") 
+```
+
+### Size factors
+
+```{r}
+#| label: prefilt-sf
+df = data.frame(sample_id = names(sizeFactors(dds)), 
+                sizeFactors = sizeFactors(dds))
+
+ggplot(df, aes(x = sample_id, y = sizeFactors)) + 
+    geom_bar(stat="identity") + 
+    scale_y_continuous(limits = c(0,2), expand = c(0,0)) + 
+    labs(title = "Size factors for each sample",
+         subtitle = plt_title, 
+         x = element_blank()) +
+    theme_minimal() + 
+    theme(axis.text.x = element_text(angle = 90, hjust=1, 
+                                     colour="black", size = 10))
+```
+
+### Normalized counts (boxplot)
+
+```{r}
+#| label: prefilt-qc-ncounts
+
+nc = counts(dds, normalized=TRUE)
+nc.melt = melt(nc)
+
+ggplot(nc.melt, aes(x=Var2, y=value)) + 
+    geom_boxplot() + 
+    theme_classic() + 
+    theme(axis.text.x = element_text(angle = 90, colour="black", hjust = 1,
+                                     size = 10)) + 
+    scale_x_discrete("Sample") + 
+    scale_y_continuous("Normalised counts") +
+    labs(title = "Normalized counts",
+        subtitle = plt_title) +
+    th
+
+```
+
+```{r}
+nc.threshold = 1e6
+test = apply(nc, 1, function(x){ any(x > nc.threshold) })
+```
+
+The genes with normalized counts greater than `r nc.threshold` are:
+
+```{r}
+above_threshold <- as.data.frame(ensembl.genes[names(test[test])])
+
+above_threshold[ ,colnames(above_threshold) %in% 
+                   c("gene_id", "gene_biotype", "external_gene_name")]
+```
+
+That's an rRNA. 
+
+Plotting the rRNA graph: 
+```{r}
+#| label: prefilt-qc-rrna
+
+rrna.genes = names(ensembl.genes[ensembl.genes$gene_biotype %in% c("Mt_rRNA", "rRNA")])
+percentage.of.rrna = (colSums(counts(dds[ rownames(counts(dds)) %in% rrna.genes])) / colSums(counts(dds))) * 100
+
+percentage.of.rrna = as.data.frame(percentage.of.rrna)
+percentage.of.rrna$name = rownames(percentage.of.rrna)
+percentage.of.rrna$name = factor(percentage.of.rrna$name, 
+                                 rev(experimental_metadata$sample_id))
+
+ggplot(percentage.of.rrna, 
+       aes(x = name, y = percentage.of.rrna)) + 
+        geom_bar(stat="identity") + 
+        geom_hline(yintercept = 5, color = "blue", linetype = "dashed") +
+        theme_classic() + 
+        coord_flip() + 
+        scale_y_continuous("% rRNA",
+                           expand=c(0,0), limits = c(0, 30), breaks = seq(0, 30, 5)) +
+        labs(title = "% rRNA", x = "") 
+
+```
+
+Checking summary statistics for rRNA: 
+```{r}
+summary(percentage.of.rrna$percentage.of.rrna)
+```
+
+There's some rRNA, but they are all less than 7%. That's good - it indicates that most reads still belong to non-rRNA reads. Regardless, we will filter out these rRNA reads from our analysis later. 
+
+### Proportions of gene biotypes
+
+```{r}
+#| label: prefilt-qc-genebiotypes
+
+pc = ensembl.genes$gene_id[ensembl.genes$gene_biotype == "protein_coding"]
+pg = ensembl.genes$gene_id[ensembl.genes$gene_biotype %in% unique(ensembl.genes$gene_biotype)[grep("pseudogene", unique(ensembl.genes$gene_biotype))]]
+lc = ensembl.genes$gene_id[ensembl.genes$gene_biotype == "lincRNA"]
+
+totalcounts.pc = colSums(counts(dds)[rownames(counts(dds)) %in% pc,])
+totalcounts.pg = colSums(counts(dds)[rownames(counts(dds)) %in% pg,])
+totalcounts.lc = colSums(counts(dds)[rownames(counts(dds)) %in% lc,])
+
+totalcounts.other = colSums(counts(dds)[!(rownames(counts(dds)) %in% c(lc,pc,pg)),])
+
+counts.by.biotype = data.frame(name = names(totalcounts.pc),
+                         protein_coding = totalcounts.pc,
+                         pseudogene = totalcounts.pg,
+                         lincRNA = totalcounts.lc,
+                         other = totalcounts.other
+                         
+                         )
+
+
+counts.by.biotype = as.data.frame(t(apply(counts.by.biotype[,2:5], 1, function(x){ 100 * (x / sum(x)) }) ))
+counts.by.biotype$name = names(totalcounts.pc)
+
+counts.by.biotype.melt = melt(counts.by.biotype)
+counts.by.biotype.melt$name = factor(counts.by.biotype.melt$name, 
+                                     levels = experimental_metadata$sample_id)
+
+
+ggplot(counts.by.biotype.melt, aes(x=name, y=value, fill=variable)) +  
+    geom_bar(stat="identity") + 
+    theme_classic() + 
+    scale_x_discrete("") +
+    scale_y_continuous("% reads", labels = dollar_format(suffix = "%", prefix = ""),  
+                       expand=c(0,0)) + 
+    theme(axis.text.x = element_text(angle = 90, colour="black", #family="Arial", 
+                                     hjust = 1, size = 11)) +
+    labs(title = "Proportions of gene biotypes", 
+        subtitle = plt_title) 
+```
+
+Most genes are protein-coding, as expected.
+:::
+
+## QC - clustering
+
+We perform 3 types of Quality Control to assess our DESeq dataset:
+
+-   Correlation matrix heatmap
+-   Hierarchical clustering
+-   PCA
+
+::: {.panel-tabset}
+### Correlation matrix heatmap
+
+```{r}
+#| label: prefilt-heatmap
+#| fig-height: 10
+#| fig-width: 9
+
+### Extract the rld matrix from the object
+rld_mat <- assay(rld)  
+### Compute pairwise correlation values
+rld_cor <- cor(rld_mat)
+### Plot heatmap
+pheatmap(rld_cor, main = "Correlation heatmap, before filtering")
+
+```
+
+
+### Hierarchical clustering
+
+```{r}
+#| label: prefilt-hclust
+
+sampleDists <- dist(t(assay(rld)))
+plot(hclust(sampleDists), main = paste0("Cluster Dendrogram, ", plt_title))
+```
+
+### PCA
+
+```{r}
+#| label: prefilt-pca-bycondition
+
+source("../../scripts/R/qc_functions.R")
+```
+
+```{r}
+intgroup = "condition"
+intgroup_order = unique(experimental_metadata$condition)
+title = "PCA"
+
+pca_xlim <- c(-30, 30)
+pca_ylim <- c(-20, 20)
+
+xlimits = pca_xlim 
+ylimits = pca_ylim
+
+ntop = 500
+  rv <- rowVars(assay(rld))
+  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, length(rv)))]
+  pca = prcomp(t(assay(rld)[select,]))
+  percentVar <- pca$sdev^2/sum(pca$sdev^2)
+  data <- plotPCA(rld, intgroup = intgroup, 
+                  returnData = TRUE)
+  percentVar <- round(100 * attr(data, "percentVar"), digits = 2)
+  data[[intgroup]] <- factor(data[[intgroup]], 
+                             levels = intgroup_order)
+  
+  # Plot 
+  pca_plot <- ggplot(as.data.frame(data), aes(x = PC1, y = PC2)) + 
+    geom_point(aes(color = as.data.frame(data)[[intgroup]]), 
+               size = 2, alpha = 0.8) +
+    labs(title = title,
+         subtitle = paste0("By ", intgroup), 
+         colour = intgroup) +
+    # Add scale annotations
+    scale_x_continuous(paste0("PC1: ",percentVar[1],"% variance"), 
+                       limits = xlimits) +
+    scale_y_continuous(paste0("PC2: ",percentVar[2],"% variance"), 
+                       limits = ylimits) +
+    # Default: paired
+    #scale_color_brewer(palette = "Paired") +
+    # specify custom colors
+    scale_color_manual(name = intgroup, 
+                       values = manual_colors) +
+    
+    # Make 1 unit on x-axis equal to 1 unit on y-axis
+    coord_fixed(ratio = 1) +
+    theme_classic()
+  
+  
+pca_plot
+```
+
+
+```{r}
+intgroup = "condition"
+intgroup_order = unique(experimental_metadata$condition)
+
+pca_xlim <- c(-30, 30)
+pca_ylim <- c(-20, 20)
+
+manual_colors = c("darkgrey",
+                   "#1f78b4", "#33a02c","#6600FF","#e31a1c",
+                  "lightpink", 
+                   "#a6cee3", "#b2df8a","#CC99FF", 
+                   
+                   "coral")
+
+# they must be in the same order- I forgot about this - we will fix this later
+
+pca_plot <- make_pca(rld, intgroup = "condition",
+         xlimits = pca_xlim, 
+         ylimits = pca_ylim,
+         manual_colors = manual_colors, 
+         title = "PCA, before filtering",
+         rearrange_intgroup = TRUE,
+         intgroup_order = intgroup_order)
+
+pca_plot
+```
+
+### PCA, labelled
+```{r}
+#| label: prefilt-pca-all-label
+
+make_pca(rld, intgroup = "condition", label = TRUE,
+         manual_colors = manual_colors, 
+         title = "PCA, before filtering",
+         rearrange_intgroup = TRUE, 
+         intgroup_order = intgroup_order)
+```
+
+### PCA, by size factor
+```{r}
+#| label: prefilt-pca-all-sf
+#| message: false
+
+make_pca(rld, intgroup = "sizeFactor",
+         title = "PCA plot, before filtering") +
+  scale_color_viridis(option = "A")
+```
+:::
+
+This looks good - PC1 and 2 both capture biological variation. Samples also cluster within conditions. 
+
+
+All our key metrics look good. Read counts per sample, number of genes per sample are all high, and relatively similar across all samples. Most genes are protein-coding, as expected. Data is of high quality. 
+
+
+# Remove rRNA and mitochondrial genome
+
+We remove all genes that map to rRNA, as well as the mitochondrial chromosome before we proceed with downstream analysis. 
+
+```{r}
+plt_title = "after removing rRNA and mitochondrial genome"
+```
+
+Checking MT chromosome intact: 
+
+```{r}
+in_dds = ensembl.genes[match(rownames(counts(dds)), ensembl.genes$gene_id), ]
+table(seqnames(in_dds))
+```
+
+Remove MT chromosome, rerun DESeq: 
+```{r}
+# Remove mitochondrial genome
+mit_genes <- ensembl.genes[seqnames(ensembl.genes) %in% "MT", ]$gene_id
+dds_rm_mit <- dds[!rownames(counts(dds)) %in% mit_genes, ]
+
+# Remove rRNA
+dds_filt = dds_rm_mit[!(row.names(counts(dds_rm_mit)) %in% 
+                   ensembl.genes$gene_id[ensembl.genes$gene_biotype %in% 
+                                           c("rRNA", "snoRNA", "snRNA", "Mt_rRNA")]), ]
+dds_filt = dds_filt[rowSums(counts(dds_filt)) > 0, ]
+
+# Re-estimate dispersions
+dds_filt <- estimateSizeFactors(dds_filt) 
+dds_filt <- estimateDispersions(dds_filt)
+rld_filt <- rlog(dds, blind = TRUE) # use blind = TRUE for QC
+```
+Check that mitochondrial genome has been removed: 
+
+```{r}
+in_dds = ensembl.genes[match(rownames(counts(dds_filt)), ensembl.genes$gene_id), ]
+table(seqnames(in_dds))
+```
+
+## Check rRNA removed
+
+```{r}
+#| label: rmrna-qc-rrna-percent-rrna
+rrna.genes = names(ensembl.genes[ensembl.genes$gene_biotype %in% c("Mt_rRNA", "rRNA", 
+                                                                   "snoRNA", "snRNA")])
+
+percentage.of.rrna = (colSums(counts(dds_filt[rownames(counts(dds_filt)) %in% rrna.genes])) / colSums(counts(dds_filt))) * 100
+percentage.of.rrna = as.data.frame(percentage.of.rrna)
+percentage.of.rrna$name = row.names(percentage.of.rrna)
+#percentage.of.rrna$name = factor(percentage.of.rrna$name, rev(experimental_metadata$sample_id))
+
+
+ggplot(percentage.of.rrna, aes(x=name, y=percentage.of.rrna)) +
+  geom_bar(stat="identity") + theme_classic() + coord_flip() + scale_y_continuous("% rRNA", expand=c(0,0)) +
+  scale_x_discrete("Sample") +
+  ggtitle(paste0("% rRNA, ", plt_title))
+```
+
+Checking that rRNA percentage is now zero: 
+```{r}
+summary(percentage.of.rrna$percentage.of.rrna)
+```
+
+## QC - number of genes
+
+::: {.panel-tabset}
+### Size Factors after rRNA removal
+
+```{r}
+#| label: rmrna-sf
+
+df = data.frame(sample_id = names(sizeFactors(dds_filt)), sizeFactors = sizeFactors(dds_filt))
+
+df$sample_id = factor(df$sample_id, experimental_metadata$sample_id)
+
+ggplot(df, aes(x = sample_id, y=sizeFactors)) + 
+  geom_bar(stat="identity") + 
+  scale_y_continuous(limits=c(0,2), expand=c(0,0)) + 
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90, hjust=1, colour="black", size=11)) +
+  geom_hline(yintercept = 1, color = "blue", linetype = "dashed") +
+  ggtitle(paste0("Size Factors, ", plt_title)) + 
+  th
+```
+
+Summary of size factors: 
+```{r}
+summary(sizeFactors(dds_filt))
+```
+
+Size factors for each sample: 
+```{r}
+print(sizeFactors(dds_filt))
+```
+
+
+### Read counts per sample after rRNA and chrM removal
+```{r}
+total_counts <- as.data.frame(colSums(counts(dds_filt)))
+colnames(total_counts) <- "total_counts"
+total_counts$name = rownames(total_counts)
+
+```
+
+
+```{r}
+#| label: rmrna-qc-filt-rcpersample
+# Plot
+ggplot(total_counts, aes(x = name, y = total_counts)) +
+    geom_bar(stat = "identity") +
+    scale_y_continuous("Read counts", 
+                       limits = c(0, 5e7),
+                       expand = c(0, 0),
+                       breaks = seq(0, 5e7, 1e7)) +
+    geom_hline(yintercept = 3e7, color = "blue", linetype = "dashed") +
+    labs(title = "Read counts per sample",
+         subtitle = "after removing chrM and rRNA",
+         x = element_blank()) +
+    theme_minimal() +
+    coord_flip()
+```
+
+### Number of genes detected per sample after rRNA and chrM removal
+```{r}
+#| label: rmrna-qc-filt-ngenes
+
+detected = apply(counts(dds_filt), 2, function(col) sum(col > 0 ))
+detected = as.data.frame(detected)
+detected$name = row.names(detected)
+#detected$name = factor(detected$name, rev(experimental_metadata$sample_id))
+                 
+ggplot(detected, aes(x=name, y=detected)) + 
+                 geom_bar(stat="identity") + 
+                 theme_minimal() + 
+                 coord_flip() + 
+                 scale_y_continuous("Number of Genes detected", 
+                                    breaks = c(seq(0, 20000, 2500)), 
+                                      expand=c(0,0),
+                                    limits = c(0, 20000)) + 
+                 scale_x_discrete("Sample") +
+                 labs(title = "# of genes detected", 
+                     subtitle = plt_title) +
+                 geom_hline(yintercept = 12500, color = "blue", linetype = "dashed") 
+```
+:::
+
+
+
+## QC- clustering
+
+::: {.panel-tabset}
+### Heatmap after rRNA removal
+
+```{r}
+#| label: rmrna-rrna-heatmap
+#| fig-height: 10
+#| fig-width: 9
+
+### Extract the vst matrix from the object
+rld_mat <- assay(rld_filt)  
+
+### Compute pairwise correlation values
+rld_cor <- cor(rld_mat)
+
+### Plot heatmap
+pheatmap(rld_cor, main = "Correlation heatmap, after rRNA removal")
+```
+
+### Clustering after rRNA removal
+
+```{r}
+#| label: rmrna-clustering-filt
+
+sampleDists <- dist(t(assay(rld_filt)))
+plot(hclust(sampleDists), main = paste0("Cluster Dendrogram, ", plt_title))
+```
+
+### PCA after rRNA removal
+
+
+```{r}
+#| label: rmrna-pca-filt-condition
+make_pca(rld_filt, intgroup = "condition",
+         title = "PCA plot, after removing rRNA and chrM",
+         xlimits = pca_xlim, 
+         ylimits = pca_ylim,
+         manual_colors = manual_colors, 
+         rearrange_intgroup = TRUE, 
+         intgroup_order = intgroup_order) 
+```
+
+### PCA, labelled
+
+```{r}
+#| label: rmrna-pca-filt-condition-labelled
+
+make_pca(rld_filt, intgroup = "condition", label = TRUE, 
+         title = "PCA plot, after removing rRNA and chrM",
+         xlimits = pca_xlim, 
+         ylimits = pca_ylim,
+         manual_colors = manual_colors, 
+         rearrange_intgroup = TRUE, 
+         intgroup_order = intgroup_order) 
+```
+
+### PCA, by size factor
+
+```{r}
+#| label: rmrna-pca-filt-sf
+
+make_pca(rld_filt, intgroup = "sizeFactor", 
+         title = "PCA plot, after removing rRNA and chrM") +
+  scale_color_viridis(option = "A")
+
+```
+:::
+
+
+
+# Check Wnt4, Otk1 and Otk2 levels
+
+
+## Otk1 counts
+We plot the normalized counts of Otk1 in each sample:
+
+```{r}
+#| label: otk1-norm
+
+otk1_fbgn <- "FBgn0004839"
+
+# Get normalized counts
+otk1_norm <- as.data.frame(counts(dds_filt, normalized = TRUE)[otk1_fbgn, ])
+otk1_norm$sample <- rownames(otk1_norm)
+colnames(otk1_norm) <- c("counts", "sample")
+otk1_norm$sample = factor(otk1_norm$sample, 
+                          levels = experimental_metadata$sample_id)
+otk1_norm$condition = otk1_norm$sample
+otk1_norm$condition = gsub("_[0-9]", "", otk1_norm$condition)
+otk1_norm$condition = factor(otk1_norm$condition, 
+                             levels = unique(experimental_metadata$condition))
+
+# Plot
+ggplot(otk1_norm, aes(x = condition, y = counts, fill = condition)) +
+  geom_boxplot() +
+  geom_point(size = 0.5) +
+  labs(title = "otk1", 
+       x = "", y = "Normalized counts") +
+  scale_fill_manual(values = manual_colors) +
+  scale_y_continuous(expand = c(0, NA), limits = c(0, 8e4)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90), 
+        legend.position = "none") 
+```
+
+## Otk2 counts
+
+```{r}
+#| label: otk2-norm
+
+otk2_fbgn <- "FBgn0267728"
+
+# Get normalized counts
+otk2_norm <- as.data.frame(counts(dds_filt, normalized = TRUE)[otk2_fbgn, ])
+otk2_norm$sample <- rownames(otk2_norm)
+colnames(otk2_norm) <- c("counts", "sample")
+otk2_norm$sample = factor(otk2_norm$sample, 
+                          levels = experimental_metadata$sample_id)
+otk2_norm$condition = otk2_norm$sample
+otk2_norm$condition = gsub("_[0-9]", "", otk2_norm$condition)
+otk2_norm$condition = factor(otk2_norm$condition, 
+                             levels = unique(experimental_metadata$condition))
+
+# Plot
+ggplot(otk2_norm, aes(x = condition, y = counts, fill = condition)) +
+  geom_boxplot() +
+  geom_point(size = 0.5) +
+  labs(title = "otk2", 
+       x = "", y = "Normalized counts") +
+  scale_fill_manual(values = manual_colors) +
+  scale_y_continuous(expand = c(0, NA), limits = c(0, 3000)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90), 
+        legend.position = "none") 
+```
+
+## Wnt4 counts
+```{r}
+#| label: wnt4-norm
+
+wnt4_fbgn <- "FBgn0010453"
+
+# Get normalized counts
+wnt4_norm <- as.data.frame(counts(dds_filt, normalized = TRUE)[wnt4_fbgn, ])
+wnt4_norm$sample <- rownames(wnt4_norm)
+colnames(wnt4_norm) <- c("counts", "sample")
+wnt4_norm$sample = factor(wnt4_norm$sample, 
+                          levels = experimental_metadata$sample_id)
+wnt4_norm$condition = wnt4_norm$sample
+wnt4_norm$condition = gsub("_[0-9]", "", wnt4_norm$condition)
+wnt4_norm$condition = factor(wnt4_norm$condition, 
+                             levels = unique(experimental_metadata$condition))
+
+# Plot
+ggplot(wnt4_norm, aes(x = condition, y = counts, fill = condition)) +
+  geom_boxplot() +
+  geom_point(size = 0.5) +
+  labs(title = "wnt4", 
+       x = "", y = "Normalized counts") +
+  scale_fill_manual(values = manual_colors) +
+  scale_y_continuous(expand = c(0, NA), limits = c(0, 1e5)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90),
+        legend.position = "none") 
+
+
+```
+
+
+# MA plots
+
+Plots to assess whether samples are good replicates. 
+
+::: {.panel-tabset}
+## Ctrl
+
+```{r}
+#| label: ma-ctrl
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "Ctrl"))
+```
+
+
+## W4_OE
+
+```{r}
+#| label: ma-W4OE
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "W4_OE"))
+```
+
+## O1_OE
+
+```{r}
+#| label: ma-O1_OE
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1_OE"))
+```
+
+
+## O1W4_OE
+
+```{r}
+#| label: ma-O1W4_OE
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1W4_OE"))
+```
+
+
+## O2_KO
+
+```{r}
+#| label: ma-O2_KO
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O2_KO"))
+```
+
+
+
+## O2W4_KO
+
+```{r}
+#| label: ma-O2W4_OE
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O2W4_KO"))
+```
+
+
+
+
+## W4_KO
+
+```{r}
+#| label: ma-W4_KO
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "W4_KO"))
+```
+
+
+
+## O1_KO
+
+```{r}
+#| label: ma-O1_KO
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1_KO"))
+```
+
+
+
+## O1W4_KO
+
+```{r}
+#| label: ma-O1W4_KO
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1W4_KO"))
+```
+
+
+## O1O2_KO
+
+```{r}
+#| label: ma-O102_KO
+#| fig.height: 6
+#| fig.width: 6
+
+plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1O2_KO"))
+```
+
+
+:::
+
+Everything looks good. 
+
+
+# Save output
+
+```{r}
+saveRDS(ensembl.genes, file = paste0(output_dir, "ensembl_genes.RDS"))
+saveRDS(data_mat, file = paste0(output_dir, "data_mat.RDS"))
+saveRDS(experimental_metadata, file = paste0(output_dir, "metadata.RDS"))
+saveRDS(dds_filt, file = paste0(output_dir, "dds_filt.RDS"))
+```
+
+# Summary
+
+- Everything looks good!
+- Same conditions cluster together on the PCA, as expected. 
+- MA plots look amazing - no visible batch effect. 
+
+# Sessioninfo
+
+```{r}
+sessionInfo()
+```

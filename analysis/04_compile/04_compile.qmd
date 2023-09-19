@@ -1,0 +1,120 @@
+---
+title: 04_compile
+author: Qian Hui TAN
+date: '`r format(Sys.time(), "%d %B %Y")`'
+format:
+  html: 
+    keep-md: true
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 4
+    code-fold: true
+    number-sections: true
+    smooth-scroll: true
+    code-tools: true
+    code-line-numbers: true
+  gfm: 
+    df-print: kable
+    toc: true 
+    toc-depth: 4
+    number-sections: true
+    prefer-html: true
+---
+
+# 04_compile
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+})
+
+
+
+## If the output directory doesn't exist, create it
+if(!dir.exists("output/04_compile")){
+  dir.create("output/04_compile")
+}
+
+output_dir <- "output/04_compile/"
+
+knitr::opts_chunk$set(#fig.width=12, fig.height=8, 
+                      fig.path='../figures/04_compile/',
+                      dev=c("png"))
+```
+
+
+## Read in files
+
+```{r}
+df_go <- read.csv("../output/03_clust/go_tables.csv")
+df_kegg <- read.csv("../output/03_clust/kegg_tables.csv")
+```
+
+
+```{r}
+df_go$cluster = factor(df_go$cluster, levels = c(1, 2, 3))
+df_go$GeneRatio = DOSE::parse_ratio(df_go$GeneRatio)
+
+df_go %>% 
+  arrange(cluster, GeneRatio) 
+```
+
+
+# GO plot
+
+```{r}
+ggplot(df_go, aes(x = cluster, y = Description, 
+                  size = GeneRatio, color = p.adjust)) +
+  geom_point() +
+  scale_color_gradient(low = "red", high = "blue", limits = c(0, 0.1), 
+                       breaks = c(seq(0, 0.1, 0.05))) +
+  theme_classic() +
+  labs(title = "GO: BP",
+       y = "")
+```
+- need to figure out how to reorder this
+
+
+
+## KEGG
+
+```{r}
+str(df_kegg)
+```
+
+```{r}
+df_kegg$GeneRatio = DOSE::parse_ratio(df_kegg$GeneRatio)
+
+
+df_kegg$cluster = factor(df_kegg$cluster)
+
+df_keggplot <- df_kegg %>% 
+  arrange(cluster, GeneRatio)
+
+
+df_keggplot$Description = factor(df_keggplot$Description, levels = df_keggplot$Description)
+```
+
+
+
+```{r}
+ggplot(df_keggplot, aes(x = cluster, y = Description, 
+                    size = GeneRatio, color = p.adjust)) +
+  geom_point() +
+  scale_color_gradient(low = "blue", high = "red") +
+  theme_classic() +
+  labs(title = "KEGG", 
+       y = "")
+```
+
+
+
+
+
+
+
+```{r}
+sessionInfo()
+```
+
