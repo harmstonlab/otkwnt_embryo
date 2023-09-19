@@ -28,4 +28,4 @@ sandbox/
 */Archive
 results/
 */*/*/figure-html/*
-*.html
+data/02_aligned/03_multiqc/*.html
