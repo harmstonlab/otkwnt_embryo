@@ -29,3 +29,4 @@ sandbox/
 results/
 */*/*/figure-html/*
 data/02_aligned/03_multiqc/*.html
+data/01_data_raw/data_raw/*

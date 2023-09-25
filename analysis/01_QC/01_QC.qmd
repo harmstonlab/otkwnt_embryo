@@ -65,6 +65,8 @@ manual_colors = c("darkgrey",
                   
                    "#a6cee3", "#b2df8a","#CC99FF", "lightpink", 
                    "coral")
+
+
   
 ```
 
@@ -109,6 +111,9 @@ pca_th <- theme(plot.title = element_text(size = 15),
          axis.title.y = element_text(size = 10),
          axis.text.x = element_text(size = 10),
          axis.text.y = element_text(size = 10))
+
+
+
 ```
 
 We first create gene-level annotations:
@@ -223,6 +228,7 @@ data_mat = apply(round(data), c(1,2), as.integer)
 head(data_mat)
 ```
 
+
 ## Create DESeq object
 
 ```{r}
@@ -269,6 +275,19 @@ nrow(data_mat_nonzero)/nrow(data_mat) * 100
 
 
 # DESeq QC 
+
+## Setup colors
+```{r}
+sample_order = colData(dds)$sample_id
+condition_order <- c("Ctrl", 
+                     "W4_OE", "O1_OE", "O1W4_OE", "O2_KO", 
+                     "W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO")
+
+col_colors <- c("darkgrey", #Ctrls
+                '#00362d', '#3a6f60', '#80ac95', '#ceebcb', #OEs
+                '#552200', '#834a25', '#b0764f', '#daa680', '#ffdab8' #KOs
+                )
+```
 
 ## Dispersion estimates
 
@@ -559,7 +578,7 @@ ntop = 500
     #scale_color_brewer(palette = "Paired") +
     # specify custom colors
     scale_color_manual(name = intgroup, 
-                       values = manual_colors) +
+                       values = col_colors) +
     
     # Make 1 unit on x-axis equal to 1 unit on y-axis
     coord_fixed(ratio = 1) +
@@ -577,19 +596,18 @@ intgroup_order = unique(experimental_metadata$condition)
 pca_xlim <- c(-30, 30)
 pca_ylim <- c(-20, 20)
 
-manual_colors = c("darkgrey",
-                   "#1f78b4", "#33a02c","#6600FF","#e31a1c",
-                  "lightpink", 
-                   "#a6cee3", "#b2df8a","#CC99FF", 
-                   
-                   "coral")
+#manual_colors = c("darkgrey",
+#                   "#1f78b4", "#33a02c","#6600FF","#e31a1c",
+#                  "lightpink", 
+#                   "#a6cee3", "#b2df8a","#CC99FF", 
+#                   "coral")
 
 # they must be in the same order- I forgot about this - we will fix this later
 
 pca_plot <- make_pca(rld, intgroup = "condition",
          xlimits = pca_xlim, 
          ylimits = pca_ylim,
-         manual_colors = manual_colors, 
+         manual_colors = col_colors, 
          title = "PCA, before filtering",
          rearrange_intgroup = TRUE,
          intgroup_order = intgroup_order)
@@ -602,7 +620,7 @@ pca_plot
 #| label: prefilt-pca-all-label
 
 make_pca(rld, intgroup = "condition", label = TRUE,
-         manual_colors = manual_colors, 
+         manual_colors = col_colors, 
          title = "PCA, before filtering",
          rearrange_intgroup = TRUE, 
          intgroup_order = intgroup_order)
@@ -807,28 +825,46 @@ plot(hclust(sampleDists), main = paste0("Cluster Dendrogram, ", plt_title))
 
 ```{r}
 #| label: rmrna-pca-filt-condition
-make_pca(rld_filt, intgroup = "condition",
+pca_rmrna <- make_pca(rld_filt, intgroup = "condition",
          title = "PCA plot, after removing rRNA and chrM",
          xlimits = pca_xlim, 
          ylimits = pca_ylim,
-         manual_colors = manual_colors, 
+         manual_colors = col_colors, 
          rearrange_intgroup = TRUE, 
          intgroup_order = intgroup_order) 
+
+pca_rmrna
 ```
+
+```{r}
+# Save this
+saveRDS(pca_rmrna, file = paste0(output_dir, "pca_rmrna.RDS"))
+```
+
 
 ### PCA, labelled
 
 ```{r}
 #| label: rmrna-pca-filt-condition-labelled
 
-make_pca(rld_filt, intgroup = "condition", label = TRUE, 
+pca_rmrna_label <- make_pca(rld_filt, intgroup = "condition", label = TRUE, 
          title = "PCA plot, after removing rRNA and chrM",
          xlimits = pca_xlim, 
          ylimits = pca_ylim,
-         manual_colors = manual_colors, 
+         manual_colors = col_colors, 
          rearrange_intgroup = TRUE, 
          intgroup_order = intgroup_order) 
+
+pca_rmrna_label
 ```
+
+```{r}
+# Save this
+
+saveRDS(pca_rmrna_label, file = paste0(output_dir, "pca_rmrna_label.RDS"))
+```
+
+
 
 ### PCA, by size factor
 
@@ -867,17 +903,25 @@ otk1_norm$condition = factor(otk1_norm$condition,
                              levels = unique(experimental_metadata$condition))
 
 # Plot
-ggplot(otk1_norm, aes(x = condition, y = counts, fill = condition)) +
+otk1_plot <- ggplot(otk1_norm, aes(x = condition, y = counts, fill = condition)) +
   geom_boxplot() +
   geom_point(size = 0.5) +
   labs(title = "otk1", 
        x = "", y = "Normalized counts") +
-  scale_fill_manual(values = manual_colors) +
-  scale_y_continuous(expand = c(0, NA), limits = c(0, 8e4)) +
+  scale_fill_manual(values = col_colors) +
+  scale_y_continuous(expand = c(0, NA), limits = c(0, 1e5)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90), 
         legend.position = "none") 
+
+otk1_plot
 ```
+
+```{r}
+saveRDS(otk1_plot, file = paste0(output_dir, "otk1_plot.RDS"))
+```
+
+
 
 ## Otk2 counts
 
@@ -898,17 +942,27 @@ otk2_norm$condition = factor(otk2_norm$condition,
                              levels = unique(experimental_metadata$condition))
 
 # Plot
-ggplot(otk2_norm, aes(x = condition, y = counts, fill = condition)) +
+otk2_plot <- ggplot(otk2_norm, aes(x = condition, y = counts, fill = condition)) +
   geom_boxplot() +
   geom_point(size = 0.5) +
   labs(title = "otk2", 
        x = "", y = "Normalized counts") +
-  scale_fill_manual(values = manual_colors) +
-  scale_y_continuous(expand = c(0, NA), limits = c(0, 3000)) +
+  scale_fill_manual(values = col_colors) +
+  scale_color_manual(values = col_colors) +
+  scale_y_continuous(expand = c(0, NA), limits = c(0, 1e5)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90), 
         legend.position = "none") 
+
+otk2_plot
 ```
+
+
+```{r}
+saveRDS(otk2_plot, file = paste0(output_dir, "otk2_plot.RDS"))
+```
+
+
 
 ## Wnt4 counts
 ```{r}
@@ -928,18 +982,24 @@ wnt4_norm$condition = factor(wnt4_norm$condition,
                              levels = unique(experimental_metadata$condition))
 
 # Plot
-ggplot(wnt4_norm, aes(x = condition, y = counts, fill = condition)) +
+wnt4_plot <- ggplot(wnt4_norm, aes(x = condition, y = counts, fill = condition)) +
   geom_boxplot() +
   geom_point(size = 0.5) +
   labs(title = "wnt4", 
        x = "", y = "Normalized counts") +
-  scale_fill_manual(values = manual_colors) +
+  scale_fill_manual(values = col_colors) +
   scale_y_continuous(expand = c(0, NA), limits = c(0, 1e5)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90),
         legend.position = "none") 
 
 
+wnt4_plot
+```
+
+
+```{r}
+saveRDS(wnt4_plot, file = paste0(output_dir, "wnt4_plot.RDS"))
 ```
 
 
