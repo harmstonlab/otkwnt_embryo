@@ -139,8 +139,48 @@ wald_dds = nbinomWaldTest(dds)
 
 Check names of coefficients
 ```{r}
-resultsNames(wald_dds)
+res_names <- resultsNames(wald_dds)
+
+res_names
 ```
+
+
+# Wald Tests
+
+- Get all the pairwise comparisons as a list
+- export to xlsx with each page being one comparison 
+
+lapply? 
+
+```{r}
+
+get_res <- function(x) {
+  res = results(wald_dds, name = x) 
+  res$ensembl_gene_id = rownames(res)
+  res$external_gene_name = ensembl.genes$external_gene_name[match(rownames(res), ensembl.genes$ensembl_gene_id)]
+  res$gene_biotype = ensembl.genes$gene_biotype[match(rownames(res), ensembl.genes$ensembl_gene_id)]
+  
+  res <- as_tibble(res) %>% 
+    dplyr::select(ensembl_gene_id, log2FoldChange, pvalue, padj, gene_biotype, external_gene_name)
+  
+  return(res)
+  }
+
+wald_res_all <- lapply(res_names, get_res)
+names(wald_res_all) <- res_names
+
+head(wald_res_all)
+```
+
+
+```{r}
+# export this
+openxlsx::write.xlsx(wald_res_all, 
+                     file = paste0(output_dir, "logfoldchanges.xlsx"), 
+                     sheetName = names(wald_res_all), 
+                     rowNames = FALSE)
+```
+
 
 # Wald Tests
 

@@ -6,3 +6,6 @@
 "dme00040","dme00040","Pentose and glucuronate interconversions - Drosophila melanogaster (fruit fly)","3/21","50/3487",0.0030767800440017,0.0196913922816109,0.0136026065103233,"Ugt37D1/Ugt37C2/sgl",3
 "dme00982","dme00982","Drug metabolism - cytochrome P450 - Drosophila melanogaster (fruit fly)","3/21","66/3487",0.00675164821542895,0.033542020469823,0.0231704746666541,"Ugt37D1/Ugt37C2/GstE5",3
 "dme00980","dme00980","Metabolism of xenobiotics by cytochrome P450 - Drosophila melanogaster (fruit fly)","3/21","68/3487",0.00733731697777378,0.033542020469823,0.0231704746666541,"Ugt37D1/Ugt37C2/GstE5",3
+"dme00830","dme00830","Retinol metabolism - Drosophila melanogaster (fruit fly)","2/21","33/3487",0.0163028666135812,0.0631009199114008,0.043589451254586,"Ugt37D1/Ugt37C2",2
+"dme00983","dme00983","Drug metabolism - other enzymes - Drosophila melanogaster (fruit fly)","3/21","94/3487",0.0177471337250815,0.0631009199114008,0.043589451254586,"Ugt37D1/Ugt37C2/GstE5",3
+"dme00860","dme00860","Porphyrin metabolism - Drosophila melanogaster (fruit fly)","2/21","45/3487",0.0292728420530199,0.0936730945696636,0.0647083876961492,"Ugt37D1/Ugt37C2",2
