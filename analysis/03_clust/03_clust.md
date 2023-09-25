@@ -1,6 +1,6 @@
 # 03_clust
 Qian Hui TAN
-2023-09-19
+2023-09-25
 
 - [<span class="toc-section-number">1</span> Clustering](#clustering)
 - [<span class="toc-section-number">2</span> Setup](#setup)
@@ -10,22 +10,22 @@ Qian Hui TAN
   test](#likelihood-ratio-test)
 - [<span class="toc-section-number">5</span> Determining optimal number
   of clusters](#determining-optimal-number-of-clusters)
-  - [<span class="toc-section-number">5.1</span> Silhouette
-    plots](#silhouette-plots)
-- [<span class="toc-section-number">6</span> Heatmap, varying
-  k](#heatmap-varying-k)
-- [<span class="toc-section-number">7</span> Kmeans, 3
-  clusters](#kmeans-3-clusters)
-  - [<span class="toc-section-number">7.1</span> Cluster 1](#cluster-1)
-  - [<span class="toc-section-number">7.2</span> Cluster 2](#cluster-2)
-  - [<span class="toc-section-number">7.3</span> Cluster 3](#cluster-3)
-- [<span class="toc-section-number">8</span> Export cluster genes for
+- [<span class="toc-section-number">6</span> Heatmap](#heatmap)
+  - [<span class="toc-section-number">6.1</span> Kmeans, 3
+    clusters](#kmeans-3-clusters)
+  - [<span class="toc-section-number">6.2</span> Cluster 1](#cluster-1)
+  - [<span class="toc-section-number">6.3</span> Cluster 2](#cluster-2)
+  - [<span class="toc-section-number">6.4</span> Cluster 3](#cluster-3)
+- [<span class="toc-section-number">7</span> Gene
+  boxplots](#gene-boxplots)
+- [<span class="toc-section-number">8</span> Exports](#exports)
+- [<span class="toc-section-number">9</span> Export cluster genes for
   compilation](#export-cluster-genes-for-compilation)
-  - [<span class="toc-section-number">8.1</span> Export GO and KEGG for
+  - [<span class="toc-section-number">9.1</span> Export GO and KEGG for
     figure](#export-go-and-kegg-for-figure)
-- [<span class="toc-section-number">9</span> Summary and
+- [<span class="toc-section-number">10</span> Summary and
   discussion](#summary-and-discussion)
-- [<span class="toc-section-number">10</span> Session
+- [<span class="toc-section-number">11</span> Session
   info](#session-info)
 
 # Clustering
@@ -35,21 +35,17 @@ Qian Hui TAN
 ``` r
 suppressPackageStartupMessages({
     library(DESeq2)
-
-    library(DT)
     library(pheatmap)
     library(clusterProfiler)
     library(ComplexHeatmap)
     library(circlize)
-    library(RColorBrewer)
     library(org.Dm.eg.db)
-    library(cluster)
+    library(RColorBrewer)
     # General tidying up
-    library(janitor)
-    library(ggrepel)
     library(tidyverse)
     library(reshape2)
     library(knitr)
+    library(grid)
 })
 
 source("../../scripts/R/clustering_functions.R")
@@ -111,6 +107,12 @@ dds = dds[filter, ]
   rld <- rlog(dds, blind = FALSE)
 ```
 
+``` r
+# export dds_filt
+
+saveRDS(dds, file = paste0(output_dir, "dds_filt.RDS"))
+```
+
 # Likelihood ratio test
 
 ``` r
@@ -118,6 +120,8 @@ res_lrt <- results(dds)
 
 res_lrt$gene_biotype= ensembl.genes$gene_biotype[match(row.names(res_lrt), ensembl.genes$gene_id)]
 res_lrt$external_gene_name= ensembl.genes$external_gene_name[match(row.names(res_lrt), ensembl.genes$gene_id)]
+
+res_lrt$ensembl_gene_id = rownames(res_lrt)
 #head(res_lrt)
 ```
 
@@ -193,8 +197,6 @@ plot(1:k.max, wss,
 
 ![](../figures/03_clust/optclust-wss-1.png)
 
-That looks like 5 or 6 clusters - it’s hard to tell.
-
 ## Average silhouette width
 
 We perform kmeans for 2-10 clusters, and calculate the average
@@ -225,6 +227,8 @@ best_k
 
     [1] 2
 
+### ASW
+
 ``` r
 ggplot(as.data.frame(ks, ASW), aes(ks, ASW)) + geom_line() +
   geom_vline(xintercept = best_k, color = "red", linetype = 2) +
@@ -236,29 +240,10 @@ ggplot(as.data.frame(ks, ASW), aes(ks, ASW)) + geom_line() +
 
 ![](../figures/03_clust/optclust-asw-1.png)
 
-</div>
-
 2 clusters looks best, but silhouette width constantly decreases until
 we reach k = 7. Which means either 3 clusters, or 8 clusters.
 
-Given that our samples have very distinct transcriptional profiles (from
-the previous DE section), it is unlikely that 3 clusters will capture
-the complexity we need. Hence, we will use 8 clusters instead.
-
-We plot all of these:
-
 ## Silhouette plots
-
-<div class="panel-tabset">
-
-### k = 2
-
-``` r
-k2_coef <- cluster_kmeans(rld_z = rld_z, nclust = 2, 
-                          plot_sil = TRUE)
-```
-
-![](../figures/03_clust/silplot-k2-1.png)
 
 ### k = 3
 
@@ -269,103 +254,106 @@ k3_coef <- cluster_kmeans(rld_z = rld_z, nclust = 3,
 
 ![](../figures/03_clust/silplot-k3-1.png)
 
-### k = 4
-
-``` r
-k4_coef <- cluster_kmeans(rld_z = rld_z, nclust = 4, 
-                          plot_sil = TRUE)
-```
-
-![](../figures/03_clust/silplot-k4-1.png)
-
-### k = 8
-
-``` r
-k8_coef <- cluster_kmeans(rld_z = rld_z, nclust = 8, 
-                          plot_sil = TRUE)
-```
-
-![](../figures/03_clust/silplot-k8-1.png)
-
 </div>
 
-Either 3 or 6 clusters looks correct. 8 clusters is overclustering.
-
-# Heatmap, varying k
-
-<div class="panel-tabset">
-
-## k = 2
+# Heatmap
 
 ``` r
 sample_order = colData(dds)$sample_id
+condition_order <- c("Ctrl", 
+                     "W4_OE", "O1_OE", "O1W4_OE", "O2_KO", 
+                     "W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO")
 
-plot_kmeans_heatmap(rld_z, k_coef = k2_coef,  
-                    sample_order = sample_order)
-```
-
-![](../figures/03_clust/heatmap-k2-1.png)
-
-## k = 3
-
-``` r
+#### ------ Row and column annotations ----- ####
 row_ann <- as.data.frame(k3_coef$cluster)
 colnames(row_ann) = "cluster"
-
 row_ann$cluster = factor(row_ann$cluster, 
                          levels = (1:length(row_ann$cluster)))
 
+col_ann <- data.frame(condition = rep(condition_order, each = 2))
+rownames(col_ann) <- sample_order
 
-sample_order = colData(dds)$sample_id
+ann_colors = list(
+    condition = c("Ctrl" = "grey30",
+                  # OE
+                  "W4_OE" = '#00362d', "O1_OE" = '#3a6f60', 
+                  "O1W4_OE" = '#80ac95', "O2_KO" = '#ceebcb',
+                  # KO
+                  "W4_KO" = '#552200', "O1_KO" = '#834a25', 
+                  "O1W4_KO" = '#b0764f', "O2W4_KO" = '#daa680', 
+                  "O1O2_KO" = '#ffdab8'),
+    cluster = c("1" = "grey90", "2" = "grey70", "3" = "grey10")
+)
 
-plot_kmeans_heatmap(rld_z, k_coef = k3_coef,  
+col_colors <- c("darkgrey", #Ctrls
+                '#00362d', '#3a6f60', '#80ac95', '#ceebcb', #OEs
+                '#552200', '#834a25', '#b0764f', '#daa680', '#ffdab8' #KOs
+                )
+```
+
+## Kmeans, 3 clusters
+
+``` r
+heatmap_plot <- plot_kmeans_heatmap(rld_z, k_coef = k3_coef,  
                     sample_order = sample_order,
-                    annotation_row = row_ann)
+                    labels_col = condition_order, 
+                    show_rownames = FALSE,
+                    show_colnames = FALSE, 
+                    annotation_row = row_ann, 
+                    annotation_col = col_ann,
+                    annotation_colors = ann_colors)
+
+heatmap_plot
 ```
 
 ![](../figures/03_clust/heatmap-k3-1.png)
 
-## k = 8
-
 ``` r
-row_ann <- as.data.frame(k8_coef$cluster)
-colnames(row_ann) = "cluster"
-
-row_ann$cluster = factor(row_ann$cluster, 
-                         levels = (1:length(row_ann$cluster)))
-
-# Todo: fix the ugly colors
-
-#| label: heatmap-k6
-plot_kmeans_heatmap(rld_z, k_coef = k8_coef,  
-                    sample_order = sample_order, 
-                    annotation_row = row_ann)
+saveRDS(heatmap_plot, file = paste0(output_dir, "heatmap_plot.RDS"))
 ```
 
-![](../figures/03_clust/heatmap-k8-1.png)
+``` r
+# save this
 
-</div>
-
-Honestly, k = 3 looks the best. We can proceed with that.
-
-# Kmeans, 3 clusters
+ggsave(filename = c("../figures/03_clust/heatmap.pdf"),
+       plot = heatmap_plot,
+       width = 210, 
+       height = 145, 
+       device = "pdf",
+       dpi = "retina",
+       units = c("mm"))
+```
 
 ``` r
-row_ann <- as.data.frame(k3_coef$cluster)
-colnames(row_ann) = "cluster"
+# Same plot as above, but remove the legend
 
-row_ann$cluster = factor(row_ann$cluster, 
-                         levels = (1:length(row_ann$cluster)))
-
-
-sample_order = colData(dds)$sample_id
-
-plot_kmeans_heatmap(rld_z, k_coef = k3_coef,  
+heatmap_noleg <- plot_kmeans_heatmap(rld_z, k_coef = k3_coef,  
                     sample_order = sample_order,
-                    annotation_row = row_ann)
+                    labels_col = condition_order, 
+                    show_rownames = FALSE,
+                    show_colnames = FALSE, 
+                    annotation_row = row_ann, 
+                    annotation_col = col_ann,
+                    annotation_colors = ann_colors, 
+                    annotation_legend = FALSE)
+
+heatmap_noleg
 ```
 
-![](../figures/03_clust/unnamed-chunk-22-1.png)
+![](../figures/03_clust/heatmap-nolegend-1.png)
+
+``` r
+saveRDS(heatmap_noleg, file = paste0(output_dir, "heatmap_noleg.RDS"))
+```
+
+``` r
+ggsave(filename = c("../figures/03_clust/heatmap_noleg.svg"),
+       plot = heatmap_noleg,
+       width = 210, 
+       height = 145, 
+       device = "svg",
+       units = c("mm"))
+```
 
 ``` r
 kmeans_cl <- get_cluster_genes(k3_coef, nclust = 3)
@@ -374,10 +362,17 @@ kmeans_cl <- get_cluster_genes(k3_coef, nclust = 3)
 ## Cluster 1
 
 ``` r
+ha = HeatmapAnnotation(condition = rep(condition_order, each = 2),
+                       col = ann_colors)
+
+
 clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
                clust_num = 1,
                sample_order = sample_order,
-              cluster_rows = FALSE)
+              cluster_rows = FALSE,
+              font_size = 8,
+              top_annotation = ha
+)
 ```
 
     `use_raster` is automatically set to TRUE for a matrix with more than
@@ -397,10 +392,6 @@ clusterHeatmap(rld_z, kmeans_cl = kmeans_cl,
 ### Zscore boxplot
 
 ``` r
-condition_order = c("Ctrl", "W4_OE", "O1_OE", "O1W4_OE", "O2_KO",
-                    "W4_KO", "O1_KO", "O1W4_KO",
-                    "O2W4_KO", "O1O2_KO")
-
 zscore_boxcondition(kmeans_cl, clust_num = 1, 
                     condition_order = condition_order)
 ```
@@ -649,8 +640,12 @@ write_csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"))
 # Get entrez ids
 c1_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[1]]), ]$entrezgene_id)
 
+
+kegg_universe = ensembl.genes[ensembl.genes$ensembl_gene_id %in% rownames(dds), ]$entrezgene_id
+
 # Run KEGG
-k3_c1_ekegg <- plotKEGG_dm(c1_entrez, title = "KEGG, cluster 1")
+k3_c1_ekegg <- plotKEGG_dm(c1_entrez, 
+                           universe = kegg_universe, title = "KEGG, cluster 1")
 ```
 
     Running KEGG for organism = drosophila melanogaster
@@ -660,6 +655,8 @@ k3_c1_ekegg <- plotKEGG_dm(c1_entrez, title = "KEGG, cluster 1")
     Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/dme"...
 
     Reading KEGG annotation online: "https://rest.kegg.jp/conv/ncbi-geneid/dme"...
+
+    `universe` is not in character and will be ignored...
 
 ![](../figures/03_clust/c1-ekegg-1.png)
 
@@ -715,7 +712,9 @@ c1_kegg_table
 ``` r
 clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
                clust_num = 2, sample_order = sample_order,
-              cluster_rows = FALSE)
+              cluster_rows = FALSE,
+              font_size = 8,
+              top_annotation  = ha)
 ```
 
 ![](../figures/03_clust/c2-heatmap-1.png)
@@ -1020,19 +1019,24 @@ write_csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
 # Get the entrez IDs
 c2_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[2]]), ]$entrezgene_id)
 # Run KEGG
-k3_c2_ekegg <- plotKEGG_dm(c2_entrez, title = "KEGG, cluster 2")
+k3_c2_ekegg <- plotKEGG_dm(c2_entrez, 
+                           universe = kegg_universe, 
+                           title = "KEGG, cluster 2")
 ```
 
     Running KEGG for organism = drosophila melanogaster
 
+    `universe` is not in character and will be ignored...
+
 ![](../figures/03_clust/c2-ekegg-1.png)
 
-    [1] "4 enrichments found"
+    [1] "6 enrichments found"
 
 ``` r
 interesting_pathways = c("Endocytosis", 
                          "MAPK signaling pathway - fly",
-                         "Hippo signaling pathway - fly")
+                         "Hippo signaling pathway - fly",
+                         "TGF-beta signaling pathway")
 
 c2_kegg_table <- custom_kegg_table(k3_c2_ekegg, 
                                    interesting_pathways)
@@ -1045,6 +1049,7 @@ c2_kegg_table
 | dme04144 | Endocytosis                   | 31/431    | 0.0054133 | Hsp68/Egfr/babo/Hsp70Ba/Hsp70Bc/Past1/sktl/WASp/siz/Sara/Rip11/Sec71/CG8243/wash/FAM21/Vps20/Eps-15/Strump/Arpc3A/Usp8/Asap/CG31064/Efa6/Hsp70Bbb/step/Rbsn-5/AP-2mu/garz/AP-2alpha/InR/btl |
 | dme04013 | MAPK signaling pathway - fly  | 25/431    | 0.0054133 | aop/dpp/Jra/Sos/peb/pnt/raw/Egfr/ttk/vn/hid/pros/hep/Mef2/phyl/Ask1/sty/Shark/Shc/edl/p38b/slpr/CYLD/Tab2/Duox                                                                              |
 | dme04391 | Hippo signaling pathway - fly | 17/431    | 0.0077243 | fj/ft/hth/tsh/vn/ex/wts/jub/yki/sav/Patj/crb/d/kibra/Myc/wg/ds                                                                                                                              |
+| dme04350 | TGF-beta signaling pathway    | 13/431    | 0.0740056 | dpp/emc/sog/babo/Rbf/Sin3A/gbb/E2f2/Sara/vis/achi/Myc/S6k                                                                                                                                   |
 
 ``` r
 write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"))
@@ -1059,7 +1064,9 @@ write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"))
 ``` r
 clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
                clust_num = 3, sample_order = sample_order,
-              cluster_rows = FALSE)
+              cluster_rows = FALSE,
+              font_size = 8, 
+              top_annotation = ha)
 ```
 
     `use_raster` is automatically set to TRUE for a matrix with more than
@@ -1220,7 +1227,7 @@ custom_ego(k3_c3_ego, interesting_pathways,
            title = "GO, k=3, cluster 3")
 ```
 
-![](../figures/03_clust/unnamed-chunk-47-1.png)
+![](../figures/03_clust/unnamed-chunk-48-1.png)
 
 ``` r
 write_csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"))
@@ -1233,14 +1240,17 @@ Run KEGG enrichment
 ``` r
 c3_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[3]]), ]$entrezgene_id)
 
-k3_c3_ekegg <- plotKEGG_dm(c3_entrez, title = "KEGG, cluster 3")
+k3_c3_ekegg <- plotKEGG_dm(c3_entrez, title = "KEGG, cluster 3", 
+                           universe = kegg_universe)
 ```
 
     Running KEGG for organism = drosophila melanogaster
 
+    `universe` is not in character and will be ignored...
+
 ![](../figures/03_clust/c3-ekegg-1.png)
 
-    [1] "22 enrichments found"
+    [1] "32 enrichments found"
 
 ### Custom KEGG
 
@@ -1248,42 +1258,45 @@ k3_c3_ekegg <- plotKEGG_dm(c3_entrez, title = "KEGG, cluster 3")
 k3_c3_ekegg
 ```
 
-|          | ID       | Description                                                                       | GeneRatio | BgRatio  |    pvalue |  p.adjust |    qvalue | geneID                                                                                                                                                                                                                                                                            | Count |
-|:---------|:---------|:----------------------------------------------------------------------------------|:----------|:---------|----------:|----------:|----------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------:|
-| dme04080 | dme04080 | Neuroactive ligand-receptor interaction - Drosophila melanogaster (fruit fly)     | 36/536    | 67/3487  | 0.0000000 | 0.0000000 | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |    36 |
-| dme01240 | dme01240 | Biosynthesis of cofactors - Drosophila melanogaster (fruit fly)                   | 38/536    | 138/3487 | 0.0001318 | 0.0068399 | 0.0047571 | Pu/v/l(3)02640/Alp4/Alas/Ugt35A1/Ugt37C1/Ugt37B1/CG12116/CG4407/Naprt/CG15629/Coq6/Nfs1/Ugt301D1/Alp12/CG8080/Alp6/Alp7/Alp8/CG3803/GC/Alp9/Pbgs/Pmm2/CG7430/Hpd/CG12170/CG2767/Alp5/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl/FeCH/Alp1                                      |    38 |
-| dme00514 | dme00514 | Other types of O-glycan biosynthesis - Drosophila melanogaster (fruit fly)        | 15/536    | 38/3487  | 0.0002579 | 0.0068399 | 0.0047571 | rt/fng/tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/GlcAT-P/Pgant8/Pgant9/CG31915/Pgant4/CG34056/tw                                                                                                                                                                                     |    15 |
-| dme00600 | dme00600 | Sphingolipid metabolism - Drosophila melanogaster (fruit fly)                     | 13/536    | 31/3487  | 0.0003294 | 0.0068399 | 0.0047571 | Gal/Sply/wun/Sk1/laza/CG11438/CG11437/CG11426/CDase/Hexo2/bwa/Gba1b/Ect3                                                                                                                                                                                                          |    13 |
-| dme04146 | dme04146 | Peroxisome - Drosophila melanogaster (fruit fly)                                  | 27/536    | 91/3487  | 0.0003423 | 0.0068399 | 0.0047571 | Cat/Idh/ry/ScpX/Pex5/Mfe2/Pex12/CG9527/CG17597/CG17544/CG1441/ADPS/Pex11/CG8306/CG5065/CG10672/Pex7/CG3961/CG17562/CG17560/CG13827/CG12268/wat/CG12355/CG30427/CG33671/Acsl                                                                                                       |    27 |
-| dme04512 | dme04512 | ECM-receptor interaction - Drosophila melanogaster (fruit fly)                    | 7/536     | 11/3487  | 0.0003664 | 0.0068399 | 0.0047571 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |     7 |
-| dme00785 | dme00785 | Lipoic acid metabolism - Drosophila melanogaster (fruit fly)                      | 9/536     | 18/3487  | 0.0005927 | 0.0094840 | 0.0065960 | ppl/Pdha/CG6415/CG33791/CG7430/CG8199/CG3999/Pdhb/CG1544                                                                                                                                                                                                                          |     9 |
-| dme04142 | dme04142 | Lysosome - Drosophila melanogaster (fruit fly)                                    | 32/536    | 123/3487 | 0.0013003 | 0.0175558 | 0.0122099 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |    32 |
-| dme00520 | dme00520 | Amino sugar and nucleotide sugar metabolism - Drosophila melanogaster (fruit fly) | 16/536    | 48/3487  | 0.0014450 | 0.0175558 | 0.0122099 | kkv/Pgm1/Cht2/CG17065/Gale/Cht7/Pmm2/Cht5/CG6218/Gfat2/Gnpnat/Hexo2/mmy/sgl/Cht6/Galk                                                                                                                                                                                             |    16 |
-| dme01212 | dme01212 | Fatty acid metabolism - Drosophila melanogaster (fruit fly)                       | 17/536    | 53/3487  | 0.0016753 | 0.0175558 | 0.0122099 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |    17 |
-| dme00512 | dme00512 | Mucin type O-glycan biosynthesis - Drosophila melanogaster (fruit fly)            | 10/536    | 24/3487  | 0.0017242 | 0.0175558 | 0.0122099 | tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/Pgant8/Pgant9/Pgant4/CG34056                                                                                                                                                                                                               |    10 |
-| dme00730 | dme00730 | Thiamine metabolism - Drosophila melanogaster (fruit fly)                         | 9/536     | 21/3487  | 0.0023250 | 0.0198853 | 0.0138300 | Alp4/Nfs1/Alp12/Alp6/Alp7/Alp8/Alp9/Alp5/Alp1                                                                                                                                                                                                                                     |     9 |
-| dme00830 | dme00830 | Retinol metabolism - Drosophila melanogaster (fruit fly)                          | 12/536    | 33/3487  | 0.0024568 | 0.0198853 | 0.0138300 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG15629/Ugt301D1/CG10672/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2                                                                                                                                                                                    |    12 |
-| dme01040 | dme01040 | Biosynthesis of unsaturated fatty acids - Drosophila melanogaster (fruit fly)     | 10/536    | 25/3487  | 0.0024857 | 0.0198853 | 0.0138300 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/CG18609/CG8630/CG9747/CG9743                                                                                                                                                                                                               |    10 |
-| dme00350 | dme00350 | Tyrosine metabolism - Drosophila melanogaster (fruit fly)                         | 9/536     | 22/3487  | 0.0034081 | 0.0254475 | 0.0176984 | Adh/amd/Ddc/ple/Faa/Hpd/yellow-f2/hgo/Tdc2                                                                                                                                                                                                                                        |     9 |
-| dme00053 | dme00053 | Ascorbate and aldarate metabolism - Drosophila melanogaster (fruit fly)           | 12/536    | 35/3487  | 0.0043094 | 0.0301659 | 0.0209800 | Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG6910/CG2767/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                                      |    12 |
-| dme00230 | dme00230 | Purine metabolism - Drosophila melanogaster (fruit fly)                           | 24/536    | 92/3487  | 0.0049069 | 0.0316190 | 0.0219906 | Pgm1/rut/ry/Ac76E/Gyc32E/Gycalpha99B/Gycbeta100B/Papss/CG6106/veil/CG16758/AdenoK/Adgf-A/Pde6/Gyc88E/Gyc89Db/ACXD/NT5E-2/CG32301/CG32305/CG34357/Pde9/Pde1c/Pde8                                                                                                                  |    24 |
-| dme00790 | dme00790 | Folate biosynthesis - Drosophila melanogaster (fruit fly)                         | 13/536    | 40/3487  | 0.0050816 | 0.0316190 | 0.0219906 | Hn/Pu/ple/Alp4/CG12116/Alp12/Alp6/Alp7/Alp8/Alp9/GstO3/Alp5/Alp1                                                                                                                                                                                                                  |    13 |
-| dme00860 | dme00860 | Porphyrin metabolism - Drosophila melanogaster (fruit fly)                        | 14/536    | 45/3487  | 0.0057390 | 0.0338298 | 0.0235282 | l(3)02640/Alas/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG3803/Pbgs/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/FeCH                                                                                                                                                                        |    14 |
-| dme00983 | dme00983 | Drug metabolism - other enzymes - Drosophila melanogaster (fruit fly)             | 24/536    | 94/3487  | 0.0065643 | 0.0367601 | 0.0255663 | ry/CRMP/Ugt35A1/Ugt37C1/Ugt37B1/CG17224/CG8360/CG8353/Ugt301D1/GstE1/GstE11/pyd3/CG6330/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10/Nlg4                                                                                                            |    24 |
-| dme00561 | dme00561 | Glycerolipid metabolism - Drosophila melanogaster (fruit fly)                     | 13/536    | 42/3487  | 0.0080343 | 0.0428495 | 0.0298013 | wun/Agpat1/CG1941/Agpat4/laza/CG11438/CG11437/CG11426/CG2767/CG31140/Dgk/CG34384/Mulk                                                                                                                                                                                             |    13 |
-| dme00410 | dme00410 | beta-Alanine metabolism - Drosophila melanogaster (fruit fly)                     | 9/536     | 25/3487  | 0.0091138 | 0.0463975 | 0.0322689 | b/Gad1/CRMP/CG17896/CG9527/CG17544/CG5618/pyd3/CG5044                                                                                                                                                                                                                             |     9 |
+|          | ID       | Description                                                                        | GeneRatio | BgRatio  |    pvalue |  p.adjust |    qvalue | geneID                                                                                                                                                                                                                                                                            | Count |
+|:---------|:---------|:-----------------------------------------------------------------------------------|:----------|:---------|----------:|----------:|----------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------:|
+| dme04080 | dme04080 | Neuroactive ligand-receptor interaction - Drosophila melanogaster (fruit fly)      | 36/536    | 67/3487  | 0.0000000 | 0.0000000 | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |    36 |
+| dme01240 | dme01240 | Biosynthesis of cofactors - Drosophila melanogaster (fruit fly)                    | 38/536    | 138/3487 | 0.0001318 | 0.0068399 | 0.0047571 | Pu/v/l(3)02640/Alp4/Alas/Ugt35A1/Ugt37C1/Ugt37B1/CG12116/CG4407/Naprt/CG15629/Coq6/Nfs1/Ugt301D1/Alp12/CG8080/Alp6/Alp7/Alp8/CG3803/GC/Alp9/Pbgs/Pmm2/CG7430/Hpd/CG12170/CG2767/Alp5/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl/FeCH/Alp1                                      |    38 |
+| dme00514 | dme00514 | Other types of O-glycan biosynthesis - Drosophila melanogaster (fruit fly)         | 15/536    | 38/3487  | 0.0002579 | 0.0068399 | 0.0047571 | rt/fng/tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/GlcAT-P/Pgant8/Pgant9/CG31915/Pgant4/CG34056/tw                                                                                                                                                                                     |    15 |
+| dme00600 | dme00600 | Sphingolipid metabolism - Drosophila melanogaster (fruit fly)                      | 13/536    | 31/3487  | 0.0003294 | 0.0068399 | 0.0047571 | Gal/Sply/wun/Sk1/laza/CG11438/CG11437/CG11426/CDase/Hexo2/bwa/Gba1b/Ect3                                                                                                                                                                                                          |    13 |
+| dme04146 | dme04146 | Peroxisome - Drosophila melanogaster (fruit fly)                                   | 27/536    | 91/3487  | 0.0003423 | 0.0068399 | 0.0047571 | Cat/Idh/ry/ScpX/Pex5/Mfe2/Pex12/CG9527/CG17597/CG17544/CG1441/ADPS/Pex11/CG8306/CG5065/CG10672/Pex7/CG3961/CG17562/CG17560/CG13827/CG12268/wat/CG12355/CG30427/CG33671/Acsl                                                                                                       |    27 |
+| dme04512 | dme04512 | ECM-receptor interaction - Drosophila melanogaster (fruit fly)                     | 7/536     | 11/3487  | 0.0003664 | 0.0068399 | 0.0047571 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |     7 |
+| dme00785 | dme00785 | Lipoic acid metabolism - Drosophila melanogaster (fruit fly)                       | 9/536     | 18/3487  | 0.0005927 | 0.0094840 | 0.0065960 | ppl/Pdha/CG6415/CG33791/CG7430/CG8199/CG3999/Pdhb/CG1544                                                                                                                                                                                                                          |     9 |
+| dme04142 | dme04142 | Lysosome - Drosophila melanogaster (fruit fly)                                     | 32/536    | 123/3487 | 0.0013003 | 0.0175558 | 0.0122099 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |    32 |
+| dme00520 | dme00520 | Amino sugar and nucleotide sugar metabolism - Drosophila melanogaster (fruit fly)  | 16/536    | 48/3487  | 0.0014450 | 0.0175558 | 0.0122099 | kkv/Pgm1/Cht2/CG17065/Gale/Cht7/Pmm2/Cht5/CG6218/Gfat2/Gnpnat/Hexo2/mmy/sgl/Cht6/Galk                                                                                                                                                                                             |    16 |
+| dme01212 | dme01212 | Fatty acid metabolism - Drosophila melanogaster (fruit fly)                        | 17/536    | 53/3487  | 0.0016753 | 0.0175558 | 0.0122099 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |    17 |
+| dme00512 | dme00512 | Mucin type O-glycan biosynthesis - Drosophila melanogaster (fruit fly)             | 10/536    | 24/3487  | 0.0017242 | 0.0175558 | 0.0122099 | tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/Pgant8/Pgant9/Pgant4/CG34056                                                                                                                                                                                                               |    10 |
+| dme00730 | dme00730 | Thiamine metabolism - Drosophila melanogaster (fruit fly)                          | 9/536     | 21/3487  | 0.0023250 | 0.0198853 | 0.0138300 | Alp4/Nfs1/Alp12/Alp6/Alp7/Alp8/Alp9/Alp5/Alp1                                                                                                                                                                                                                                     |     9 |
+| dme00830 | dme00830 | Retinol metabolism - Drosophila melanogaster (fruit fly)                           | 12/536    | 33/3487  | 0.0024568 | 0.0198853 | 0.0138300 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG15629/Ugt301D1/CG10672/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2                                                                                                                                                                                    |    12 |
+| dme01040 | dme01040 | Biosynthesis of unsaturated fatty acids - Drosophila melanogaster (fruit fly)      | 10/536    | 25/3487  | 0.0024857 | 0.0198853 | 0.0138300 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/CG18609/CG8630/CG9747/CG9743                                                                                                                                                                                                               |    10 |
+| dme00350 | dme00350 | Tyrosine metabolism - Drosophila melanogaster (fruit fly)                          | 9/536     | 22/3487  | 0.0034081 | 0.0254475 | 0.0176984 | Adh/amd/Ddc/ple/Faa/Hpd/yellow-f2/hgo/Tdc2                                                                                                                                                                                                                                        |     9 |
+| dme00053 | dme00053 | Ascorbate and aldarate metabolism - Drosophila melanogaster (fruit fly)            | 12/536    | 35/3487  | 0.0043094 | 0.0301659 | 0.0209800 | Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG6910/CG2767/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                                      |    12 |
+| dme00230 | dme00230 | Purine metabolism - Drosophila melanogaster (fruit fly)                            | 24/536    | 92/3487  | 0.0049069 | 0.0316190 | 0.0219906 | Pgm1/rut/ry/Ac76E/Gyc32E/Gycalpha99B/Gycbeta100B/Papss/CG6106/veil/CG16758/AdenoK/Adgf-A/Pde6/Gyc88E/Gyc89Db/ACXD/NT5E-2/CG32301/CG32305/CG34357/Pde9/Pde1c/Pde8                                                                                                                  |    24 |
+| dme00790 | dme00790 | Folate biosynthesis - Drosophila melanogaster (fruit fly)                          | 13/536    | 40/3487  | 0.0050816 | 0.0316190 | 0.0219906 | Hn/Pu/ple/Alp4/CG12116/Alp12/Alp6/Alp7/Alp8/Alp9/GstO3/Alp5/Alp1                                                                                                                                                                                                                  |    13 |
+| dme00860 | dme00860 | Porphyrin metabolism - Drosophila melanogaster (fruit fly)                         | 14/536    | 45/3487  | 0.0057390 | 0.0338298 | 0.0235282 | l(3)02640/Alas/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG3803/Pbgs/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/FeCH                                                                                                                                                                        |    14 |
+| dme00983 | dme00983 | Drug metabolism - other enzymes - Drosophila melanogaster (fruit fly)              | 24/536    | 94/3487  | 0.0065643 | 0.0367601 | 0.0255663 | ry/CRMP/Ugt35A1/Ugt37C1/Ugt37B1/CG17224/CG8360/CG8353/Ugt301D1/GstE1/GstE11/pyd3/CG6330/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10/Nlg4                                                                                                            |    24 |
+| dme00561 | dme00561 | Glycerolipid metabolism - Drosophila melanogaster (fruit fly)                      | 13/536    | 42/3487  | 0.0080343 | 0.0428495 | 0.0298013 | wun/Agpat1/CG1941/Agpat4/laza/CG11438/CG11437/CG11426/CG2767/CG31140/Dgk/CG34384/Mulk                                                                                                                                                                                             |    13 |
+| dme00410 | dme00410 | beta-Alanine metabolism - Drosophila melanogaster (fruit fly)                      | 9/536     | 25/3487  | 0.0091138 | 0.0463975 | 0.0322689 | b/Gad1/CRMP/CG17896/CG9527/CG17544/CG5618/pyd3/CG5044                                                                                                                                                                                                                             |     9 |
+| dme01250 | dme01250 | Biosynthesis of nucleotide sugars - Drosophila melanogaster (fruit fly)            | 10/536    | 30/3487  | 0.0111048 | 0.0535345 | 0.0372326 | Pgm1/Gale/CG6910/Pmm2/CG6218/Gfat2/Gnpnat/mmy/sgl/Galk                                                                                                                                                                                                                            |    10 |
+| dme00564 | dme00564 | Glycerophospholipid metabolism - Drosophila melanogaster (fruit fly)               | 17/536    | 63/3487  | 0.0118175 | 0.0535345 | 0.0372326 | Ace/ChAT/wun/Gpo1/CG4757/Agpat1/CG7149/Agpat4/laza/CG11438/CG11437/CG11426/CLS/CG18815/CG31140/Dgk/CG34384                                                                                                                                                                        |    17 |
+| dme00980 | dme00980 | Metabolism of xenobiotics by cytochrome P450 - Drosophila melanogaster (fruit fly) | 18/536    | 68/3487  | 0.0119497 | 0.0535345 | 0.0372326 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG3609/Ugt301D1/GstE1/GstE11/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10                                                                                                                                                |    18 |
+| dme00511 | dme00511 | Other glycan degradation - Drosophila melanogaster (fruit fly)                     | 8/536     | 22/3487  | 0.0128794 | 0.0549597 | 0.0382239 | Gal/CG5613/LManIII/LManV/LManVI/Hexo2/Gba1b/Ect3                                                                                                                                                                                                                                  |     8 |
+| dme00760 | dme00760 | Nicotinate and nicotinamide metabolism - Drosophila melanogaster (fruit fly)       | 7/536     | 18/3487  | 0.0132492 | 0.0549597 | 0.0382239 | Sirt4/Naprt/CG8080/veil/CG16758/Sirt2/NT5E-2                                                                                                                                                                                                                                      |     7 |
+| dme00040 | dme00040 | Pentose and glucuronate interconversions - Drosophila melanogaster (fruit fly)     | 14/536    | 50/3487  | 0.0154567 | 0.0618270 | 0.0430000 | Ugt35A1/Ugt37C1/Ugt37B1/CG3609/Ugt301D1/Had2/CG2767/CG3534/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                          |    14 |
+| dme00982 | dme00982 | Drug metabolism - cytochrome P450 - Drosophila melanogaster (fruit fly)            | 17/536    | 66/3487  | 0.0188116 | 0.0726518 | 0.0505285 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/GstE1/GstE11/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10                                                                                                                                                       |    17 |
+| dme04145 | dme04145 | Phagosome - Drosophila melanogaster (fruit fly)                                    | 20/536    | 82/3487  | 0.0206132 | 0.0769561 | 0.0535221 | alphaTub85E/betaTub97EF/Calr/Sec61beta/Nos/Rac2/RhoL/Rab7/Sec61gamma/Tsp/Vha100-5/VhaM9.7-a/CG11459/Vha100-4/Vha36-3/Sdic2/Sec61alpha/Vha68-2/Vha68-1/Vha13                                                                                                                       |    20 |
+| dme02010 | dme02010 | ABC transporters - Drosophila melanogaster (fruit fly)                             | 11/536    | 38/3487  | 0.0237572 | 0.0858325 | 0.0596956 | Mdr65/CG3156/CG1824/CG1494/CG4822/CG5853/CG10226/CG4562/CG11069/Mrp4/CG17646                                                                                                                                                                                                      |    11 |
+| dme00250 | dme00250 | Alanine, aspartate and glutamate metabolism - Drosophila melanogaster (fruit fly)  | 9/536     | 29/3487  | 0.0253267 | 0.0886434 | 0.0616505 | Gs1/Gad1/Ass/CG7860/Argl/CG9674/P5CDh1/Ssadh/Gfat2                                                                                                                                                                                                                                |     9 |
 
 ``` r
-custom_ego_table(k3_c3_ekegg, 
-                 interesting_pathways = c("Coronavirus disease - COVID-19", 
-                                          "Ribosome"))
-```
-
-| Description | GeneRatio | p.adjust | geneID |
-|:------------|:----------|---------:|:-------|
-
-``` r
-interesting_pathways <- c("ECM-receptor interaction", "Lysosome", 
+interesting_pathways <- c("ECM-receptor interaction",
+                          "Neuroactive ligand-receptor interaction",
+                          "Lysosome", 
                           "Fatty acid metabolism")
 
 c3_kegg_table <- custom_kegg_table(k3_c3_ekegg, interesting_pathways)
@@ -1291,15 +1304,185 @@ c3_kegg_table <- custom_kegg_table(k3_c3_ekegg, interesting_pathways)
 c3_kegg_table
 ```
 
-|          | Description              | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                           |
-|:---------|:-------------------------|:----------|----------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| dme04512 | ECM-receptor interaction | 7/536     | 0.0068399 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                           |
-| dme04142 | Lysosome                 | 32/536    | 0.0175558 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b |
-| dme01212 | Fatty acid metabolism    | 17/536    | 0.0175558 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                  |
+|          | Description                             | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                            |
+|:---------|:----------------------------------------|:----------|----------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| dme04080 | Neuroactive ligand-receptor interaction | 36/536    | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |
+| dme04512 | ECM-receptor interaction                | 7/536     | 0.0068399 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |
+| dme04142 | Lysosome                                | 32/536    | 0.0175558 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |
+| dme01212 | Fatty acid metabolism                   | 17/536    | 0.0175558 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |
 
 ### Summary
 
 </div>
+
+# Gene boxplots
+
+Plot some cluster genes and figure out why hippo is different between
+kegg and go
+
+<div class="panel-tabset">
+
+## Wts
+
+``` r
+gene_boxplot <- function(gene_of_interest, dds, title = "title") {
+  
+  # Get normalized counts
+  df_norm <- as.data.frame(counts(dds, normalized = TRUE)[gene_of_interest, ])
+  df_norm$sample <- rownames(df_norm)
+  colnames(df_norm) <- c("counts", "sample")
+  df_norm$sample = factor(df_norm$sample, 
+                            levels = colData(dds)$sample_id)
+  df_norm$condition = df_norm$sample
+  df_norm$condition = gsub("_[0-9]", "", df_norm$condition)
+  df_norm$condition = factor(df_norm$condition, 
+                               levels = unique(colData(dds)$condition))
+  
+  # Plot
+  gene_plot <- ggplot(df_norm, aes(x = condition, y = counts, fill = condition)) +
+    geom_boxplot() +
+    geom_point(size = 0.5) +
+    labs(title = title, 
+         x = "", y = "Normalized counts") +
+    scale_fill_manual(values = col_colors) +
+    scale_y_continuous(expand = c(0, NA), limits = c(0, NA)) +
+    theme_classic() +
+    theme(axis.text.x = element_text(angle = 90), 
+          legend.position = "none") 
+  
+  return(gene_plot)
+  
+}
+```
+
+``` r
+c2_kegg_table %>% 
+  dplyr::filter(Description == "Hippo signaling pathway - fly") %>% 
+  pull(geneID) %>% 
+  strsplit(split = "/")
+```
+
+    [[1]]
+     [1] "fj"    "ft"    "hth"   "tsh"   "vn"    "ex"    "wts"   "jub"   "yki"  
+    [10] "sav"   "Patj"  "crb"   "d"     "kibra" "Myc"   "wg"    "ds"   
+
+``` r
+wts <- "FBgn0011739"
+gene_boxplot(wts, dds, title = "wts")
+```
+
+![](../figures/03_clust/genebox-wts-1.png)
+
+## Vn
+
+``` r
+vn = "FBgn0003984"
+
+gene_boxplot(vn, dds, title = "vn")
+```
+
+![](../figures/03_clust/genebox-vn-1.png)
+
+## GO terms
+
+Alright, what’s in the GO terms?
+
+``` r
+hippo_c1 <- k3_c1_ego %>% 
+  dplyr::filter(Description == "hippo signaling") %>% 
+  pull(geneID) %>% 
+  strsplit(split = "/") %>% 
+  unlist()
+
+
+df_hippo <- as_tibble(ensembl.genes) %>% 
+  filter(external_gene_name %in% hippo_c1) %>% 
+  dplyr::select(ensembl_gene_id, external_gene_name) %>% 
+  arrange(external_gene_name)
+
+df_hippo
+```
+
+| ensembl_gene_id | external_gene_name |
+|:----------------|:-------------------|
+| FBgn0020238     | 14-3-3epsilon      |
+| FBgn0015024     | CkIalpha           |
+| FBgn0015509     | Cul1               |
+| FBgn0032363     | Dlg5               |
+| FBgn0031871     | Fgop2              |
+| FBgn0033539     | Git                |
+| FBgn0035207     | Herc4              |
+| FBgn0034590     | Magi               |
+| FBgn0024329     | Mekk1              |
+| FBgn0263197     | Patronin           |
+| FBgn0031799     | Pez                |
+| FBgn0000273     | Pka-C1             |
+| FBgn0260439     | Pp2A-29B           |
+| FBgn0040752     | Prosap             |
+| FBgn0034646     | Rae1               |
+| FBgn0004636     | Rap1               |
+| FBgn0039055     | Rassf              |
+| FBgn0005649     | Rox8               |
+| FBgn0015803     | RtGEF              |
+| FBgn0262103     | Sik3               |
+| FBgn0025637     | SkpA               |
+| FBgn0040011     | Slmap              |
+| FBgn0029006     | Smurf              |
+| FBgn0262733     | Src64B             |
+| FBgn0003557     | Su(dx)             |
+| FBgn0031030     | Tao                |
+| FBgn0026317     | Tsc1               |
+| FBgn0030366     | Usp7               |
+| FBgn0261854     | aPKC               |
+| FBgn0002413     | dco                |
+| FBgn0283649     | elgi               |
+| FBgn0261456     | hpo                |
+| FBgn0002121     | l(2)gl             |
+| FBgn0261524     | lic                |
+| FBgn0020279     | lig                |
+| FBgn0038965     | mats               |
+| FBgn0259168     | mnb                |
+| FBgn0010909     | msn                |
+| FBgn0004177     | mts                |
+| FBgn0010441     | pll                |
+| FBgn0029903     | pod1               |
+| FBgn0002466     | sti                |
+| FBgn0003733     | tor                |
+| FBgn0266848     | wap                |
+
+## Hpo
+
+``` r
+gene_boxplot("FBgn0261456", dds, title = "hpo")
+```
+
+![](../figures/03_clust/genebox-hpo-1.png)
+
+## Mats
+
+``` r
+gene_boxplot("FBgn0038965", dds, title = "mats")
+```
+
+![](../figures/03_clust/genebox-mats-1.png)
+
+## Rae1
+
+``` r
+gene_boxplot("FBgn0034646", dds, title = "Rae1")
+```
+
+![](../figures/03_clust/genebox-rae1-1.png)
+
+</div>
+
+# Exports
+
+``` r
+# to make the plots
+saveRDS(rld_z, file = paste0(output_dir, "rld_z.RDS"))
+saveRDS(kmeans_cl, file = paste0(output_dir, "kmeans_cl.RDS"))
+```
 
 # Export cluster genes for compilation
 
@@ -1322,11 +1505,23 @@ df_combined$gene_biotype = ensembl.genes$gene_biotype[match(df_combined$ensembl_
                                                             ensembl.genes$gene_id)]
 # Add gene name
 df_combined$gene_name = ensembl.genes$external_gene_name[match(df_combined$ensembl_gene_id, 
-                                                            ensembl.genes$gene_id)]
+                                                               ensembl.genes$gene_id)]
+
+# Add pvalue
+df_combined$pvalue = res_lrt$pvalue[match(df_combined$ensembl_gene_id, 
+                                          res_lrt$ensembl_gene_id)]
+# Add padj
+df_combined$padj = res_lrt$padj[match(df_combined$ensembl_gene_id, 
+                                          res_lrt$ensembl_gene_id)]
+
+# Arrange
+df_combined <- df_combined %>% 
+  dplyr::select(ensembl_gene_id, pvalue, padj, 
+                gene_biotype, gene_name, cluster)
 
 # Export
-
-write.csv(df_combined, file = paste0(output_dir, "cluster_genes.csv"))
+write.csv(df_combined, file = paste0(output_dir, "cluster_genes.csv"),
+          row.names = FALSE)
 ```
 
 ## Export GO and KEGG for figure
@@ -1377,23 +1572,21 @@ sessionInfo()
      [3] forcats_1.0.0               stringr_1.5.0              
      [5] dplyr_1.1.3                 purrr_1.0.1                
      [7] readr_2.1.3                 tidyr_1.3.0                
-     [9] tibble_3.2.1                tidyverse_1.3.2            
-    [11] ggrepel_0.9.3               ggplot2_3.4.2              
-    [13] janitor_2.2.0               cluster_2.1.4              
-    [15] org.Dm.eg.db_3.16.0         AnnotationDbi_1.60.2       
-    [17] RColorBrewer_1.1-3          circlize_0.4.15            
-    [19] ComplexHeatmap_2.14.0       clusterProfiler_4.7.1.003  
-    [21] pheatmap_1.0.12             DT_0.27                    
-    [23] DESeq2_1.38.3               SummarizedExperiment_1.28.0
-    [25] Biobase_2.58.0              MatrixGenerics_1.10.0      
-    [27] matrixStats_1.0.0           GenomicRanges_1.50.2       
-    [29] GenomeInfoDb_1.34.9         IRanges_2.32.0             
-    [31] S4Vectors_0.36.2            BiocGenerics_0.44.0        
+     [9] tibble_3.2.1                ggplot2_3.4.2              
+    [11] tidyverse_1.3.2             RColorBrewer_1.1-3         
+    [13] org.Dm.eg.db_3.16.0         AnnotationDbi_1.60.2       
+    [15] circlize_0.4.15             ComplexHeatmap_2.14.0      
+    [17] clusterProfiler_4.7.1.003   pheatmap_1.0.12            
+    [19] DESeq2_1.38.3               SummarizedExperiment_1.28.0
+    [21] Biobase_2.58.0              MatrixGenerics_1.10.0      
+    [23] matrixStats_1.0.0           GenomicRanges_1.50.2       
+    [25] GenomeInfoDb_1.34.9         IRanges_2.32.0             
+    [27] S4Vectors_0.36.2            BiocGenerics_0.44.0        
 
     loaded via a namespace (and not attached):
       [1] utf8_1.2.3             tidyselect_1.2.0       RSQLite_2.3.1         
-      [4] htmlwidgets_1.6.1      BiocParallel_1.32.6    scatterpie_0.2.1      
-      [7] munsell_0.5.0          codetools_0.2-19       withr_2.5.0           
+      [4] BiocParallel_1.32.6    scatterpie_0.2.1       munsell_0.5.0         
+      [7] ragg_1.2.5             codetools_0.2-19       withr_2.5.0           
      [10] colorspace_2.1-0       GOSemSim_2.24.0        rstudioapi_0.14       
      [13] robustbase_0.95-0      DOSE_3.24.2            labeling_0.4.2        
      [16] GenomeInfoDbData_1.2.9 polyclip_1.10-4        bit64_4.0.5           
@@ -1406,35 +1599,36 @@ sessionInfo()
      [37] gridGraphics_0.5-1     DelayedArray_0.24.0    vroom_1.6.1           
      [40] scales_1.2.1           ggraph_2.1.0           nnet_7.3-18           
      [43] enrichplot_1.18.4      googlesheets4_1.0.1    gtable_0.3.3          
-     [46] tidygraph_1.2.3        rlang_1.1.1            GlobalOptions_0.1.2   
-     [49] splines_4.2.2          lazyeval_0.2.2         gargle_1.3.0          
-     [52] broom_1.0.3            yaml_2.3.7             modelr_0.1.10         
-     [55] backports_1.4.1        qvalue_2.30.0          tools_4.2.2           
-     [58] ggplotify_0.1.1        Rcpp_1.0.11            plyr_1.8.8            
-     [61] zlibbioc_1.44.0        RCurl_1.98-1.12        GetoptLong_1.0.5      
-     [64] viridis_0.6.3          cowplot_1.1.1          haven_2.5.1           
-     [67] fs_1.6.2               magrittr_2.0.3         data.table_1.14.8     
-     [70] reprex_2.0.2           googledrive_2.0.0      hms_1.1.3             
-     [73] patchwork_1.1.2        evaluate_0.20          xtable_1.8-4          
-     [76] HDO.db_0.99.1          XML_3.99-0.14          mclust_6.0.0          
-     [79] readxl_1.4.1           gridExtra_2.3          shape_1.4.6           
-     [82] compiler_4.2.2         crayon_1.5.2           shadowtext_0.1.2      
-     [85] htmltools_0.5.4        ggfun_0.1.1            tzdb_0.3.0            
-     [88] geneplotter_1.76.0     aplot_0.1.10           lubridate_1.9.1       
-     [91] DBI_1.1.3              tweenr_2.0.2           dbplyr_2.3.3          
-     [94] MASS_7.3-58.2          fpc_2.2-10             Matrix_1.5-4.1        
-     [97] cli_3.6.1              parallel_4.2.2         igraph_1.5.0          
-    [100] pkgconfig_2.0.3        xml2_1.3.5             foreach_1.5.2         
-    [103] ggtree_3.6.2           annotate_1.76.0        XVector_0.38.0        
-    [106] rvest_1.0.3            snakecase_0.11.0       yulab.utils_0.0.6     
-    [109] digest_0.6.33          Biostrings_2.66.0      rmarkdown_2.20        
-    [112] cellranger_1.1.0       fastmatch_1.1-3        tidytree_0.4.4        
-    [115] kernlab_0.9-32         modeltools_0.2-23      rjson_0.2.21          
-    [118] lifecycle_1.0.3        nlme_3.1-162           jsonlite_1.8.7        
-    [121] viridisLite_0.4.2      fansi_1.0.4            pillar_1.9.0          
-    [124] lattice_0.20-45        DEoptimR_1.0-11        KEGGREST_1.38.0       
-    [127] fastmap_1.1.1          httr_1.4.6             GO.db_3.16.0          
-    [130] glue_1.6.2             png_0.1-8              prabclus_2.3-2        
-    [133] iterators_1.0.14       bit_4.0.5              ggforce_0.4.1         
-    [136] class_7.3-21           stringi_1.7.12         blob_1.2.4            
-    [139] memoise_2.0.1          ape_5.7-1             
+     [46] tidygraph_1.2.3        rlang_1.1.1            systemfonts_1.0.4     
+     [49] GlobalOptions_0.1.2    splines_4.2.2          lazyeval_0.2.2        
+     [52] gargle_1.3.0           broom_1.0.3            yaml_2.3.7            
+     [55] modelr_0.1.10          backports_1.4.1        qvalue_2.30.0         
+     [58] tools_4.2.2            ggplotify_0.1.1        Rcpp_1.0.11           
+     [61] plyr_1.8.8             zlibbioc_1.44.0        RCurl_1.98-1.12       
+     [64] GetoptLong_1.0.5       viridis_0.6.3          cowplot_1.1.1         
+     [67] haven_2.5.1            ggrepel_0.9.3          cluster_2.1.4         
+     [70] fs_1.6.2               magrittr_2.0.3         data.table_1.14.8     
+     [73] reprex_2.0.2           googledrive_2.0.0      hms_1.1.3             
+     [76] patchwork_1.1.2        evaluate_0.20          xtable_1.8-4          
+     [79] HDO.db_0.99.1          XML_3.99-0.14          mclust_6.0.0          
+     [82] readxl_1.4.1           gridExtra_2.3          shape_1.4.6           
+     [85] compiler_4.2.2         crayon_1.5.2           shadowtext_0.1.2      
+     [88] htmltools_0.5.4        ggfun_0.1.1            tzdb_0.3.0            
+     [91] geneplotter_1.76.0     aplot_0.1.10           lubridate_1.9.1       
+     [94] DBI_1.1.3              tweenr_2.0.2           dbplyr_2.3.3          
+     [97] MASS_7.3-58.2          fpc_2.2-10             Matrix_1.5-4.1        
+    [100] cli_3.6.1              parallel_4.2.2         igraph_1.5.0          
+    [103] pkgconfig_2.0.3        xml2_1.3.5             foreach_1.5.2         
+    [106] svglite_2.1.1          ggtree_3.6.2           annotate_1.76.0       
+    [109] XVector_0.38.0         rvest_1.0.3            yulab.utils_0.0.6     
+    [112] digest_0.6.33          Biostrings_2.66.0      rmarkdown_2.20        
+    [115] cellranger_1.1.0       fastmatch_1.1-3        tidytree_0.4.4        
+    [118] kernlab_0.9-32         modeltools_0.2-23      rjson_0.2.21          
+    [121] lifecycle_1.0.3        nlme_3.1-162           jsonlite_1.8.7        
+    [124] viridisLite_0.4.2      fansi_1.0.4            pillar_1.9.0          
+    [127] lattice_0.20-45        KEGGREST_1.38.0        fastmap_1.1.1         
+    [130] httr_1.4.6             DEoptimR_1.0-11        GO.db_3.16.0          
+    [133] glue_1.6.2             png_0.1-8              prabclus_2.3-2        
+    [136] iterators_1.0.14       bit_4.0.5              ggforce_0.4.1         
+    [139] class_7.3-21           stringi_1.7.12         blob_1.2.4            
+    [142] textshaping_0.3.6      memoise_2.0.1          ape_5.7-1             
