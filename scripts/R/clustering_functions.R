@@ -36,7 +36,9 @@ cluster_kmeans <- function(rld_z, nclust, plot_sil = FALSE){
 
 
 plot_kmeans_heatmap <- function(rld_z, k_coef,
-                                sample_order, ...){
+                                sample_order, 
+                                legend = TRUE, 
+                                ...){
   
   # Arrange samples in correct order
   #order_samples <- as.factor(sample_order)
@@ -70,17 +72,12 @@ plot_kmeans_heatmap <- function(rld_z, k_coef,
                                   breaks = breaksList, 
                                   cluster_col = FALSE,
                                   cluster_rows = FALSE, 
-                                  show_rownames = FALSE,
-                                  show_colnames = TRUE, 
-                                  #color = color,
-                                  #annotation_col = annotation,
-                                  #annotation_colours = anno_colours,
                                   color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdBu")))(29),
-                                  fontsize_col = 12, 
-                                  legend = TRUE,
+                                  fontsize_col = 10, 
+                                  legend = legend,
                                   border_color = NA, 
                                   main = paste("Heatmap"),
-                                  angle_col = 45,
+                                  angle_col = 90,
                                   ...
   )
   
@@ -180,7 +177,8 @@ clusterHeatmap = function(rld_z,
                           cluster_columns = FALSE, 
                           show_row_names = FALSE,
                           show_column_names = TRUE,
-                          font_size = 14
+                          font_size = 14,
+                          ...
 ) {
   
   # Set up heatmap
@@ -225,13 +223,14 @@ clusterHeatmap = function(rld_z,
     ## Columns: graphic parameters
     show_column_names = show_column_names, 
     column_names_rot = 45,
-    column_names_gp = gpar(fontsize = 14), 
+    column_names_gp = gpar(fontsize = font_size), 
     column_names_side = "bottom",
     column_dend_gp = gpar(fontsize = 12),
     column_dend_side = "top",
     column_dend_height = unit(10, "mm"),
     
-    column_order = factor(sample_order, levels = sample_order)
+    column_order = factor(sample_order, levels = sample_order),
+    ...
   )
   heatmap_cl
   
