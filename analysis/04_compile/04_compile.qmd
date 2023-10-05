@@ -24,74 +24,272 @@ format:
 
 # 04_compile
 
+In this notebook, we compile all the figures required for our RNA seq data. 
+
+
+# Setup
+
+## Load libraries
+
 ```{r}
 suppressPackageStartupMessages({
   library(tidyverse)
+  library(pheatmap)
+  library(grid)
+  library(gridExtra)
+  library(DESeq2)
 })
+```
 
-
-
+```{r}
 ## If the output directory doesn't exist, create it
-if(!dir.exists("output/04_compile")){
-  dir.create("output/04_compile")
+if(!dir.exists("../output/04_compile")){
+  dir.create("../output/04_compile")
 }
 
-output_dir <- "output/04_compile/"
+output_dir <- "../output/04_compile/"
 
 knitr::opts_chunk$set(#fig.width=12, fig.height=8, 
                       fig.path='../figures/04_compile/',
                       dev=c("png"))
+
+source("../../scripts/R/go_kegg_functions.R")
 ```
-
-
-## Read in files
 
 ```{r}
-df_go <- read.csv("../output/03_clust/go_tables.csv")
-df_kegg <- read.csv("../output/03_clust/kegg_tables.csv")
+# Setup
+
+# Define colors
+col_colors <- c("darkgrey", #Ctrls
+                '#00362d', '#3a6f60', '#80ac95', '#ceebcb', #OEs
+                '#552200', '#834a25', '#b0764f', '#daa680', '#ffdab8' #KOs
+                )
+
+# Define order
+condition_full_order <- c("WT", 
+                          "UAS-wnt4", "UAS-otk1", "UAS-otk1, UAS-wnt4", "otk2RNAi", 
+                          "wnt4RNAi", "otk1RNAi", "otk1RNAi wnt4RNAi", "otk2RNAi wnt4RNAi",
+                          "otk1RNAi otk2RNAi")
+```
+
+
+
+```{r}
+# Read in files
+
+# Heatmap
+heatmap <- readRDS("../output/03_clust/heatmap_noleg.RDS")
+
+
+# GO, KEGG
+
+# PCA
+pca <- readRDS("../output/01_QC/pca_rmrna.RDS")
+rld_filt <- readRDS("../output/01_QC/rld_filt.RDS")
+
+# Zscore boxplots, representatitve gene plots
+dds <- readRDS("../output/03_clust/dds_filt.RDS")
+rld_z <- readRDS("../output/03_clust/rld_z.RDS")
+kmeans_cl <- readRDS("../output/03_clust/kmeans_cl.RDS")
+```
+
+
+# Main paper plots
+
+## Heatmap
+
+```{r}
+#| label: heatmap
+
+p1 <- heatmap$gtable
+
+plot(p1)
+```
+
+
+
+
+
+## GO
+
+### Read in terms
+```{r}
+c1_go <- read.csv("../output/03_clust/k3_c1_ego.csv")
+c2_go <- read.csv("../output/03_clust/k3_c2_ego.csv")
+c3_go <- read.csv("../output/03_clust/k3_c3_ego.csv")
+
+c1_go$cluster = "I"
+c2_go$cluster = "II"
+c3_go$cluster = "III"
+
+df_go_all <- rbind(c1_go, c2_go, c3_go)
+df_go_all$GeneRatio = DOSE::parse_ratio(df_go_all$GeneRatio)
+
+df_go_all<- df_go_all %>% 
+  dplyr::select(Description, GeneRatio, p.adjust, Count, cluster, geneID) %>%
+  group_by(cluster) %>% 
+  arrange(desc(GeneRatio))
+
+# export
+write.csv(df_go_all, file = paste0(output_dir, "go_all.csv"), 
+          row.names = FALSE)
+```
+
+### Pick terms
+
+```{r}
+findterm <- function(term, df_go_all){
+  df_subset <- df_go_all[grep(term, df_go_all$Description), ] %>% 
+  group_by(cluster) %>% 
+  arrange(cluster, desc(GeneRatio))
+  
+  return(df_subset)
+}
 ```
 
 
 ```{r}
-df_go$cluster = factor(df_go$cluster, levels = c(1, 2, 3))
-df_go$GeneRatio = DOSE::parse_ratio(df_go$GeneRatio)
+#| output: FALSE
 
-df_go %>% 
-  arrange(cluster, GeneRatio) 
+# don't print this chunk during knitting - it's very long
+findterm("axis spec", df_go_all)
+findterm("[Hh]ippo", df_go_all)
+findterm("[Ww]nt", df_go_all)
+findterm("mitot|prolif", df_go_all)
+findterm("pathway", df_go_all)
+findterm("apop|senes|death", df_go_all)
+findterm("adhes", df_go_all)
+findterm("migrat|taxi", df_go_all)
+findterm("junction", df_go_all)
 ```
 
+:::
 
-# GO plot
+
+### Plot
 
 ```{r}
-ggplot(df_go, aes(x = cluster, y = Description, 
-                  size = GeneRatio, color = p.adjust)) +
-  geom_point() +
-  scale_color_gradient(low = "red", high = "blue", limits = c(0, 0.1), 
-                       breaks = c(seq(0, 0.1, 0.05))) +
-  theme_classic() +
-  labs(title = "GO: BP",
-       y = "")
+terms_of_interest <- c(
+  # cluster I
+  "canonical Wnt signaling pathway",
+  "axis specification",
+  "negative regulation of mitotic cell cycle",
+  "smoothened signaling pathway",
+  # cluster II
+  "negative regulation of Wnt signaling pathway",
+  "insulin receptor signaling pathway", 
+  "epidermal growth factor receptor signaling pathway",
+  "ERBB signaling pathway", 
+  "fibroblast growth factor receptor signaling pathway",
+  "vascular endothelial growth factor receptor signaling pathway",
+  # cluster III
+  "neuron projection guidance",
+  "cuticle development",
+  "tight junction assembly", 
+  "apical junction assembly",
+  "septate junction assembly",
+  "chemotaxis")
 ```
-- need to figure out how to reorder this
 
+```{r}
+df_go_renamed <- df_go_all %>%
+  dplyr::filter(Description %in% terms_of_interest) %>% 
+  mutate(Description = str_to_sentence(Description)) %>% 
+  mutate(Description = case_when(
+    Description == "Smoothened signaling pathway" ~ "Hh signaling",
+    Description == "Epidermal growth factor receptor signaling pathway" ~ "EGF receptor signaling",
+    Description == "Canonical wnt signaling pathway" ~ "Canonical Wnt signaling",
+    Description == "Erbb signaling pathway" ~ "ERBB signaling pathway",
+    Description == "Fibroblast growth factor receptor signaling pathway" ~ "FGF receptor signaling",
+    Description == "Vascular endothelial growth factor receptor signaling pathway" ~ "VEGF receptor signaling",
+    Description == "Negative regulation of wnt signaling pathway" ~ "Negative regulation of Wnt signaling pathway",
+    TRUE ~ as.character(Description)
+  ))
+```
 
+```{r}
+#| label: go-plot
+#| fig-height: 7
+#| fig-width: 6
+
+go_plot <- df_go_renamed %>% 
+  mutate(cluster = factor(cluster, levels = c("I", "II", "III"))) %>% 
+  group_by(cluster) %>% 
+  arrange(desc(GeneRatio)) %>% 
+  mutate(Description = factor(Description, levels = Description)) %>% 
+  ggplot(aes(x = cluster, y = Description)) +
+  geom_point(aes(colour = p.adjust, size = GeneRatio)) +
+  labs(title = "GO:BP", x = "Cluster", y = NULL) +
+  scale_color_continuous(low="red", high="blue", 
+                         guide = guide_colorbar(reverse=TRUE),
+                         limits = c(0, 0.1), breaks = c(seq(0, 0.1, 0.05))) + 
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 30),
+                   limits=rev) +
+  guides(colour = guide_colorbar(title = "p.adjust", reverse = TRUE),
+         size = guide_legend(title = "Gene Ratio")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        title = element_blank()) 
+
+go_plot
+```
 
 ## KEGG
 
+:::{.panel-tabset}
+### Reading in data
 ```{r}
-str(df_kegg)
-```
+c1_kegg <- read.csv("../output/03_clust/k3_c1_ekegg.csv")
+c2_kegg <- read.csv("../output/03_clust/k3_c2_ekegg.csv")
+c3_kegg <- read.csv("../output/03_clust/k3_c3_ekegg.csv")
 
-```{r}
+c1_kegg$cluster = "I"
+c2_kegg$cluster = "II"
+c3_kegg$cluster = "III"
+
+df_kegg <- rbind(c1_kegg, c2_kegg, c3_kegg)
 df_kegg$GeneRatio = DOSE::parse_ratio(df_kegg$GeneRatio)
 
+df_kegg$cluster = factor(df_kegg$cluster, levels = c("I", "II", "III"))
 
-df_kegg$cluster = factor(df_kegg$cluster)
+# Remove the trailing Drosophila melanogaster label from Description
+df_kegg$Description = gsub(" - Drosophila melanogaster (fruit fly)", "", 
+                           df_kegg$Description,
+                           fixed = TRUE)
+
+# export
+write.csv(df_kegg, file = paste0(output_dir, "kegg_all.csv"), 
+          row.names = FALSE)
+```
+
+### All KEGG terms
+
+```{r}
+df_kegg
+```
+:::
+
+### Plot
+
+
+```{r}
+interesting_kegg <- c("Notch signaling pathway", "Nucleotide excision repair", 
+                      "MAPK signaling pathway - fly", 
+                      "Hippo signaling pathway - fly", 
+                      "Neuroactive ligand-receptor interaction")
 
 df_keggplot <- df_kegg %>% 
-  arrange(cluster, GeneRatio)
+  dplyr::filter(Description %in% interesting_kegg)
+```
 
+
+```{r}
+# Some wrangling
+df_keggplot <- df_keggplot %>% 
+  arrange(cluster, desc(GeneRatio))
 
 df_keggplot$Description = factor(df_keggplot$Description, levels = df_keggplot$Description)
 ```
@@ -99,22 +297,703 @@ df_keggplot$Description = factor(df_keggplot$Description, levels = df_keggplot$D
 
 
 ```{r}
-ggplot(df_keggplot, aes(x = cluster, y = Description, 
-                    size = GeneRatio, color = p.adjust)) +
-  geom_point() +
-  scale_color_gradient(low = "blue", high = "red") +
-  theme_classic() +
-  labs(title = "KEGG", 
-       y = "")
+#| label: kegg-plot
+#| fig-height: 7
+#| fig-width: 6
+
+kegg_plot <- ggplot(df_keggplot, aes(x = cluster, y = Description)) +
+  geom_point(aes(colour = p.adjust, size = GeneRatio)) +
+  labs(title = "KEGG", x = "Cluster", y = NULL) +
+  scale_color_continuous(low="red", high="blue", 
+                         guide = guide_colorbar(reverse=TRUE),
+                         limits = c(0, 0.1), breaks = c(seq(0, 0.1, 0.05))) + 
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 30),
+                   limits=rev) +
+  guides(colour = guide_colorbar(title = "p.adjust", reverse = TRUE),
+         size = guide_legend(title = "Gene Ratio")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 12), 
+        axis.text.y = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        title = element_blank()) 
+
+kegg_plot
+```
+
+# Supplementary data
+
+
+```{r}
+gene_boxplot <- function(gene_of_interest, dds, title = "title",
+                         axis_labels = FALSE) {
+  
+  # Get normalized counts
+  df_norm <- as.data.frame(counts(dds, normalized = TRUE)[gene_of_interest, ])
+  df_norm$sample <- rownames(df_norm)
+  colnames(df_norm) <- c("counts", "sample")
+  df_norm$sample = factor(df_norm$sample, 
+                            levels = colData(dds)$sample_id)
+  df_norm$condition = df_norm$sample
+  df_norm$condition = gsub("_[0-9]", "", df_norm$condition)
+  df_norm$condition = factor(df_norm$condition, 
+                               levels = unique(colData(dds)$condition))
+  
+  df_norm <- df_norm %>% 
+    mutate(condition_full = case_when(
+      condition == "Ctrl" ~ "WT", 
+      condition == "W4_OE" ~ "UAS-wnt4",
+      condition == "O1_OE" ~ "UAS-otk1",
+      condition == "O1W4_OE" ~ "UAS-otk1, UAS-wnt4",
+      condition == "O2_KO" ~ "otk2RNAi",
+      condition == "W4_KO" ~ "wnt4RNAi",
+      condition == "O1_KO" ~ "otk1RNAi",
+      condition == "O1W4_KO" ~ "otk1RNAi wnt4RNAi",
+      condition == "O2W4_KO" ~ "otk2RNAi wnt4RNAi",
+      condition == "O1O2_KO" ~ "otk1RNAi otk2RNAi"
+    )) %>% 
+    mutate(group = case_when(
+      condition == "Ctrl" ~ "WT", 
+      condition %in% c("W4_OE", "O1_OE", "O1W4_OE", "O2_KO") ~ "A",
+      condition %in% c("W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO") ~ "B"
+    ))
+  
+    df_norm$condition_full <- factor(df_norm$condition_full, 
+                                  levels = (condition_full_order))
+    df_norm$group = factor(df_norm$group, levels = c("WT", "A", "B"))
+  
+  # Plot
+  gene_plot <- ggplot(df_norm, aes(x = condition_full, y = counts, 
+                                   fill = condition_full)) +
+    geom_boxplot(linewidth = 0.1) +
+    geom_point(size = 0.5) +
+    labs(title = title, 
+         x = "", y = "Normalized counts") +
+    scale_fill_manual(values = (col_colors)) +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
+    #scale_y_continuous(expand = c(0, NA), limits = c(0, NA)) +
+    theme_classic() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 14), 
+        axis.text.x = element_text(angle = 90, hjust = -0.1),
+        axis.title = element_text(size = 10),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
+    facet_grid(cols = vars(group),
+               scales = "free", space = "free",
+               drop = TRUE)
+  
+  
+  if(axis_labels == FALSE){
+    gene_plot <- gene_plot +
+      theme(axis.text.x = element_blank())
+  }
+  
+  return(gene_plot)
+  
+}
 ```
 
 
+## wnt4, otk1, otk2 counts
 
+:::{.panel-tabset}
 
+### Wnt4
+
+```{r}
+#| label: marker-wnt4
+
+wnt4 <- "FBgn0010453"
+
+wnt4_plot <- gene_boxplot(wnt4, dds, title = "wnt4") +
+  ggbreak::scale_y_break(breaks = c(5500, 80000))
+
+wnt4_plot
+```
 
 
 
 ```{r}
+ggsave(paste0(output_dir, "counts_wnt4.pdf"), wnt4_plot, 
+       device = "pdf", 
+       width = 200, 
+       height = 100, 
+       units = "mm"
+       )
+```
+
+
+### Otk1
+
+```{r}
+#| label: marker-otk1
+
+otk <- "FBgn0004839"
+
+otk1_plot <- gene_boxplot(otk, dds, title = "otk") +
+  ggbreak::scale_y_break(c(7000, 45000))
+
+otk1_plot
+```
+
+```{r}
+ggsave(paste0(output_dir, "counts_otk1.pdf"), otk1_plot, 
+       device = "pdf", 
+       width = 200, 
+       height = 100, 
+       units = "mm"
+       )
+```
+
+
+### Otk2
+
+```{r}
+#| label: marker-otk2
+
+otk2 <- "FBgn0267728"
+
+otk2_plot <- gene_boxplot(otk2, dds, title = "otk2") 
+
+otk2_plot
+```
+
+
+```{r}
+ggsave(paste0(output_dir, "counts_otk2.pdf"), otk2_plot, 
+       device = "pdf", 
+       width = 260, 
+       height = 80, 
+       units = "mm"
+       )
+```
+:::
+
+## PCA 
+
+```{r}
+# QC functions
+
+calculate_pca <- function(rld, intgroup,  
+                     title = "title",         
+                     xlimits = c(-30, 30), 
+                     ylimits = c(-15, 15),
+                     manual_colors = NA,
+                     label = FALSE, 
+                     rearrange_intgroup = FALSE,
+                     intgroup_order){
+  # Calculations
+  ntop = 500
+  rv <- rowVars(assay(rld))
+  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, length(rv)))]
+  pca = prcomp(t(assay(rld)[select,]))
+  percentVar <- pca$sdev^2/sum(pca$sdev^2)
+  data <- plotPCA(rld, intgroup = intgroup, 
+                  returnData = TRUE)
+  percentVar <- round(100 * attr(data, "percentVar"), digits = 2)
+  
+  if(rearrange_intgroup == TRUE){
+    data[[intgroup]] <- factor(data[[intgroup]], 
+                               levels = intgroup_order)
+  }
+  
+  return(data)
+}
+
+```
+
+### PCA plot
+
+```{r}
+#| label: pca
+
+intgroup = "condition"
+title = "PCA"
+
+intgroup_order <- c("Ctrl", 
+                    "W4_OE", "O1_OE", "O1W4_OE", "O2_KO",
+                    "W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO")
+
+pca_calc <- calculate_pca(rld_filt, intgroup = "condition",
+                          title = "PCA",
+                          manual_colors = col_colors, 
+                          rearrange_intgroup = TRUE,
+                          intgroup_order = intgroup_order)
+
+percentVar <- round(100 * attr(pca_calc, "percentVar"), digits = 2)
+
+## Plot the PCA
+
+pca_plot <- ggplot(as.data.frame(pca_calc), aes(x = PC1, y = PC2)) + 
+    geom_point(aes(color = as.data.frame(pca_calc)[[intgroup]]), 
+               size = 2, alpha = 0.8) +
+    labs(title = title,
+         colour = intgroup) +
+    
+    # Add scale annotations
+    scale_x_continuous(paste0("PC1: ",percentVar[1],"% variance"),
+                       limits = c(-30, 30)) +
+    scale_y_continuous(paste0("PC2: ",percentVar[2],"% variance"),
+                       limits = c(-20, 20)) +
+    # Default: paired
+    # scale_color_brewer(palette = "Paired") +
+    # specify custom colors
+    scale_color_manual(values = col_colors, 
+                     labels = c("WT", 
+                                "UAS-wnt4", "UAS-otk1", "UAS-otk1 UAS-wnt4", "otk2RNAi", 
+                                "wnt4RNAi", "otk1RNAi", "otk1RNAi wnt4RNAi", "otk2RNAi wnt4RNAi", 
+                                "otk1RNAi otk2RNAi")) +
+    
+    # Make 1 unit on x-axis equal to 1 unit on y-axis
+    coord_fixed(ratio = 1) +
+    theme_classic()
+
+p2 <- pca_plot +
+  theme(legend.text = element_text(size = 12), 
+        legend.title = element_blank(), 
+        plot.title = element_blank(),
+        plot.subtitle = element_blank(),
+        legend.position = "right"
+        ) +
+  # Make legend into two columns
+  guides(col = guide_legend(nrow = 5, byrow = FALSE))
+
+
+p2
+```
+
+## zscore boxplots
+
+```{r}
+# label: zscore-func
+zscore_boxcondition <- function(rld_z,  kmeans_cl, 
+                                clust_num, condition_full_order,
+                                print_legend = FALSE){
+  
+condition_full_order <- c("WT", 
+                          "UAS-wnt4", "UAS-otk1", "UAS-otk1, UAS-wnt4", "otk2RNAi", 
+                          "wnt4RNAi", "otk1RNAi", "otk1RNAi wnt4RNAi", "otk2RNAi wnt4RNAi", "otk1RNAi otk2RNAi")
+  # Get the genes
+  c3_genes <- names((kmeans_cl)[[clust_num]])
+  
+  # Plot the normalized counts
+  c3_all <- rld_z[c3_genes, ] %>% 
+   reshape2::melt()
+  colnames(c3_all) <- c("gene_id", "sample", "vst_z")
+  # Reorder conditions
+  c3_all$condition <- c3_all$sample
+  c3_all$condition <- gsub("_[1-3]", "", c3_all$condition)
+  c3_all <- c3_all %>% 
+    mutate(condition_full = case_when(
+      condition == "Ctrl" ~ "WT", 
+      condition == "W4_OE" ~ "UAS-wnt4",
+      condition == "O1_OE" ~ "UAS-otk1",
+      condition == "O1W4_OE" ~ "UAS-otk1, UAS-wnt4",
+      condition == "O2_KO" ~ "otk2RNAi",
+      condition == "W4_KO" ~ "wnt4RNAi",
+      condition == "O1_KO" ~ "otk1RNAi",
+      condition == "O1W4_KO" ~ "otk1RNAi wnt4RNAi",
+      condition == "O2W4_KO" ~ "otk2RNAi wnt4RNAi",
+      condition == "O1O2_KO" ~ "otk1RNAi otk2RNAi"
+    )) %>% 
+    mutate(group = case_when(
+      condition == "Ctrl" ~ "WT", 
+      condition %in% c("W4_OE", "O1_OE", "O1W4_OE", "O2_KO") ~ "A",
+      condition %in% c("W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO") ~ "B"
+    ))
+  
+  c3_all$condition_full <- factor(c3_all$condition_full, 
+                                  levels = (condition_full_order))
+  
+  c3_all$group = factor(c3_all$group, levels = c("WT", "A", "B"))
+  
+  # Plot the zscores
+  zscore_plot <- ggplot(c3_all, aes(x = condition_full, y = vst_z, fill = condition_full)) +
+    geom_hline(yintercept = 0, color = "blue", linetype = "dashed") +
+    geom_boxplot() +
+    theme_classic() +
+    scale_fill_manual(values = (col_colors)) +
+    scale_y_continuous(limits = c(-4, 4)) +
+    theme(axis.text.x = element_blank(),
+          axis.title = element_text(size = 14),
+          legend.title = element_blank(),
+          legend.text = element_text(size = 13),
+          legend.margin = margin(r = 1.1, l = 1.2, t = 0.5, unit='cm'),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
+    labs(title = paste0("Cluster ", clust_num),
+         x = "", 
+         y = "z-score") +
+    #coord_flip() +
+    facet_grid(cols = vars(group),
+               scales = "free", space = "free",
+               drop = TRUE) +
+    guides(fill = guide_legend(nrow = 5, byrow = FALSE))
+  
+  if(print_legend == FALSE){
+    zscore_plot = zscore_plot +
+      theme(legend.position = "none")
+  }
+  
+  return(zscore_plot)
+}
+
+  
+```
+
+
+```{r}
+condition_full_order <- c("WT", 
+                          "UAS-wnt4", "UAS-otk1", "UAS-otk1, UAS-wnt4", "otk2RNAi", 
+                          "wnt4RNAi", "otk1RNAi", "otk1RNAi wnt4RNAi", "otk2RNAi wnt4RNAi", "otk1RNAi otk2RNAi")
+```
+
+
+### Cluster boxplots
+:::{.panel-tabset}
+
+#### Cluster 1
+
+```{r}
+#| label: zscorebox-c1-leg
+#| fig-height: 5
+#| fig-width: 9
+c1_zbox_withleg <- zscore_boxcondition(rld_z, kmeans_cl, clust_num = 1, condition_full_order,
+                               print_legend = TRUE) + 
+  labs(title = "Cluster I")
+
+c1_zbox_withleg
+```
+
+#### Cluster 2
+
+```{r}
+#| label: zscorebox-c2-leg
+#| fig-width: 9
+zscore_boxcondition(rld_z, kmeans_cl, clust_num = 2, condition_full_order,
+                    print_legend = TRUE) + 
+  labs(title = "Cluster II")
+```
+
+#### Cluster 3
+
+```{r}
+#| label: zscorebox-c3-leg
+#| fig-width: 9
+zscore_boxcondition(rld_z, kmeans_cl, 
+                               clust_num = 3, condition_full_order,
+                    print_legend = TRUE) +
+  labs(title = "Cluster III")
+
+```
+:::
+
+
+
+
+### Cluster boxplots, no legend
+
+:::{.panel-boxplot}
+
+#### Cluster 1
+
+```{r}
+#| label: zscorebox-c1
+#| fig-height: 3
+#| fig-width: 5
+c1_zbox <- zscore_boxcondition(rld_z, kmeans_cl, 
+                               clust_num = 1, condition_full_order) +
+  labs(title = "Cluster I")
+
+c1_zbox
+```
+
+
+#### Cluster 2
+
+```{r}
+#| label: zscorebox-c2
+#| fig-height: 3
+#| fig-width: 5
+c2_zbox <- zscore_boxcondition(rld_z, kmeans_cl, 
+                               clust_num = 2, condition_full_order) +
+  labs(title = "Cluster II")
+
+c2_zbox
+```
+
+#### Cluster 3
+```{r}
+#| label: zscorebox-c3
+#| fig-height: 3
+#| fig-width: 5
+c3_zbox <- zscore_boxcondition(rld_z, kmeans_cl, 
+                               clust_num = 3, condition_full_order) +
+  labs(title = "Cluster III")
+
+c3_zbox
+```
+:::
+
+## Representative gene plots
+
+
+We read in cluster_genes and then subset relevant genes from KEGG and GO. 
+
+
+```{r}
+kegg_genes <- df_kegg %>% 
+  pull(geneID) %>% 
+  strsplit(split = "/") %>% 
+  unlist()
+
+go_genes <- df_go_renamed %>% 
+  pull(geneID) %>% 
+  strsplit(split = "/") %>% 
+  unlist()
+
+go_genes <- unique(go_genes)
+
+cluster_genes <- read.csv("../output/03_clust/cluster_genes.csv")
+```
+
+
+
+### Cluster 1
+
+:::{.panel-tabset}
+#### Ths
+
+```{r}
+#| label: fig-ths
+
+ths <- "FBgn0033652" #thisbe, FGF ligand
+
+c1_ths <- gene_boxplot(ths, dds, title = "Ths")
+c1_ths
+```
+
+#### EGFR
+```{r}
+#| label: c1-egfr
+egfr <- "FBgn0003731"
+
+c1_egfr <- gene_boxplot(egfr, dds, title = "Egfr")
+
+c1_egfr
+```
+
+#### Myc
+
+```{r}
+#| label: c1-myc
+Myc <- "FBgn0262656"
+
+gene_boxplot(Myc, dds, title = "Myc")
+```
+
+:::
+
+
+
+
+### Cluster 2
+
+:::{.panel-tabset}
+
+#### Ea
+
+```{r}
+#| label: c2-ea
+
+ea <- "FBgn0000533" # easter - dorsoventral patterning of embryo
+
+c2_ea <- gene_boxplot(ea, dds, "Ea")
+
+c2_ea
+```
+
+#### Dsh
+
+```{r}
+#| label: c2-dsh
+
+dsh <- "FBgn0000499"
+c2_dsh <- gene_boxplot(dsh, dds, title = "Dsh")
+
+c2_dsh
+```
+
+#### Baz
+
+```{r}
+#| label: c2-baz
+baz <- "FBgn0000163" # bazooka
+gene_boxplot(baz, dds, title = "Baz")
+```
+
+#### Su(fu)
+
+```{r}
+#| label: c2-sufu
+sufu <- "FBgn0005355" # negative regulator of hedgehog
+
+gene_boxplot(sufu, dds, title = "Su(fu)")
+```
+:::
+
+### Cluster 3
+
+:::{.panel-tabset}
+
+#### Mesh
+
+```{r}
+#| label: c3-mesh
+
+mesh <- "FBgn0051004"
+
+c3_mesh <- gene_boxplot(mesh, dds, "Mesh")
+c3_mesh
+```
+
+
+#### Gli
+
+```{r}
+#| label: c3-gli
+
+gli <- "FBgn0001987"
+c3_gli <- gene_boxplot(gli, dds, "Gli")
+c3_gli
+```
+
+#### Tektin C
+
+```{r}
+#| label: c3-tektinc
+tektin_c <- "FBgn0035638"
+gene_boxplot(tektin_c, dds, "Tektin-C")
+```
+
+#### Scaf
+```{r}
+#| label: c3-scaf
+scaf <- "FBgn0033033" # apical-basal polarity
+gene_boxplot(scaf, dds, "scaf")
+```
+
+:::
+
+# Putting it together
+
+## Main figure
+
+```{r}
+#| label: compiled-plot
+#| fig-height: 12
+#| fig-width: 10
+
+final_plot <- grid.arrange(
+  p1, go_plot, kegg_plot,
+  layout_matrix = rbind(c(1, 1),
+                        c(3, 4))
+)
+
+final_plot
+
+ggsave(paste0(output_dir, "final_plot.pdf"), final_plot, 
+       device = "pdf", 
+       width = 260, 
+       height = 310, 
+       units = "mm"
+       )
+```
+
+
+## Supplementary Figure 1
+
+PCA, otk1, otk2, wnt4 counts
+
+
+```{r}
+#| label: plot-s1
+#| fig-height: 10
+#| fig-width: 6
+plot_s1 <- grid.arrange(
+  p2, 
+  wnt4_plot, otk1_plot,
+  otk2_plot,
+  layout_matrix = rbind(c(1),
+                        c(2),
+                        c(3),
+                        c(4))
+)
+
+plot_s1
+
+ggsave(paste0(output_dir, "suppl_plot1.pdf"), plot_s1, 
+       device = "pdf", 
+       width = 200, 
+       height = 360, 
+       units = "mm"
+       )
+
+```
+
+
+## Supplementary Figure 2
+
+zscore boxplots and representative gene boxes
+
+```{r}
+#| label: plot-s2
+#| fig-height: 12
+#| fig-width: 10
+plot_s2 <- grid.arrange(
+  c1_zbox_withleg, 
+  c2_zbox, c3_zbox,
+  c1_ths, c1_egfr,
+  c2_ea, c2_dsh,
+  c3_mesh, c3_gli,
+  layout_matrix = rbind(c(1),
+                        c(2, 3),
+                        c(4, 5),
+                        c(6, 7),
+                        c(8, 9))
+)
+
+plot_s2
+
+ggsave(paste0(output_dir, "suppl_plot2.pdf"), plot_s2, 
+       device = "pdf", 
+       width = 260, 
+       height = 310, 
+       units = "mm"
+       )
+```
+
+
+
+
+# sessionInfo()
+
+```{r}
 sessionInfo()
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
