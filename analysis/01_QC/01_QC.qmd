@@ -225,7 +225,7 @@ for (i in experimental_metadata$sample_id){
 # DESeq needs read counts to be integers
 data_mat = apply(round(data), c(1,2), as.integer)
 
-head(data_mat)
+#head(data_mat)
 ```
 
 
@@ -236,7 +236,7 @@ head(data_mat)
 dds = DESeqDataSetFromMatrix(data_mat, experimental_metadata, ~ condition)
 colnames(dds) = colnames(data_mat)
 
-head(colData(dds)) # Check that condition matches sample
+#head(colData(dds)) # Check that condition matches sample
 ```
 
 ```{r}
@@ -510,8 +510,8 @@ We perform 3 types of Quality Control to assess our DESeq dataset:
 
 ```{r}
 #| label: prefilt-heatmap
-#| fig-height: 10
-#| fig-width: 9
+#| fig-height: 8
+#| fig-width: 8
 
 ### Extract the rld matrix from the object
 rld_mat <- assay(rld)  
@@ -540,69 +540,16 @@ plot(hclust(sampleDists), main = paste0("Cluster Dendrogram, ", plt_title))
 source("../../scripts/R/qc_functions.R")
 ```
 
-```{r}
-intgroup = "condition"
-intgroup_order = unique(experimental_metadata$condition)
-title = "PCA"
-
-pca_xlim <- c(-30, 30)
-pca_ylim <- c(-20, 20)
-
-xlimits = pca_xlim 
-ylimits = pca_ylim
-
-ntop = 500
-  rv <- rowVars(assay(rld))
-  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, length(rv)))]
-  pca = prcomp(t(assay(rld)[select,]))
-  percentVar <- pca$sdev^2/sum(pca$sdev^2)
-  data <- plotPCA(rld, intgroup = intgroup, 
-                  returnData = TRUE)
-  percentVar <- round(100 * attr(data, "percentVar"), digits = 2)
-  data[[intgroup]] <- factor(data[[intgroup]], 
-                             levels = intgroup_order)
-  
-  # Plot 
-  pca_plot <- ggplot(as.data.frame(data), aes(x = PC1, y = PC2)) + 
-    geom_point(aes(color = as.data.frame(data)[[intgroup]]), 
-               size = 2, alpha = 0.8) +
-    labs(title = title,
-         subtitle = paste0("By ", intgroup), 
-         colour = intgroup) +
-    # Add scale annotations
-    scale_x_continuous(paste0("PC1: ",percentVar[1],"% variance"), 
-                       limits = xlimits) +
-    scale_y_continuous(paste0("PC2: ",percentVar[2],"% variance"), 
-                       limits = ylimits) +
-    # Default: paired
-    #scale_color_brewer(palette = "Paired") +
-    # specify custom colors
-    scale_color_manual(name = intgroup, 
-                       values = col_colors) +
-    
-    # Make 1 unit on x-axis equal to 1 unit on y-axis
-    coord_fixed(ratio = 1) +
-    theme_classic()
-  
-  
-pca_plot
-```
-
 
 ```{r}
+#| label: prefilt-pca
+
 intgroup = "condition"
 intgroup_order = unique(experimental_metadata$condition)
 
 pca_xlim <- c(-30, 30)
 pca_ylim <- c(-20, 20)
 
-#manual_colors = c("darkgrey",
-#                   "#1f78b4", "#33a02c","#6600FF","#e31a1c",
-#                  "lightpink", 
-#                   "#a6cee3", "#b2df8a","#CC99FF", 
-#                   "coral")
-
-# they must be in the same order- I forgot about this - we will fix this later
 
 pca_plot <- make_pca(rld, intgroup = "condition",
          xlimits = pca_xlim, 
@@ -661,7 +608,8 @@ table(seqnames(in_dds))
 Remove MT chromosome, rerun DESeq: 
 ```{r}
 # Remove mitochondrial genome
-mit_genes <- ensembl.genes[seqnames(ensembl.genes) %in% "MT", ]$gene_id
+mit_genes <- ensembl.genes[seqnames(ensembl.genes) %in% "chrM", ]$gene_id
+length(mit_genes)
 dds_rm_mit <- dds[!rownames(counts(dds)) %in% mit_genes, ]
 
 # Remove rRNA
@@ -798,8 +746,8 @@ ggplot(detected, aes(x=name, y=detected)) +
 
 ```{r}
 #| label: rmrna-rrna-heatmap
-#| fig-height: 10
-#| fig-width: 9
+#| fig-height: 8
+#| fig-width: 8
 
 ### Extract the vst matrix from the object
 rld_mat <- assay(rld_filt)  
@@ -838,6 +786,7 @@ pca_rmrna
 
 ```{r}
 # Save this
+saveRDS(rld_filt, file = paste0(output_dir, "rld_filt.RDS"))
 saveRDS(pca_rmrna, file = paste0(output_dir, "pca_rmrna.RDS"))
 ```
 
@@ -902,6 +851,8 @@ otk1_norm$condition = gsub("_[0-9]", "", otk1_norm$condition)
 otk1_norm$condition = factor(otk1_norm$condition, 
                              levels = unique(experimental_metadata$condition))
 
+write.csv(otk1_norm, file = paste0(output_dir, "otk1_norm_counts.csv"))
+
 # Plot
 otk1_plot <- ggplot(otk1_norm, aes(x = condition, y = counts, fill = condition)) +
   geom_boxplot() +
@@ -940,6 +891,8 @@ otk2_norm$condition = otk2_norm$sample
 otk2_norm$condition = gsub("_[0-9]", "", otk2_norm$condition)
 otk2_norm$condition = factor(otk2_norm$condition, 
                              levels = unique(experimental_metadata$condition))
+
+write.csv(otk2_norm, file = paste0(output_dir, "otk2_norm_counts.csv"))
 
 # Plot
 otk2_plot <- ggplot(otk2_norm, aes(x = condition, y = counts, fill = condition)) +
@@ -981,6 +934,8 @@ wnt4_norm$condition = gsub("_[0-9]", "", wnt4_norm$condition)
 wnt4_norm$condition = factor(wnt4_norm$condition, 
                              levels = unique(experimental_metadata$condition))
 
+write.csv(wnt4_norm, file = paste0(output_dir, "wnt4_norm_counts.csv"))
+
 # Plot
 wnt4_plot <- ggplot(wnt4_norm, aes(x = condition, y = counts, fill = condition)) +
   geom_boxplot() +
@@ -1012,8 +967,6 @@ Plots to assess whether samples are good replicates.
 
 ```{r}
 #| label: ma-ctrl
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "Ctrl"))
 ```
@@ -1023,8 +976,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "Ctr
 
 ```{r}
 #| label: ma-W4OE
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "W4_OE"))
 ```
@@ -1033,8 +984,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "W4_
 
 ```{r}
 #| label: ma-O1_OE
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1_OE"))
 ```
@@ -1044,8 +993,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1_
 
 ```{r}
 #| label: ma-O1W4_OE
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1W4_OE"))
 ```
@@ -1055,8 +1002,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1W
 
 ```{r}
 #| label: ma-O2_KO
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O2_KO"))
 ```
@@ -1067,8 +1012,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O2_
 
 ```{r}
 #| label: ma-O2W4_OE
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O2W4_KO"))
 ```
@@ -1080,8 +1023,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O2W
 
 ```{r}
 #| label: ma-W4_KO
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "W4_KO"))
 ```
@@ -1092,8 +1033,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "W4_
 
 ```{r}
 #| label: ma-O1_KO
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1_KO"))
 ```
@@ -1104,8 +1043,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1_
 
 ```{r}
 #| label: ma-O1W4_KO
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1W4_KO"))
 ```
@@ -1115,8 +1052,6 @@ plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1W
 
 ```{r}
 #| label: ma-O102_KO
-#| fig.height: 6
-#| fig.width: 6
 
 plot_ma_by_rep(condition_combis = generate_condition_combinations(dds_filt, "O1O2_KO"))
 ```
