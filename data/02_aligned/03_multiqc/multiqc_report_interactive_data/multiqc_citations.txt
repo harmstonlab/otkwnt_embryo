@@ -1,0 +1,4 @@
+10.1093/bioinformatics/btw354                      # MultiQC
+10.1186/1471-2105-12-323                           # rsem
+10.1093/bioinformatics/bts635                      # star
+
