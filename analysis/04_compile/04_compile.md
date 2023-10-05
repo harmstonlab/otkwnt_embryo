@@ -477,7 +477,7 @@ wnt4_plot
 ``` r
 ggsave(paste0(output_dir, "counts_wnt4.pdf"), wnt4_plot, 
        device = "pdf", 
-       width = 200, 
+       width = 280, 
        height = 100, 
        units = "mm"
        )
@@ -499,7 +499,7 @@ otk1_plot
 ``` r
 ggsave(paste0(output_dir, "counts_otk1.pdf"), otk1_plot, 
        device = "pdf", 
-       width = 200, 
+       width = 280, 
        height = 100, 
        units = "mm"
        )
@@ -520,7 +520,7 @@ otk2_plot
 ``` r
 ggsave(paste0(output_dir, "counts_otk2.pdf"), otk2_plot, 
        device = "pdf", 
-       width = 200, 
+       width = 280, 
        height = 100, 
        units = "mm"
        )
@@ -624,6 +624,15 @@ p2
 ```
 
 ![](../figures/04_compile/pca-1.png)
+
+``` r
+ggsave(paste0(output_dir, "pca_plot.pdf"), p2, 
+       device = "pdf", 
+       width = 280, 
+       height = 50, 
+       units = "mm"
+       )
+```
 
 ## zscore boxplots
 
@@ -978,7 +987,7 @@ final_plot
 ``` r
 ggsave(paste0(output_dir, "final_plot.pdf"), final_plot, 
        device = "pdf", 
-       width = 260, 
+       width = 280, 
        height = 310, 
        units = "mm"
        )
@@ -1016,7 +1025,7 @@ plot_s1
 ``` r
 ggsave(paste0(output_dir, "suppl_plot1.pdf"), plot_s1, 
        device = "pdf", 
-       width = 200, 
+       width = 280, 
        height = 360, 
        units = "mm"
        )
@@ -1066,7 +1075,7 @@ plot_s2
 ``` r
 ggsave(paste0(output_dir, "suppl_plot2.pdf"), plot_s2, 
        device = "pdf", 
-       width = 260, 
+       width = 280, 
        height = 310, 
        units = "mm"
        )
