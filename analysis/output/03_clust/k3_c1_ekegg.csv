@@ -1,0 +1,7 @@
+ID,Description,GeneRatio,BgRatio,pvalue,p.adjust,qvalue,geneID,Count
+dme04144,Endocytosis - Drosophila melanogaster (fruit fly),31/429,125/3488,6.759412255492693e-5,0.00498597343746237,0.004569721571539921,Hsp68/Egfr/babo/Hsp70Ba/Hsp70Bc/Past1/sktl/WASp/siz/Sara/Rip11/Sec71/CG8243/wash/FAM21/Vps20/Eps-15/Strump/Arpc3A/Usp8/Asap/CG31064/Efa6/Hsp70Bbb/step/Rbsn-5/AP-2mu/garz/AP-2alpha/InR/btl,31
+dme04013,MAPK signaling pathway - fly - Drosophila melanogaster (fruit fly),25/429,93/3488,8.596505926659258e-5,0.00498597343746237,0.004569721571539921,aop/dpp/Jra/Sos/peb/pnt/raw/Egfr/ttk/vn/hid/pros/hep/Mef2/phyl/Ask1/sty/Shark/Shc/edl/p38b/slpr/CYLD/Tab2/Duox,25
+dme04391,Hippo signaling pathway - fly - Drosophila melanogaster (fruit fly),17/429,56/3488,2.458593821393123e-4,0.007458529601014642,0.0068358574383165045,fj/ft/hth/tsh/vn/ex/wts/jub/yki/sav/Patj/crb/d/kibra/Myc/wg/ds,17
+dme04392,Hippo signaling pathway - multiple species - Drosophila melanogaster (fruit fly),8/429,16/3488,2.571906758970566e-4,0.007458529601014642,0.0068358574383165045,ft/ex/wts/jub/yki/sav/kibra/ds,8
+dme04350,TGF-beta signaling pathway - Drosophila melanogaster (fruit fly),13/429,47/3488,0.003325650046857706,0.07039181118497007,0.0645151808501087,dpp/emc/sog/babo/Rbf/Sin3A/gbb/E2f2/Sara/vis/achi/Myc/S6k,13
+dme00970,Aminoacyl-tRNA biosynthesis - Drosophila melanogaster (fruit fly),16/429,64/3488,0.003640955750946728,0.07039181118497007,0.0645151808501087,AspRS/GluProRS/TrpRS/SerRS-m/ValRS/LeuRS-m/AlaRS-m/alpha-PheRS/Pstk/SerRS/MetRS/ValRS-m/TrpRS-m/beta-PheRS/PheRS-m/LeuRS,16

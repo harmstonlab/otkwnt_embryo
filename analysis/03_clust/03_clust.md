@@ -1,6 +1,6 @@
 # 03_clust
 Qian Hui TAN
-2023-09-25
+2023-10-05
 
 - [<span class="toc-section-number">1</span> Clustering](#clustering)
 - [<span class="toc-section-number">2</span> Setup](#setup)
@@ -16,16 +16,12 @@ Qian Hui TAN
   - [<span class="toc-section-number">6.2</span> Cluster 1](#cluster-1)
   - [<span class="toc-section-number">6.3</span> Cluster 2](#cluster-2)
   - [<span class="toc-section-number">6.4</span> Cluster 3](#cluster-3)
-- [<span class="toc-section-number">7</span> Gene
-  boxplots](#gene-boxplots)
-- [<span class="toc-section-number">8</span> Exports](#exports)
-- [<span class="toc-section-number">9</span> Export cluster genes for
+- [<span class="toc-section-number">7</span> Exports](#exports)
+- [<span class="toc-section-number">8</span> Export cluster genes for
   compilation](#export-cluster-genes-for-compilation)
-  - [<span class="toc-section-number">9.1</span> Export GO and KEGG for
-    figure](#export-go-and-kegg-for-figure)
-- [<span class="toc-section-number">10</span> Summary and
+- [<span class="toc-section-number">9</span> Summary and
   discussion](#summary-and-discussion)
-- [<span class="toc-section-number">11</span> Session
+- [<span class="toc-section-number">10</span> Session
   info](#session-info)
 
 # Clustering
@@ -137,17 +133,17 @@ Number of significant genes (padj \< 0.1):
 sum(res_lrt$padj < 0.1, na.rm = TRUE)
 ```
 
-    [1] 7939
+    [1] 7927
 
 ``` r
 summary(res_lrt)
 ```
 
 
-    out of 11157 with nonzero total read count
+    out of 11145 with nonzero total read count
     adjusted p-value < 0.1
-    LFC > 0 (up)       : 3381, 30%
-    LFC < 0 (down)     : 4558, 41%
+    LFC > 0 (up)       : 3378, 30%
+    LFC < 0 (down)     : 4549, 41%
     outliers [1]       : 0, 0%
     low counts [2]     : 0, 0%
     (mean count < 10)
@@ -212,7 +208,7 @@ summary(d)
 ```
 
        Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-      0.000   4.253   6.213   5.828   7.618   8.682 
+      0.000   4.249   6.214   5.827   7.619   8.681 
 
 ``` r
 set.seed(1)
@@ -375,16 +371,6 @@ clusterHeatmap(rld_z, kmeans_cl = kmeans_cl,
 )
 ```
 
-    `use_raster` is automatically set to TRUE for a matrix with more than
-    2000 rows. You can control `use_raster` argument by explicitly setting
-    TRUE/FALSE to it.
-
-    Set `ht_opt$message = FALSE` to turn off this message.
-
-    'magick' package is suggested to install to give better rasterization.
-
-    Set `ht_opt$message = FALSE` to turn off this message.
-
 ![](../figures/03_clust/c1-heatmap-1.png)
 
 <div class="panel-tabset">
@@ -396,7 +382,9 @@ zscore_boxcondition(kmeans_cl, clust_num = 1,
                     condition_order = condition_order)
 ```
 
-    [1] "3535 genes in cluster 1"
+    [1] "1431 genes in cluster 1"
+
+    Warning: Removed 1 rows containing non-finite values (`stat_boxplot()`).
 
 ![](../figures/03_clust/c1-zscorebox-1.png)
 
@@ -412,7 +400,7 @@ k3_c1_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[1]]),
 
 ![](../figures/03_clust/c1-ego-1.png)
 
-    [1] "511 enrichments found"
+    [1] "555 enrichments found"
 
 How many enrichments?
 
@@ -420,7 +408,7 @@ How many enrichments?
 nrow(k3_c1_ego)
 ```
 
-    [1] 511
+    [1] 555
 
 ### Finding enrichments
 
@@ -428,387 +416,42 @@ nrow(k3_c1_ego)
 findEGO(k3_c1_ego, "Wnt", print_top_matches = FALSE)
 ```
 
-    [1] "7 matches found."
-    [1] "regulation of Wnt signaling pathway"                   
-    [2] "cell-cell signaling by wnt"                            
-    [3] "regulation of canonical Wnt signaling pathway"         
-    [4] "Wnt signaling pathway"                                 
-    [5] "positive regulation of canonical Wnt signaling pathway"
-    [6] "positive regulation of Wnt signaling pathway"          
-    [7] "canonical Wnt signaling pathway"                       
-
-``` r
-findEGO(k3_c1_ego, "hippo", print_top_matches = FALSE)
-```
-
-    [1] "4 matches found."
-    [1] "regulation of hippo signaling"         
-    [2] "hippo signaling"                       
-    [3] "negative regulation of hippo signaling"
-    [4] "positive regulation of hippo signaling"
-
-``` r
-findEGO(k3_c1_ego, "signaling", print_top_matches = FALSE)
-```
-
-    [1] "40 matches found."
-     [1] "regulation of smoothened signaling pathway"                             
-     [2] "cell cycle checkpoint signaling"                                        
-     [3] "smoothened signaling pathway"                                           
-     [4] "mitotic cell cycle checkpoint signaling"                                
-     [5] "positive regulation of smoothened signaling pathway"                    
-     [6] "DNA integrity checkpoint signaling"                                     
-     [7] "negative regulation of smoothened signaling pathway"                    
-     [8] "DNA damage checkpoint signaling"                                        
-     [9] "mitotic DNA integrity checkpoint signaling"                             
-    [10] "regulation of hippo signaling"                                          
-    [11] "hippo signaling"                                                        
-    [12] "DNA replication checkpoint signaling"                                   
-    [13] "mitotic G2 DNA damage checkpoint signaling"                             
-    [14] "Toll signaling pathway"                                                 
-    [15] "regulation of Wnt signaling pathway"                                    
-    [16] "mitotic DNA damage checkpoint signaling"                                
-    [17] "regulation of Toll signaling pathway"                                   
-    [18] "negative regulation of hippo signaling"                                 
-    [19] "cell-cell signaling by wnt"                                             
-    [20] "regulation of canonical Wnt signaling pathway"                          
-    [21] "positive regulation of Toll signaling pathway"                          
-    [22] "positive regulation of signaling"                                       
-    [23] "cell surface receptor signaling pathway involved in cell-cell signaling"
-    [24] "Wnt signaling pathway"                                                  
-    [25] "positive regulation of canonical Wnt signaling pathway"                 
-    [26] "mitotic DNA replication checkpoint signaling"                           
-    [27] "positive regulation of Wnt signaling pathway"                           
-    [28] "mitotic spindle assembly checkpoint signaling"                          
-    [29] "spindle checkpoint signaling"                                           
-    [30] "spindle assembly checkpoint signaling"                                  
-    [31] "mitotic spindle checkpoint signaling"                                   
-    [32] "receptor signaling pathway via JAK-STAT"                                
-    [33] "receptor signaling pathway via STAT"                                    
-    [34] "canonical Wnt signaling pathway"                                        
-    [35] "regulation of receptor signaling pathway via JAK-STAT"                  
-    [36] "regulation of receptor signaling pathway via STAT"                      
-    [37] "negative regulation of signaling"                                       
-    [38] "regulation of sevenless signaling pathway"                              
-    [39] "positive regulation of hippo signaling"                                 
-    [40] "stress-activated protein kinase signaling cascade"                      
-
-``` r
-findEGO(k3_c1_ego, "mito[st]", print_top_matches = FALSE)
-```
-
-    [1] "37 matches found."
-     [1] "mitotic cell cycle"                                          
-     [2] "mitotic cell cycle process"                                  
-     [3] "regulation of mitotic cell cycle"                            
-     [4] "mitotic cell cycle phase transition"                         
-     [5] "regulation of mitotic cell cycle phase transition"           
-     [6] "mitotic nuclear division"                                    
-     [7] "mitotic cell cycle checkpoint signaling"                     
-     [8] "negative regulation of mitotic cell cycle phase transition"  
-     [9] "microtubule cytoskeleton organization involved in mitosis"   
-    [10] "negative regulation of mitotic cell cycle"                   
-    [11] "mitotic sister chromatid segregation"                        
-    [12] "regulation of G2/M transition of mitotic cell cycle"         
-    [13] "G2/M transition of mitotic cell cycle"                       
-    [14] "mitotic spindle organization"                                
-    [15] "negative regulation of G2/M transition of mitotic cell cycle"
-    [16] "mitotic DNA integrity checkpoint signaling"                  
-    [17] "mitotic G2/M transition checkpoint"                          
-    [18] "mitotic cytokinesis"                                         
-    [19] "mitotic G2 DNA damage checkpoint signaling"                  
-    [20] "mitotic DNA damage checkpoint signaling"                     
-    [21] "establishment of mitotic spindle localization"               
-    [22] "metaphase/anaphase transition of mitotic cell cycle"         
-    [23] "regulation of mitotic sister chromatid separation"           
-    [24] "mitotic sister chromatid separation"                         
-    [25] "mitotic centrosome separation"                               
-    [26] "mitotic DNA replication checkpoint signaling"                
-    [27] "establishment of mitotic spindle orientation"                
-    [28] "mitotic spindle assembly checkpoint signaling"               
-    [29] "regulation of mitotic cell cycle, embryonic"                 
-    [30] "negative regulation of mitotic sister chromatid segregation" 
-    [31] "negative regulation of mitotic metaphase/anaphase transition"
-    [32] "mitotic spindle checkpoint signaling"                        
-    [33] "negative regulation of mitotic sister chromatid separation"  
-    [34] "regulation of mitotic sister chromatid segregation"          
-    [35] "regulation of mitotic nuclear division"                      
-    [36] "regulation of mitotic metaphase/anaphase transition"         
-    [37] "mitotic metaphase plate congression"                         
-
-``` r
-findEGO(k3_c1_ego, "senes|apop|death", print_top_matches = FALSE)
-```
-
-    [1] "3 matches found."
-    [1] "programmed cell death" "cell death"            "apoptotic process"    
-
-``` r
-findEGO(k3_c1_ego, "transcript|transl", print_top_matches = FALSE)
-```
-
-    [1] "20 matches found."
-     [1] "transcription initiation at RNA polymerase II promoter"                                  
-     [2] "DNA-templated transcription initiation"                                                  
-     [3] "cytoplasmic translation"                                                                 
-     [4] "DNA-templated transcription elongation"                                                  
-     [5] "translation"                                                                             
-     [6] "transcription elongation by RNA polymerase II promoter"                                  
-     [7] "maturation of SSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)"
-     [8] "regulation of DNA-templated transcription elongation"                                    
-     [9] "post-transcriptional gene silencing"                                                     
-    [10] "post-transcriptional regulation of gene expression"                                      
-    [11] "post-transcriptional gene silencing by RNA"                                              
-    [12] "negative regulation of translation"                                                      
-    [13] "transcription preinitiation complex assembly"                                            
-    [14] "regulation of translation"                                                               
-    [15] "positive regulation of DNA-binding transcription factor activity"                        
-    [16] "regulation of transcription elongation by RNA polymerase II"                             
-    [17] "negative regulation of DNA-templated transcription, elongation"                          
-    [18] "ncRNA transcription"                                                                     
-    [19] "positive regulation of DNA-templated transcription, elongation"                          
-    [20] "regulation of DNA-binding transcription factor activity"                                 
-
-``` r
-findEGO(k3_c1_ego, "adhes", print_top_matches = FALSE)
-```
-
-    [1] "0 matches found."
-    character(0)
-
-``` r
-findEGO(k3_c1_ego, "diff|prolif", print_top_matches = FALSE)
-```
-
-    [1] "9 matches found."
-    [1] "oocyte differentiation"                                       
-    [2] "negative regulation of cell population proliferation"         
-    [3] "cell population proliferation"                                
-    [4] "negative regulation of neuroblast proliferation"              
-    [5] "negative regulation of neural precursor cell proliferation"   
-    [6] "regulation of R7 cell differentiation"                        
-    [7] "germarium-derived oocyte differentiation"                     
-    [8] "regulation of photoreceptor cell differentiation"             
-    [9] "regulation of compound eye photoreceptor cell differentiation"
-
-``` r
-findEGO(k3_c1_ego, "migrat|taxi", print_top_matches = FALSE)
-```
-
-    [1] "0 matches found."
-    character(0)
-
-### Custom EGO
-
-``` r
-interesting_pathways <- c("Wnt signaling pathway", 
-                          "hippo signaling",
-                          "smoothened signaling pathway",
-                          "mitotic cell cycle",
-                          "programmed cell death", 
-                          "cell population proliferation")
-
-custom_ego(k3_c1_ego, interesting_pathways,
-           title = "GO, k=3, cluster 1", 
-           font_size = 12)
-```
-
-![](../figures/03_clust/c1-ego-custom-1.png)
-
-``` r
-c1_go_table <- custom_ego_table(k3_c1_ego, interesting_pathways)
-
-c1_go_table
-```
-
-| Description                   | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:------------------------------|:----------|----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| mitotic cell cycle            | 244/3008  | 0.0000000 | Act5C/bru1/asp/aub/aurA/awd/ben/brm/chic/csw/CycA/CycB/dsh/dup/fzy/Hmr/Grip91/dlg1/eIF4A/l(2)gl/l(3)mbt/sti/Rcc1/Map205/twe/mor/mr/mud/mus101/mus304/Myb/ncd/pim/plu/polo/PpV/pum/rl/shi/smo/spn-E/sub/Su(var)205/thr/alphaTub84B/alphaTub84D/Pp1-87B/Cdk1/mts/Klp61F/Klp67A/shtd/B52/wapl/Su(H)/RpII15/tws/Eip63E/PCNA/PpD3/Dsor1/CycD/Arf79F/CycE/dia/fbl/eff/Mad/tsr/Wee1/Arp53D/ctp/Dp/Syx1A/l(2)dtl/pnut/Mtor/Cdk5/Rho1/prod/noi/glu/CycB3/Lis-1/PTP-ER/lok/14-3-3epsilon/Ran/mre11/asun/Pkn/chb/DCTN2-p50/Pp4-19C/Orc6/san/aurB/Dlc90F/Bub3/SkpA/Cdc16/Rad17/Mcm6/JTBR/dgt4/Rok/Mad1/Nipped-B/Hus1-like/Su(var)2-HP2/Grip75/Grip163/Apc2/Eb1/Kmn1/RecQ5/ana2/SMC2/ball/Pol31/ric8a/CG3530/CHORD/Aos1/eIF3g1/Nek2/Aladin/Psf3/PPP4R2r/Klp10A/Aven/Sap30/CG8188/CG8173/Rab35/Wdr62/Fign/Spindly/Mnn1/Nuf2/CG5181/borr/CG6443/BuGZ/CG10336/Grip71/Mcm10/geminin/CG15237/mms4/dgt5/mars/nopo/dgt3/Rae1/Slik/JMJD5/Psf1/Mfap1/Sse/mad2/Cdc6/nudE/Syx13/Cep135/Skp2/PEK/Cks85A/Tctp/Lkb1/Rrp6/Mau2/cal1/CG13599/spas/Dis3/Mink/Sld5/CG5003/dgt6/CycG/CG17493/pont/pins/p115/Kat60/cana/MED22/mus81/ago/Capr/Chro/tefu/Haspin/Rif1/CG30291/Prp38/Nnf1b/Tap42/Claspin/APC4/Synd/CG34025/Zwilch/endos/ALiX/tum/alph/DCTN6-p27/Spc25/alphaSnap/lmgA/cno/pzg/zld/bora/pds5/gwl/mei-38/vtd/Incenp/grp/scra/nej/mi/SmD2/Xpd/aPKC/CG43295/Patronin/Cdk7/l(3)72Ab/BubR1/Caf1-55/Det/smt3/Smr/Sf3a1/sau/Ptp61F/rump/Tlk/Top2/betaTub56D |
-| smoothened signaling pathway  | 56/3008   | 0.0000038 | bam/bur/Pka-C1/cos/flw/fu/Gbeta13F/dco/Pp1-13C/Pp1alpha-96A/smo/Su(dx)/Su(var)2-10/mts/Rap1/tws/Su(fu)/lwr/Gug/eff/Uch-L5/CkIalpha/Ubc4/Cul1/HDAC1/Pp4-19C/Tnpo/Roc1a/par-6/wdb/botv/Ulp1/Smurf/disp/sotv/PPP4R2r/Usp7/Hrs/Nedd8/Herc4/UbcE2M/hyx/krz/dlp/gish/Nedd4/cno/Pka-R1/Pp2A-29B/Gprk1/pic/nej/aPKC/Uba3/smt3/ttv                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| hippo signaling               | 45/3008   | 0.0011527 | Pka-C1/l(2)gl/dco/sti/Su(dx)/tor/mts/Rap1/Rox8/pll/msn/CkIalpha/Cul1/RtGEF/14-3-3epsilon/lig/Mekk1/SkpA/Tsc1/CG7028/Smurf/pod1/Usp7/Tao/Pez/Fgop2/Dlg5/Git/Magi/Rae1/Herc4/mats/Rassf/Slmap/Prosap/mnb/Pp2A-29B/hpo/lic/aPKC/Sik3/Src64B/Patronin/wap/elgi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| cell population proliferation | 128/3008  | 0.0117183 | bam/baz/brm/cad/CycA/CycB/EcR/Galphai/Gbeta13F/hb/l(2)gl/l(3)mbt/msl-3/mor/mud/Myb/polo/Ras85D/rl/tub/Cdk1/mts/hop/enc/tws/gig/Rox8/brat/Rac1/Cdc42/CycE/pll/lwr/CG10939/DCTN3-p24/Pfdn2/Cdc37/Snr1/alien/Rho1/RpS21/Dref/Lis-1/HDAC1/pgc/Stat92E/Atu/Cbl/dom/Idgf2/Nup154/Vps25/dlt/flfl/Bap60/Roc1a/HDAC3/par-6/Tsc1/Dronc/Apc2/drosha/CSN5/CSN3/CSN1b/ana2/ric8a/heix/hfp/Lnk/CG5033/CSN7/Pdcd4/CG9123/DENR/Pez/Mnn1/Ing5/CG10336/Nedd8/Mlf/Ntan1/Rae1/enok/Slik/RIOK1/Cep135/Smn/Zif/MAGE/Lkb1/smp-30/Ns1/CG7044/mats/p53/Nup358/Cul5/pasha/conu/rept/pont/pins/Prosap/CG17059/ago/key/dome/vito/snama/Nedd4/cno/zld/Tango9/Utx/hpo/Axud1/mi/aPKC/osa/Tl/wcd/AGO1/scrib/Sgt1/Doa/Ptp61F/Syx7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| Wnt signaling pathway         | 54/3008   | 0.0300275 | arm/dsh/flw/gro/dco/hyd/Pp1alpha-96A/Pp1-87B/mts/tws/por/gig/Eip63E/Ssdp/nmo/Rho1/Vps26/CkIalpha/Cul1/Usp47/spen/CtBP/SkpA/Roc1a/Cdc16/Axn/Apc2/Tnks/botv/Nulp1/sotv/Nek2/CycY/Gint3/Vps35/wls/Rnf146/CG11523/hyx/RanBP3/lgs/rept/pont/Prosap/dlp/pygo/tum/gish/hpo/lic/nej/osa/ttv/RpS12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| programmed cell death         | 122/3008  | 0.0581967 | arm/Cam/Pka-C1/cos/DNaseII/EcR/l(2)gl/dco/mod(mdg4)/Ras85D/sesB/shi/smo/Su(var)205/sws/tub/hdc/CycE/pll/Dcp-1/Sep1/ctp/Dp/BRWD3/pnut/Cdk5/mof/Cul1/Dref/crq/RpL14/lok/Drice/Cbl/Pdk1/Idgf2/Nup154/Vps25/qkr58E-3/Mekk1/Drep1/SkpA/HDAC3/Tip60/CG14812/msk/Tak1/Dronc/Drep4/Drep2/cathD/CG13373/Coa8/Pink1/Atg5/Atg101/Tao/Naa20A/CG4238/alpha4GT1/Daxx/Mabi/Nf-YB/Mcm10/DUBAI/Ptp52F/Dcr-2/nopo/Atg7/zda/RYBP/sigmar/Usp5/l(3)psg2/CG7546/Atg18a/BI-1/Srrm1/PDCD-5/CG9231/MAGE/Lkb1/Prx3/Prx5/Idh3b/PSR/mats/p53/Miro/XNP/Sid/Atg16/Fis1/rept/CG15456/scyl/tefu/Naam/Tengl3/CG32176/CG32202/vito/CG32579/Atg8a/snama/out/Tango9/Utx/scny/Atg1/hpo/Trf2/aPKC/Ire1/norpA/Cdk7/ebi/Det/Fhos/Pak/lola/Psn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-
-``` r
-write_csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"))
-```
-
-### KEGG - c1
-
-``` r
-# Get entrez ids
-c1_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[1]]), ]$entrezgene_id)
-
-
-kegg_universe = ensembl.genes[ensembl.genes$ensembl_gene_id %in% rownames(dds), ]$entrezgene_id
-
-# Run KEGG
-k3_c1_ekegg <- plotKEGG_dm(c1_entrez, 
-                           universe = kegg_universe, title = "KEGG, cluster 1")
-```
-
-    Running KEGG for organism = drosophila melanogaster
-
-    Reading KEGG annotation online: "https://rest.kegg.jp/link/dme/pathway"...
-
-    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/dme"...
-
-    Reading KEGG annotation online: "https://rest.kegg.jp/conv/ncbi-geneid/dme"...
-
-    `universe` is not in character and will be ignored...
-
-![](../figures/03_clust/c1-ekegg-1.png)
-
-    [1] "9 enrichments found"
-
-``` r
-k3_c1_ekegg
-```
-
-|          | ID       | Description                                                              | GeneRatio | BgRatio  |    pvalue |  p.adjust |    qvalue | geneID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Count |
-|:---------|:---------|:-------------------------------------------------------------------------|:----------|:---------|----------:|----------:|----------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------:|
-| dme03013 | dme03013 | Nucleocytoplasmic transport - Drosophila melanogaster (fruit fly)        | 70/1185   | 99/3487  | 0.0000000 | 0.0000000 | 0.0000000 | mago/sbr/RanGAP/lwr/Nup214/Ref1/Mtor/Hel25E/Ran/emb/Nup154/Cse1/Cbp80/Cbp20/Bin1/Dbp80/Kap-alpha1/Tnpo/mbo/msk/Kap-alpha3/Nup93-1/Nxt1/Upf2/Aladin/Nup35/Elys/Nup205/tho2/Tnpo-SR/Nup50/Gle1/tsu/Phax/Nup54/Nup62/Rae1/Pym/Upf3/thoc5/thoc7/thoc6/Srrm1/Hpr1/CG7483/RnpS1/Pnn/Ranbp9/CG14712/Nup93-2/Nup133/Nup98-96/Ndc1/Nup37/Nup358/CG18787/Arts/Apl/Ranbp16/Nup153/Karybeta3/Snup/CG42304/cdm/Nup160/Acn/Nxf3/smt3/ebo/Gp210                                                                              |    70 |
-| dme03040 | dme03040 | Spliceosome - Drosophila melanogaster (fruit fly)                        | 81/1185   | 141/3487 | 0.0000000 | 0.0000003 | 0.0000003 | crn/SmF/Hrb98DE/l(1)10Bb/mago/snf/B52/Bx42/U2af50/Ref1/Hel25E/noi/Spx/U2af38/ytr/Cbp80/Cbp20/CG2685/l(1)G0007/Prp18/CG4119/x16/hfp/Tango4/CG1622/CG6227/Usp39/Sf3b1/tho2/CG3542/Sf3b2/Phf5a/CG6686/CG10333/Dhx15/tsu/CG12343/Prp8/CG9346/Cypl/Sf3b3/CG2021/CG11586/CG6610/Sf3b6/CG6418/CG10418/Sf3a2/Prp31/U4-U6-60K/Prp3/CG14641/Hpr1/CG7483/CG6015/PQBP1/BCAS2/CG15525/CG17454/c12.1/Sf3b5/Prp38/LSm3/Spf45/pea/LSm7/Prp19/SmD2/SmE/SNRPG/snRNP-U1-C/scaf6/SmD1/SmB/Acn/l(3)72Ab/Cdc5/Sf3a1/HnRNP-K/SF2/caz |    81 |
-| dme03082 | dme03082 | ATP-dependent chromatin remodeling - Drosophila melanogaster (fruit fly) | 50/1185   | 80/3487  | 0.0000001 | 0.0000050 | 0.0000047 | Act5C/brm/E(bx)/E(Pc)/His2Av/pho/mor/Uch-L5/Iswi/Snr1/Arp6/HDAC1/dom/Bap60/Tip60/BCL7-like/CG8677/MRG15/CG11970/MBD-like/MTA1-like/Bap111/CDK2AP1/Arp8/CG31917/Gas41/CG7154/YL-1/d4/CG10395/MrgBP/CG18004/DMAP1/Eaf6/Arp5/polybromo/Brd8/rept/pont/CG12659/Bap170/Chrac-16/Chrac-14/CG33695/Ino80/e(y)3/osa/Mi-2/Rcd5/Caf1-55                                                                                                                                                                                 |    50 |
-| dme03250 | dme03250 | Viral life cycle - HIV-1 - Drosophila melanogaster (fruit fly)           | 25/1185   | 33/3487  | 0.0000010 | 0.0000297 | 0.0000278 | BicD/Fur1/Fur2/TH1/Snr1/Su(Tpl)/dod/Cdk9/Ran/Gcn5/emb/ear/NELF-B/fal/spt4/Hrs/Tnpo-SR/Cpsf6/Nup358/Jasper/Spt5/Nup153/ALiX/nej/Vps4                                                                                                                                                                                                                                                                                                                                                                           |    25 |
-| dme03022 | dme03022 | Basal transcription factors - Drosophila melanogaster (fruit fly)        | 27/1185   | 40/3487  | 0.0000140 | 0.0003298 | 0.0003089 | e(y)1/hay/TfIIB/Taf4/TfIIFalpha/Trf/Taf1/Taf5/Taf6/TfIIFbeta/TfIIA-L/Taf12/Taf11/Taf2/TfIIA-S/Taf8/Taf7/Taf10b/Taf10/Tfb4/Taf13/Ssl1/mrn/Trf2/Xpd/Cdk7/Tfb5                                                                                                                                                                                                                                                                                                                                                   |    27 |
-| dme04120 | dme04120 | Ubiquitin mediated proteolysis - Drosophila melanogaster (fruit fly)     | 57/1185   | 107/3487 | 0.0000243 | 0.0004783 | 0.0004480 | ben/fzy/hyd/mr/sina/Su(dx)/Su(var)2-10/RpL40/RpS27A/shtd/lwr/eff/Ubc2/Ubc4/Cul1/Cbl/EloB/CG2924/SkpA/Roc1a/Cdc16/SkpC/Ubc10/STUB1/Smurf/Uba2/Aos1/UbcE2H/CG8188/CG4502/Cul2/CG15237/CG7220/CG7747/CG3356/Herc4/UbcE2M/Cul6/RhoBTB/Skp2/Cul5/CG2218/sip3/ago/Roc2/APC4/Ube3a/Ubi-p5E/CG33981/lmgA/Nedd4/pic/Prp19/Uba3/Traf6/EloC/Ubc7                                                                                                                                                                         |    57 |
-| dme03015 | dme03015 | mRNA surveillance pathway - Drosophila melanogaster (fruit fly)          | 45/1185   | 80/3487  | 0.0000299 | 0.0005041 | 0.0004721 | flw/mago/Pp1-13C/Pp1alpha-96A/sbr/su(f)/Pp1-87B/mts/Hrb27C/tws/Ref1/Hel25E/Clp/Cbp80/Cbp20/Bin1/Cpsf160/Dbp80/wdb/CstF64/Cpsf100/Nxt1/Upf2/Wdr82/Gle1/tsu/cbc/Pym/Upf3/Cpsf6/Srrm1/eRF1/Fip1/CG7483/RnpS1/Pnn/Smg6/CstF50/HBS1/Wdr33/Pp2A-29B/Acn/Nxf3/caz/Rnmt                                                                                                                                                                                                                                               |    45 |
-| dme03420 | dme03420 | Nucleotide excision repair - Drosophila melanogaster (fruit fly)         | 29/1185   | 51/3487  | 0.0006167 | 0.0090959 | 0.0085198 | hay/mei-9/RpII215/Xpc/RpII15/Gnf1/PCNA/Roc1a/RpII33/Rad23/Pol31/Ercc1/RfC38/Tfb4/RfC3/Rpb11/Rpb5/Ssl1/Chrac-14/Rpb7/pic/RfC4/mrn/Xpd/Rpb12/RpII140/Cdk7/Rpb4/Tfb5                                                                                                                                                                                                                                                                                                                                             |    29 |
-| dme04330 | dme04330 | Notch signaling pathway - Drosophila melanogaster (fruit fly)            | 16/1185   | 25/3487  | 0.0020061 | 0.0263021 | 0.0246362 | dsh/gro/H/Su(H)/Bx42/HDAC1/spen/Gcn5/CtBP/Atx-1/aph-1/CG6843/Nct/pen-2/nej/Psn                                                                                                                                                                                                                                                                                                                                                                                                                                |    16 |
-
-``` r
-interesting_pathways = c("Ubiquitin mediated proteolysis",
-                         "Basal transcription factors",
-                         "Nucleotide excision repair",
-                         "Notch signaling pathway")
-
-custom_ekegg(k3_c1_ekegg, interesting_pathways,
-             title = "KEGG, cluster 1")
-```
-
-![](../figures/03_clust/c1-kegg-custom-1.png)
-
-``` r
-c1_kegg_table <- custom_kegg_table(k3_c1_ekegg, interesting_pathways)
-
-c1_kegg_table
-```
-
-|          | Description                    | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                |
-|:---------|:-------------------------------|:----------|----------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| dme03022 | Basal transcription factors    | 27/1185   | 0.0003298 | e(y)1/hay/TfIIB/Taf4/TfIIFalpha/Trf/Taf1/Taf5/Taf6/TfIIFbeta/TfIIA-L/Taf12/Taf11/Taf2/TfIIA-S/Taf8/Taf7/Taf10b/Taf10/Tfb4/Taf13/Ssl1/mrn/Trf2/Xpd/Cdk7/Tfb5                                                                                                                                                                           |
-| dme04120 | Ubiquitin mediated proteolysis | 57/1185   | 0.0004783 | ben/fzy/hyd/mr/sina/Su(dx)/Su(var)2-10/RpL40/RpS27A/shtd/lwr/eff/Ubc2/Ubc4/Cul1/Cbl/EloB/CG2924/SkpA/Roc1a/Cdc16/SkpC/Ubc10/STUB1/Smurf/Uba2/Aos1/UbcE2H/CG8188/CG4502/Cul2/CG15237/CG7220/CG7747/CG3356/Herc4/UbcE2M/Cul6/RhoBTB/Skp2/Cul5/CG2218/sip3/ago/Roc2/APC4/Ube3a/Ubi-p5E/CG33981/lmgA/Nedd4/pic/Prp19/Uba3/Traf6/EloC/Ubc7 |
-| dme03420 | Nucleotide excision repair     | 29/1185   | 0.0090959 | hay/mei-9/RpII215/Xpc/RpII15/Gnf1/PCNA/Roc1a/RpII33/Rad23/Pol31/Ercc1/RfC38/Tfb4/RfC3/Rpb11/Rpb5/Ssl1/Chrac-14/Rpb7/pic/RfC4/mrn/Xpd/Rpb12/RpII140/Cdk7/Rpb4/Tfb5                                                                                                                                                                     |
-| dme04330 | Notch signaling pathway        | 16/1185   | 0.0263021 | dsh/gro/H/Su(H)/Bx42/HDAC1/spen/Gcn5/CtBP/Atx-1/aph-1/CG6843/Nct/pen-2/nej/Psn                                                                                                                                                                                                                                                        |
-
-### Summary
-
-</div>
-
-## Cluster 2
-
-``` r
-clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
-               clust_num = 2, sample_order = sample_order,
-              cluster_rows = FALSE,
-              font_size = 8,
-              top_annotation  = ha)
-```
-
-![](../figures/03_clust/c2-heatmap-1.png)
-
-<div class="panel-tabset">
-
-### Zscore-boxplot
-
-``` r
-zscore_boxcondition(kmeans_cl, clust_num = 2, condition_order)
-```
-
-    [1] "1439 genes in cluster 2"
-
-    Warning: Removed 1 rows containing non-finite values (`stat_boxplot()`).
-
-![](../figures/03_clust/c2-zscorebox-1.png)
-
-### GO - c2
-
-``` r
-k3_c2_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[2]]), 
-                     universe = rownames(dds), 
-                     title = "GO, k=8, cluster 2")
-```
-
-    Running GO for organism = drosophila melanogaster
-
-![](../figures/03_clust/c2-ego-1.png)
-
-    [1] "554 enrichments found"
-
-### Finding enrichments
-
-``` r
-findEGO(k3_c2_ego, "Wnt", print_top_matches = FALSE)
-```
-
     [1] "2 matches found."
     [1] "negative regulation of Wnt signaling pathway"          
     [2] "negative regulation of canonical Wnt signaling pathway"
 
 ``` r
-findEGO(k3_c2_ego, "DNA", print_top_matches = FALSE)
-```
-
-    [1] "2 matches found."
-    [1] "positive regulation of DNA-templated transcription"
-    [2] "negative regulation of DNA-templated transcription"
-
-``` r
-findEGO(k3_c2_ego, "signal", print_top_matches = FALSE)
-```
-
-    [1] "29 matches found."
-     [1] "enzyme-linked receptor protein signaling pathway"                         
-     [2] "regulation of Ras protein signal transduction"                            
-     [3] "transmembrane receptor protein tyrosine kinase signaling pathway"         
-     [4] "regulation of small GTPase mediated signal transduction"                  
-     [5] "regulation of intracellular signal transduction"                          
-     [6] "negative regulation of signaling"                                         
-     [7] "negative regulation of signal transduction"                               
-     [8] "positive regulation of intracellular signal transduction"                 
-     [9] "small GTPase mediated signal transduction"                                
-    [10] "Ras protein signal transduction"                                          
-    [11] "positive regulation of Ras protein signal transduction"                   
-    [12] "positive regulation of small GTPase mediated signal transduction"         
-    [13] "insulin receptor signaling pathway"                                       
-    [14] "epidermal growth factor receptor signaling pathway"                       
-    [15] "ERBB signaling pathway"                                                   
-    [16] "positive regulation of signaling"                                         
-    [17] "positive regulation of signal transduction"                               
-    [18] "positive regulation of insulin receptor signaling pathway"                
-    [19] "regulation of Rab protein signal transduction"                            
-    [20] "fibroblast growth factor receptor signaling pathway"                      
-    [21] "vascular endothelial growth factor receptor signaling pathway"            
-    [22] "negative regulation of Wnt signaling pathway"                             
-    [23] "regulation of insulin receptor signaling pathway"                         
-    [24] "negative regulation of epidermal growth factor receptor signaling pathway"
-    [25] "negative regulation of ERBB signaling pathway"                            
-    [26] "negative regulation of intracellular signal transduction"                 
-    [27] "negative regulation of canonical Wnt signaling pathway"                   
-    [28] "regulation of epidermal growth factor receptor signaling pathway"         
-    [29] "regulation of ERBB signaling pathway"                                     
-
-``` r
-findEGO(k3_c2_ego, "repair", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "hippo", print_top_matches = FALSE)
 ```
 
     [1] "0 matches found."
     character(0)
 
 ``` r
-findEGO(k3_c2_ego, "mito[st]", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "signaling", print_top_matches = FALSE)
+```
+
+    [1] "17 matches found."
+     [1] "enzyme-linked receptor protein signaling pathway"                         
+     [2] "transmembrane receptor protein tyrosine kinase signaling pathway"         
+     [3] "negative regulation of signaling"                                         
+     [4] "insulin receptor signaling pathway"                                       
+     [5] "epidermal growth factor receptor signaling pathway"                       
+     [6] "ERBB signaling pathway"                                                   
+     [7] "positive regulation of signaling"                                         
+     [8] "positive regulation of insulin receptor signaling pathway"                
+     [9] "fibroblast growth factor receptor signaling pathway"                      
+    [10] "vascular endothelial growth factor receptor signaling pathway"            
+    [11] "negative regulation of Wnt signaling pathway"                             
+    [12] "regulation of insulin receptor signaling pathway"                         
+    [13] "negative regulation of epidermal growth factor receptor signaling pathway"
+    [14] "negative regulation of ERBB signaling pathway"                            
+    [15] "negative regulation of canonical Wnt signaling pathway"                   
+    [16] "regulation of epidermal growth factor receptor signaling pathway"         
+    [17] "regulation of ERBB signaling pathway"                                     
+
+``` r
+findEGO(k3_c1_ego, "mito[st]", print_top_matches = FALSE)
 ```
 
     [1] "2 matches found."
@@ -816,40 +459,19 @@ findEGO(k3_c2_ego, "mito[st]", print_top_matches = FALSE)
     [2] "negative regulation of G1/S transition of mitotic cell cycle"
 
 ``` r
-findEGO(k3_c2_ego, "immun|interleuk", print_top_matches = FALSE)
-```
-
-    [1] "0 matches found."
-    character(0)
-
-``` r
-findEGO(k3_c2_ego, "autophag", print_top_matches = FALSE)
-```
-
-    [1] "0 matches found."
-    character(0)
-
-``` r
-findEGO(k3_c2_ego, "splic", print_top_matches = FALSE)
-```
-
-    [1] "0 matches found."
-    character(0)
-
-``` r
-findEGO(k3_c2_ego, "senes|apop|death", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "senes|apop|death", print_top_matches = FALSE)
 ```
 
     [1] "15 matches found."
      [1] "regulation of programmed cell death"                          
      [2] "programmed cell death"                                        
-     [3] "programmed cell death involved in cell development"           
-     [4] "cell death"                                                   
-     [5] "regulation of apoptotic process"                              
-     [6] "regulation of cell death"                                     
-     [7] "larval midgut cell programmed cell death"                     
-     [8] "positive regulation of programmed cell death"                 
-     [9] "positive regulation of cell death"                            
+     [3] "regulation of apoptotic process"                              
+     [4] "regulation of cell death"                                     
+     [5] "cell death"                                                   
+     [6] "programmed cell death involved in cell development"           
+     [7] "positive regulation of programmed cell death"                 
+     [8] "positive regulation of cell death"                            
+     [9] "larval midgut cell programmed cell death"                     
     [10] "negative regulation of programmed cell death"                 
     [11] "apoptotic process"                                            
     [12] "negative regulation of apoptotic process"                     
@@ -858,7 +480,40 @@ findEGO(k3_c2_ego, "senes|apop|death", print_top_matches = FALSE)
     [15] "regulation of compound eye retinal cell programmed cell death"
 
 ``` r
-findEGO(k3_c2_ego, "transcript|transl", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "neuro", print_top_matches = FALSE)
+```
+
+    [1] "27 matches found."
+     [1] "neuron projection development"                        
+     [2] "cell morphogenesis involved in neuron differentiation"
+     [3] "neuron projection morphogenesis"                      
+     [4] "regulation of neurogenesis"                           
+     [5] "neuron projection guidance"                           
+     [6] "neuron fate commitment"                               
+     [7] "regulation of neuron projection development"          
+     [8] "positive regulation of neurogenesis"                  
+     [9] "neuroblast differentiation"                           
+    [10] "positive regulation of neuroblast proliferation"      
+    [11] "regulation of neuroblast proliferation"               
+    [12] "neuroblast proliferation"                             
+    [13] "regulation of neuron differentiation"                 
+    [14] "neuroblast fate commitment"                           
+    [15] "neuroblast development"                               
+    [16] "neuron recognition"                                   
+    [17] "synaptic assembly at neuromuscular junction"          
+    [18] "neuron migration"                                     
+    [19] "neuron remodeling"                                    
+    [20] "neuroblast fate determination"                        
+    [21] "neuromuscular junction development"                   
+    [22] "neuron maturation"                                    
+    [23] "positive regulation of neuron projection development" 
+    [24] "positive regulation of neuron differentiation"        
+    [25] "negative regulation of neuron projection development" 
+    [26] "regulation of neuromuscular junction development"     
+    [27] "negative regulation of neuron differentiation"        
+
+``` r
+findEGO(k3_c1_ego, "transcript|transl", print_top_matches = FALSE)
 ```
 
     [1] "9 matches found."
@@ -873,74 +528,7 @@ findEGO(k3_c2_ego, "transcript|transl", print_top_matches = FALSE)
     [9] "positive regulation of transcription elongation by RNA polymerase II"
 
 ``` r
-findEGO(k3_c2_ego, "adhes", print_top_matches = FALSE)
-```
-
-    [1] "5 matches found."
-    [1] "positive regulation of cell adhesion"     
-    [2] "positive regulation of cell-cell adhesion"
-    [3] "regulation of cell adhesion"              
-    [4] "regulation of cell-cell adhesion"         
-    [5] "cell adhesion"                            
-
-``` r
-findEGO(k3_c2_ego, "diff|prolif", print_top_matches = FALSE)
-```
-
-    [1] "50 matches found."
-     [1] "cell morphogenesis involved in neuron differentiation"     
-     [2] "regulation of cell differentiation"                        
-     [3] "cell morphogenesis involved in differentiation"            
-     [4] "epithelial cell differentiation"                           
-     [5] "sex differentiation"                                       
-     [6] "compound eye photoreceptor cell differentiation"           
-     [7] "photoreceptor cell differentiation"                        
-     [8] "eye photoreceptor cell differentiation"                    
-     [9] "regulation of cell population proliferation"               
-    [10] "positive regulation of cell differentiation"               
-    [11] "positive regulation of cell population proliferation"      
-    [12] "cell population proliferation"                             
-    [13] "regulation of neural precursor cell proliferation"         
-    [14] "neuroblast differentiation"                                
-    [15] "positive regulation of neuroblast proliferation"           
-    [16] "regulation of neuroblast proliferation"                    
-    [17] "positive regulation of neural precursor cell proliferation"
-    [18] "negative regulation of cell differentiation"               
-    [19] "neural precursor cell proliferation"                       
-    [20] "neuroblast proliferation"                                  
-    [21] "regulation of neuron differentiation"                      
-    [22] "stem cell differentiation"                                 
-    [23] "cardioblast differentiation"                               
-    [24] "R7 cell differentiation"                                   
-    [25] "crystal cell differentiation"                              
-    [26] "hemocyte differentiation"                                  
-    [27] "columnar/cuboidal epithelial cell differentiation"         
-    [28] "muscle cell differentiation"                               
-    [29] "regulation of stem cell proliferation"                     
-    [30] "plasmatocyte differentiation"                              
-    [31] "stem cell proliferation"                                   
-    [32] "regulation of crystal cell differentiation"                
-    [33] "regulation of glial cell proliferation"                    
-    [34] "renal filtration cell differentiation"                     
-    [35] "nephrocyte differentiation"                                
-    [36] "glial cell differentiation"                                
-    [37] "cardiocyte differentiation"                                
-    [38] "myotube differentiation"                                   
-    [39] "negative regulation of hemocyte differentiation"           
-    [40] "mesodermal cell differentiation"                           
-    [41] "positive regulation of neuron differentiation"             
-    [42] "oenocyte differentiation"                                  
-    [43] "lymph gland crystal cell differentiation"                  
-    [44] "compound eye cone cell differentiation"                    
-    [45] "regulation of stem cell differentiation"                   
-    [46] "regulation of hemocyte differentiation"                    
-    [47] "glial cell proliferation"                                  
-    [48] "R3/R4 cell differentiation"                                
-    [49] "negative regulation of neuron differentiation"             
-    [50] "negative regulation of photoreceptor cell differentiation" 
-
-``` r
-findEGO(k3_c2_ego, "migrat|taxi", print_top_matches = FALSE)
+findEGO(k3_c1_ego, "migrat|taxi", print_top_matches = FALSE)
 ```
 
     [1] "19 matches found."
@@ -967,25 +555,344 @@ findEGO(k3_c2_ego, "migrat|taxi", print_top_matches = FALSE)
 ### Custom EGO
 
 ``` r
+interesting_pathways <- c("negative regulation of canonical Wnt signaling pathway", 
+                          # signaling
+                          "negative regulation of ERBB signaling pathway",
+                          "negative regulation of epidermal growth factor receptor signaling pathway",
+                          "insulin receptor signaling pathway",
+                          "fibroblast growth factor receptor signaling pathway",
+                          "neuron projection guidance",
+                          "chemotaxis")
+
+custom_ego(k3_c1_ego, interesting_pathways,
+           title = "GO, k=3, cluster 1", 
+           font_size = 12)
+```
+
+![](../figures/03_clust/c1-ego-custom-1.png)
+
+``` r
+c1_go_table <- custom_ego_table(k3_c1_ego, interesting_pathways)
+
+c1_go_table
+```
+
+| Description                                                               | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                                                  |
+|:--------------------------------------------------------------------------|:----------|----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| chemotaxis                                                                | 73/1268   | 0.0000030 | eya/D/dpp/en/E(z)/grn/Sos/robo2/sens/peb/ras/ptc/Nrt/Ptp4E/Ten-m/pros/zfh1/hh/otk/robo1/comm/hep/trn/sqz/Sema1a/babo/fra/shot/gcm/mirr/Shc/drl/Vang/fz2/Tor/stan/msps/Rich/Fmr1/nerfin-1/SoxN/raptor/Nf-YC/hiw/erm/beat-IIIc/CdGAPr/ckn/unc-5/Toll-7/Lrt/Toll-6/Vav/boi/Alk/wun2/SCAR/Liprin-alpha/Mical/jeb/vvl/psidin/wb/Dbx/mid/hts/sli/ab/Ten-a/S6k/InR/Sac1/Sema5c |
+| neuron projection guidance                                                | 69/1268   | 0.0000150 | eya/D/en/E(z)/grn/Sos/robo2/sens/peb/ras/ptc/Nrt/Ptp4E/Ten-m/pros/zfh1/otk/robo1/comm/hep/trn/sqz/Sema1a/babo/fra/shot/gcm/mirr/Shc/drl/Vang/fz2/Tor/stan/msps/Rich/Fmr1/nerfin-1/SoxN/raptor/Nf-YC/hiw/erm/beat-IIIc/CdGAPr/ckn/unc-5/Toll-7/Toll-6/Vav/boi/Alk/SCAR/Liprin-alpha/Mical/jeb/vvl/psidin/wb/Dbx/mid/hts/sli/ab/Ten-a/S6k/InR/Sac1/Sema5c                 |
+| insulin receptor signaling pathway                                        | 21/1268   | 0.0066212 | fkh/Hsp83/ImpL2/Akt1/Pi3K21B/Tor/Fmr1/raptor/rictor/Sin1/Mkp3/srl/HDAC4/step/Mob4/Myc/Lpin/Ns3/PRAS40/S6k/InR                                                                                                                                                                                                                                                           |
+| fibroblast growth factor receptor signaling pathway                       | 12/1268   | 0.0292525 | aop/Sos/pnt/Ptp4E/bnl/sty/Shc/stumps/CG13398/ths/grh/btl                                                                                                                                                                                                                                                                                                                |
+| negative regulation of epidermal growth factor receptor signaling pathway | 10/1268   | 0.0656670 | Ptp4E/CanA1/sty/edl/rno/Mkp3/Vav/Socs36E/tay/hppy                                                                                                                                                                                                                                                                                                                       |
+| negative regulation of ERBB signaling pathway                             | 10/1268   | 0.0656670 | Ptp4E/CanA1/sty/edl/rno/Mkp3/Vav/Socs36E/tay/hppy                                                                                                                                                                                                                                                                                                                       |
+| negative regulation of canonical Wnt signaling pathway                    | 11/1268   | 0.0777024 | aop/nkd/otk/wts/phyl/Apc/Sin3A/fz4/SoxN/HUWE1/Duba                                                                                                                                                                                                                                                                                                                      |
+
+``` r
+write_csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"))
+```
+
+### KEGG - c1
+
+``` r
+# Get entrez ids
+c1_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl)[[1]]), ]$entrezgene_id)
+
+kegg_universe = ensembl.genes[ensembl.genes$ensembl_gene_id %in% rownames(dds), ]$entrezgene_id
+
+# Run KEGG
+k3_c1_ekegg <- plotKEGG_dm(c1_entrez, 
+                           universe = kegg_universe, title = "KEGG, cluster 1")
+```
+
+    Running KEGG for organism = drosophila melanogaster
+
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/dme/pathway"...
+
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/dme"...
+
+    Reading KEGG annotation online: "https://rest.kegg.jp/conv/ncbi-geneid/dme"...
+
+    `universe` is not in character and will be ignored...
+
+![](../figures/03_clust/c1-ekegg-1.png)
+
+    [1] "6 enrichments found"
+
+``` r
+nrow(k3_c1_ekegg)
+```
+
+    [1] 6
+
+``` r
+write_csv(k3_c1_ekegg, file = paste0(output_dir, "k3_c1_ekegg.csv"))
+```
+
+### Custom KEGG
+
+``` r
+interesting_pathways = c("Endocytosis", 
+                         "MAPK signaling pathway - fly",
+                         "Hippo signaling pathway - fly",
+                         "TGF-beta signaling pathway")
+
+c1_kegg_table <- custom_kegg_table(k3_c1_ekegg, 
+                                   interesting_pathways)
+
+c1_kegg_table
+```
+
+|          | Description                   | GeneRatio |  p.adjust | geneID                                                                                                                                                                                      |
+|:---------|:------------------------------|:----------|----------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| dme04144 | Endocytosis                   | 31/429    | 0.0049860 | Hsp68/Egfr/babo/Hsp70Ba/Hsp70Bc/Past1/sktl/WASp/siz/Sara/Rip11/Sec71/CG8243/wash/FAM21/Vps20/Eps-15/Strump/Arpc3A/Usp8/Asap/CG31064/Efa6/Hsp70Bbb/step/Rbsn-5/AP-2mu/garz/AP-2alpha/InR/btl |
+| dme04013 | MAPK signaling pathway - fly  | 25/429    | 0.0049860 | aop/dpp/Jra/Sos/peb/pnt/raw/Egfr/ttk/vn/hid/pros/hep/Mef2/phyl/Ask1/sty/Shark/Shc/edl/p38b/slpr/CYLD/Tab2/Duox                                                                              |
+| dme04391 | Hippo signaling pathway - fly | 17/429    | 0.0074585 | fj/ft/hth/tsh/vn/ex/wts/jub/yki/sav/Patj/crb/d/kibra/Myc/wg/ds                                                                                                                              |
+| dme04350 | TGF-beta signaling pathway    | 13/429    | 0.0703918 | dpp/emc/sog/babo/Rbf/Sin3A/gbb/E2f2/Sara/vis/achi/Myc/S6k                                                                                                                                   |
+
+### Summary
+
+</div>
+
+## Cluster 2
+
+``` r
+clusterHeatmap(rld_z, kmeans_cl = kmeans_cl, 
+               clust_num = 2, sample_order = sample_order,
+              cluster_rows = FALSE,
+              font_size = 8,
+              top_annotation  = ha)
+```
+
+    `use_raster` is automatically set to TRUE for a matrix with more than
+    2000 rows. You can control `use_raster` argument by explicitly setting
+    TRUE/FALSE to it.
+
+    Set `ht_opt$message = FALSE` to turn off this message.
+
+    'magick' package is suggested to install to give better rasterization.
+
+    Set `ht_opt$message = FALSE` to turn off this message.
+
+![](../figures/03_clust/c2-heatmap-1.png)
+
+<div class="panel-tabset">
+
+### Zscore-boxplot
+
+``` r
+zscore_boxcondition(kmeans_cl, clust_num = 2, condition_order)
+```
+
+    [1] "3528 genes in cluster 2"
+
+![](../figures/03_clust/c2-zscorebox-1.png)
+
+### GO - c2
+
+``` r
+k3_c2_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[2]]), 
+                     universe = rownames(dds), 
+                     title = "GO, k=3, cluster 2")
+```
+
+    Running GO for organism = drosophila melanogaster
+
+![](../figures/03_clust/c2-ego-1.png)
+
+    [1] "513 enrichments found"
+
+### Finding enrichments
+
+``` r
+findEGO(k3_c2_ego, "Wnt", print_top_matches = FALSE)
+```
+
+    [1] "7 matches found."
+    [1] "regulation of Wnt signaling pathway"                   
+    [2] "cell-cell signaling by wnt"                            
+    [3] "regulation of canonical Wnt signaling pathway"         
+    [4] "Wnt signaling pathway"                                 
+    [5] "positive regulation of canonical Wnt signaling pathway"
+    [6] "positive regulation of Wnt signaling pathway"          
+    [7] "canonical Wnt signaling pathway"                       
+
+``` r
+findEGO(k3_c2_ego, "signal", print_top_matches = FALSE)
+```
+
+    [1] "45 matches found."
+     [1] "regulation of smoothened signaling pathway"                             
+     [2] "cell cycle checkpoint signaling"                                        
+     [3] "smoothened signaling pathway"                                           
+     [4] "mitotic cell cycle checkpoint signaling"                                
+     [5] "positive regulation of smoothened signaling pathway"                    
+     [6] "DNA integrity checkpoint signaling"                                     
+     [7] "negative regulation of smoothened signaling pathway"                    
+     [8] "DNA damage checkpoint signaling"                                        
+     [9] "signal transduction in response to DNA damage"                          
+    [10] "mitotic DNA integrity checkpoint signaling"                             
+    [11] "regulation of hippo signaling"                                          
+    [12] "hippo signaling"                                                        
+    [13] "DNA replication checkpoint signaling"                                   
+    [14] "mitotic G2 DNA damage checkpoint signaling"                             
+    [15] "Toll signaling pathway"                                                 
+    [16] "regulation of Wnt signaling pathway"                                    
+    [17] "mitotic DNA damage checkpoint signaling"                                
+    [18] "positive regulation of signal transduction"                             
+    [19] "negative regulation of signal transduction"                             
+    [20] "regulation of Toll signaling pathway"                                   
+    [21] "negative regulation of hippo signaling"                                 
+    [22] "cell-cell signaling by wnt"                                             
+    [23] "regulation of canonical Wnt signaling pathway"                          
+    [24] "positive regulation of Toll signaling pathway"                          
+    [25] "positive regulation of signaling"                                       
+    [26] "cell surface receptor signaling pathway involved in cell-cell signaling"
+    [27] "Wnt signaling pathway"                                                  
+    [28] "positive regulation of canonical Wnt signaling pathway"                 
+    [29] "mitotic DNA replication checkpoint signaling"                           
+    [30] "positive regulation of Wnt signaling pathway"                           
+    [31] "mitotic spindle assembly checkpoint signaling"                          
+    [32] "spindle checkpoint signaling"                                           
+    [33] "spindle assembly checkpoint signaling"                                  
+    [34] "mitotic spindle checkpoint signaling"                                   
+    [35] "receptor signaling pathway via JAK-STAT"                                
+    [36] "receptor signaling pathway via STAT"                                    
+    [37] "regulation of intracellular signal transduction"                        
+    [38] "canonical Wnt signaling pathway"                                        
+    [39] "regulation of receptor signaling pathway via JAK-STAT"                  
+    [40] "regulation of receptor signaling pathway via STAT"                      
+    [41] "negative regulation of signaling"                                       
+    [42] "negative regulation of intracellular signal transduction"               
+    [43] "regulation of sevenless signaling pathway"                              
+    [44] "positive regulation of hippo signaling"                                 
+    [45] "stress-activated protein kinase signaling cascade"                      
+
+``` r
+findEGO(k3_c2_ego, "autophag", print_top_matches = FALSE)
+```
+
+    [1] "4 matches found."
+    [1] "autophagy"                             
+    [2] "process utilizing autophagic mechanism"
+    [3] "macroautophagy"                        
+    [4] "regulation of autophagy"               
+
+``` r
+findEGO(k3_c2_ego, "senes|apop|death", print_top_matches = FALSE)
+```
+
+    [1] "3 matches found."
+    [1] "programmed cell death" "cell death"            "apoptotic process"    
+
+``` r
+findEGO(k3_c2_ego, "adhes", print_top_matches = FALSE)
+```
+
+    [1] "0 matches found."
+    character(0)
+
+``` r
+findEGO(k3_c2_ego, "neuro", print_top_matches = FALSE)
+```
+
+    [1] "4 matches found."
+    [1] "negative regulation of neuroblast proliferation"    
+    [2] "asymmetric neuroblast division"                     
+    [3] "neuroblast division"                                
+    [4] "establishment or maintenance of neuroblast polarity"
+
+``` r
+findEGO(k3_c2_ego, "axis|cuti", print_top_matches = FALSE)
+```
+
+    [1] "9 matches found."
+    [1] "axis specification"                                                               
+    [2] "oocyte axis specification"                                                        
+    [3] "anterior/posterior axis specification, embryo"                                    
+    [4] "embryonic axis specification"                                                     
+    [5] "anterior/posterior axis specification"                                            
+    [6] "maternal determination of anterior/posterior axis, embryo"                        
+    [7] "oocyte anterior/posterior axis specification"                                     
+    [8] "dorsal/ventral axis specification"                                                
+    [9] "intracellular mRNA localization involved in anterior/posterior axis specification"
+
+``` r
+findEGO(k3_c2_ego, "diff|prolif|mitot", print_top_matches = FALSE)
+```
+
+    [1] "45 matches found."
+     [1] "mitotic cell cycle"                                           
+     [2] "mitotic cell cycle process"                                   
+     [3] "regulation of mitotic cell cycle"                             
+     [4] "mitotic cell cycle phase transition"                          
+     [5] "oocyte differentiation"                                       
+     [6] "regulation of mitotic cell cycle phase transition"            
+     [7] "mitotic nuclear division"                                     
+     [8] "mitotic cell cycle checkpoint signaling"                      
+     [9] "negative regulation of mitotic cell cycle phase transition"   
+    [10] "negative regulation of mitotic cell cycle"                    
+    [11] "mitotic sister chromatid segregation"                         
+    [12] "regulation of G2/M transition of mitotic cell cycle"          
+    [13] "G2/M transition of mitotic cell cycle"                        
+    [14] "mitotic spindle organization"                                 
+    [15] "negative regulation of G2/M transition of mitotic cell cycle" 
+    [16] "mitotic DNA integrity checkpoint signaling"                   
+    [17] "mitotic G2/M transition checkpoint"                           
+    [18] "mitotic cytokinesis"                                          
+    [19] "mitotic G2 DNA damage checkpoint signaling"                   
+    [20] "mitotic DNA damage checkpoint signaling"                      
+    [21] "negative regulation of cell population proliferation"         
+    [22] "establishment of mitotic spindle localization"                
+    [23] "cell population proliferation"                                
+    [24] "metaphase/anaphase transition of mitotic cell cycle"          
+    [25] "regulation of mitotic sister chromatid separation"            
+    [26] "mitotic sister chromatid separation"                          
+    [27] "mitotic centrosome separation"                                
+    [28] "mitotic DNA replication checkpoint signaling"                 
+    [29] "establishment of mitotic spindle orientation"                 
+    [30] "negative regulation of neuroblast proliferation"              
+    [31] "negative regulation of neural precursor cell proliferation"   
+    [32] "mitotic spindle assembly checkpoint signaling"                
+    [33] "regulation of mitotic cell cycle, embryonic"                  
+    [34] "negative regulation of mitotic sister chromatid segregation"  
+    [35] "negative regulation of mitotic metaphase/anaphase transition" 
+    [36] "mitotic spindle checkpoint signaling"                         
+    [37] "negative regulation of mitotic sister chromatid separation"   
+    [38] "regulation of mitotic sister chromatid segregation"           
+    [39] "regulation of mitotic nuclear division"                       
+    [40] "regulation of R7 cell differentiation"                        
+    [41] "germarium-derived oocyte differentiation"                     
+    [42] "regulation of photoreceptor cell differentiation"             
+    [43] "regulation of compound eye photoreceptor cell differentiation"
+    [44] "regulation of mitotic metaphase/anaphase transition"          
+    [45] "mitotic metaphase plate congression"                          
+
+``` r
+findEGO(k3_c2_ego, "migrat|taxi", print_top_matches = FALSE)
+```
+
+    [1] "0 matches found."
+    character(0)
+
+### Custom EGO
+
+``` r
 interesting_pathways <- c(
   # Wnt
-  "negative regulation of Wnt signaling pathway",
+  "canonical Wnt signaling pathway",
   # pathways
-  "ERBB signaling pathway", 
-  "epidermal growth factor receptor signaling pathway", 
-  "Ras protein signal transduction",
-  "insulin receptor signaling pathway",
-  "vascular endothelial growth factor receptor signaling pathway", 
-  "fibroblast growth factor receptor signaling pathway",
-  "cell death",
-  "cell adhesion",
-  "chemotaxis"
+  "smoothened signaling pathway",
+  "Toll signaling pathway",
+  # axis specification
+  "dorsal/ventral axis specification",
+  "axis specification",
+  "negative regulation of mitotic cell cycle"
   
   )
 
 custom_ego(k3_c2_ego, interesting_pathways, 
            title = "GO, k=3, cluster 2", 
-           font_size = 10)
+           font_size = 12)
 ```
 
 ![](../figures/03_clust/c2-ego-custom-1.png)
@@ -996,18 +903,14 @@ c2_go_table <- custom_ego_table(k3_c2_ego, interesting_pathways)
 c2_go_table
 ```
 
-| Description                                                   | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                                                                         |
-|:--------------------------------------------------------------|:----------|----------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| chemotaxis                                                    | 73/1274   | 0.0000035 | eya/D/dpp/en/E(z)/grn/Sos/robo2/sens/peb/ras/ptc/Nrt/Ptp4E/Ten-m/pros/zfh1/hh/otk/robo1/comm/hep/trn/sqz/Sema1a/babo/fra/shot/gcm/mirr/Shc/drl/Vang/fz2/Tor/stan/msps/Rich/Fmr1/nerfin-1/SoxN/raptor/Nf-YC/hiw/erm/beat-IIIc/CdGAPr/ckn/unc-5/Toll-7/Lrt/Toll-6/Vav/boi/Alk/wun2/SCAR/Liprin-alpha/Mical/jeb/vvl/psidin/wb/Dbx/mid/hts/sli/ab/Ten-a/S6k/InR/Sac1/Sema5c                        |
-| Ras protein signal transduction                               | 37/1274   | 0.0013242 | ca/Sos/sty/betaggt-I/Nf1/mbc/RhoGEF2/CG3630/Sbf/RhoGAP1A/siz/Rich/Sec71/CG4853/pns/RhoGAP68F/Als2/CG7369/Rab23/RhoGAP92B/CG6607/Lztr1/Efa6/RhoU/CG34393/step/C3G/Mob4/Ziz/raskol/Rabex-5/CG43658/garz/PsGEF/Cdep/PDZ-GEF/cv-c                                                                                                                                                                  |
-| cell death                                                    | 76/1274   | 0.0031562 | abd-A/Abd-B/eya/cn/ec/en/fkh/ft/kto/sens/Met/pnt/rst/Egfr/ptc/Ubi-p63E/hid/sc/ex/Itpr/hep/Akt1/wts/klu/Pi3K59F/Apc/Rbf/pcm/Tor/syd/brk/E2f2/TBPH/drpr/Fmr1/raptor/CG14441/HUWE1/AIF/CG4230/CYLD/CG17019/SCCRO3/Atg9/CG10914/yki/NijA/Atg17/FBXO11/trus/Dcr-1/CG15547/wun2/Atg2/CG17230/Tre1/Drak/sav/Tab2/spin/psidin/Clbn/bun/Diap1/Vps15/Ubr3/kibra/Sarm/Myc/bel/hppy/Atg6/rdx/Bruce/Duox/wg |
-| insulin receptor signaling pathway                            | 21/1274   | 0.0069532 | fkh/Hsp83/ImpL2/Akt1/Pi3K21B/Tor/Fmr1/raptor/rictor/Sin1/Mkp3/srl/HDAC4/step/Mob4/Myc/Lpin/Ns3/PRAS40/S6k/InR                                                                                                                                                                                                                                                                                  |
-| epidermal growth factor receptor signaling pathway            | 20/1274   | 0.0093786 | Ama/aop/Sos/pnt/Egfr/ttk/vn/Ptp4E/CanA1/phyl/sty/Shc/edl/rno/Mkp3/Vav/Socs36E/step/tay/hppy                                                                                                                                                                                                                                                                                                    |
-| ERBB signaling pathway                                        | 20/1274   | 0.0093786 | Ama/aop/Sos/pnt/Egfr/ttk/vn/Ptp4E/CanA1/phyl/sty/Shc/edl/rno/Mkp3/Vav/Socs36E/step/tay/hppy                                                                                                                                                                                                                                                                                                    |
-| fibroblast growth factor receptor signaling pathway           | 12/1274   | 0.0300193 | aop/Sos/pnt/Ptp4E/bnl/sty/Shc/stumps/CG13398/ths/grh/btl                                                                                                                                                                                                                                                                                                                                       |
-| vascular endothelial growth factor receptor signaling pathway | 12/1274   | 0.0300193 | aop/Sos/Ptp4E/hep/Akt1/Shc/mbc/Tor/slpr/Vav/PRAS40/S6k                                                                                                                                                                                                                                                                                                                                         |
-| negative regulation of Wnt signaling pathway                  | 12/1274   | 0.0518911 | aop/nkd/otk/wts/phyl/Apc/crol/Sin3A/fz4/SoxN/HUWE1/Duba                                                                                                                                                                                                                                                                                                                                        |
-| cell adhesion                                                 | 42/1274   | 0.0967379 | Ama/aop/bib/ft/robo2/peb/rst/Nrt/Ten-m/hh/otk/robo1/trn/fra/Hem/Ret/glec/crol/sns/stan/seq/hbs/Grip/Megf8/beat-IIIc/wash/FAM21/p130CAS/NijA/Strump/Fit2/Cad74A/boi/SCAR/Invadolysin/RanBPM/Sec23/Sec24CD/sli/CG45263/Ten-a/ds                                                                                                                                                                  |
+| Description                               | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|:------------------------------------------|:----------|----------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| smoothened signaling pathway              | 56/3002   | 0.0000037 | bam/bur/Pka-C1/cos/flw/fu/Gbeta13F/dco/Pp1-13C/Pp1alpha-96A/smo/Su(dx)/Su(var)2-10/mts/Rap1/tws/Su(fu)/lwr/Gug/eff/Uch-L5/CkIalpha/Ubc4/Cul1/HDAC1/Pp4-19C/Tnpo/Roc1a/par-6/wdb/botv/Ulp1/Smurf/disp/sotv/PPP4R2r/Usp7/Hrs/Nedd8/Herc4/UbcE2M/hyx/krz/dlp/gish/Nedd4/cno/Pka-R1/Pp2A-29B/Gprk1/pic/nej/aPKC/Uba3/smt3/ttv                                                                                                                                                                                                  |
+| axis specification                        | 98/3002   | 0.0000392 | aub/baz/bcd/BicD/cact/cad/Pka-C1/chic/cni/csw/cup/ea/flw/gd/fs(1)K10/grk/hb/dlg1/wek/l(2)gl/pho/mago/mus301/ndl/pum/Ras85D/rl/sax/Sce/snk/spir/spn-B/spn-D/spn-E/spz/Sry-delta/stau/swa/Tm1/tor/RasGAP1/fs(1)h/Hrb27C/enc/orb/fs(1)M3/faf/Parp/Dsor1/pll/heph/Dp/Syx1A/ksr/Lis-1/Rab11/csul/mael/Cbl/14-3-3epsilon/lig/asun/DCTN2-p50/Vps25/Rok/gus/Grip75/CSN5/Mkrn1/Rab35/cactin/papi/tsu/Myd88/tej/krimp/TBCB/DCP1/CG7483/CG9925/armi/spn-F/Pka-R1/capt/lic/aPKC/Tl/cic/milt/psq/vret/scrib/sqd/jvl/qin/spoon/rump/Ge-1 |
+| negative regulation of mitotic cell cycle | 42/3002   | 0.0000588 | brm/mor/mus101/mus304/smo/Cdk1/B52/Dsor1/Mad/Wee1/l(2)dtl/Mtor/lok/mre11/aurB/Bub3/Rad17/Mad1/Hus1-like/RecQ5/Aven/CG8173/Mnn1/CG5181/BuGZ/CG10336/CG15237/mms4/mad2/Cdc6/Tctp/CycG/mus81/Chro/tefu/Rif1/Claspin/Zwilch/grp/Xpd/CG43295/BubR1                                                                                                                                                                                                                                                                              |
+| Toll signaling pathway                    | 32/3002   | 0.0052864 | cact/ea/gd/gro/wek/ndl/snk/spz/tub/pll/lwr/Ulp1/Spn88Ea/Spn27A/Uba2/Aos1/cactin/Hrs/Myd88/Dcr-2/Herc4/mop/dgrn/puf/grass/krz/GNBP1/26-29-p/Tl/smt3/Traf6/Doa                                                                                                                                                                                                                                                                                                                                                               |
+| dorsal/ventral axis specification         | 38/3002   | 0.0057209 | BicD/cact/cni/csw/ea/flw/gd/grk/wek/mus301/ndl/snk/spn-B/spn-D/spn-E/spz/enc/orb/faf/Parp/pll/Dp/Lis-1/mael/Cbl/lig/asun/CSN5/cactin/tsu/Myd88/krimp/Tl/cic/milt/sqd/jvl/spoon                                                                                                                                                                                                                                                                                                                                             |
+| canonical Wnt signaling pathway           | 47/3002   | 0.0538860 | arm/dsh/flw/gro/dco/hyd/Pp1alpha-96A/Pp1-87B/mts/tws/Eip63E/Ssdp/nmo/Rho1/CkIalpha/Cul1/Usp47/spen/CtBP/SkpA/Roc1a/Cdc16/Axn/Apc2/Tnks/botv/Nulp1/sotv/Nek2/CycY/Gint3/Rnf146/CG11523/hyx/RanBP3/lgs/rept/pont/dlp/pygo/tum/gish/hpo/lic/nej/ttv/RpS12                                                                                                                                                                                                                                                                     |
 
 ``` r
 write_csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
@@ -1030,13 +933,33 @@ k3_c2_ekegg <- plotKEGG_dm(c2_entrez,
 
 ![](../figures/03_clust/c2-ekegg-1.png)
 
-    [1] "6 enrichments found"
+    [1] "9 enrichments found"
 
 ``` r
-interesting_pathways = c("Endocytosis", 
-                         "MAPK signaling pathway - fly",
-                         "Hippo signaling pathway - fly",
-                         "TGF-beta signaling pathway")
+nrow(k3_c2_ekegg)
+```
+
+    [1] 9
+
+``` r
+k3_c2_ekegg
+```
+
+|          | ID       | Description                                                              | GeneRatio | BgRatio  |    pvalue |  p.adjust |    qvalue | geneID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Count |
+|:---------|:---------|:-------------------------------------------------------------------------|:----------|:---------|----------:|----------:|----------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------:|
+| dme03013 | dme03013 | Nucleocytoplasmic transport - Drosophila melanogaster (fruit fly)        | 70/1184   | 99/3488  | 0.0000000 | 0.0000000 | 0.0000000 | mago/sbr/RanGAP/lwr/Nup214/Ref1/Mtor/Hel25E/Ran/emb/Nup154/Cse1/Cbp80/Cbp20/Bin1/Dbp80/Kap-alpha1/Tnpo/mbo/msk/Kap-alpha3/Nup93-1/Nxt1/Upf2/Aladin/Nup35/Elys/Nup205/tho2/Tnpo-SR/Nup50/Gle1/tsu/Phax/Nup54/Nup62/Rae1/Pym/Upf3/thoc5/thoc7/thoc6/Srrm1/Hpr1/CG7483/RnpS1/Pnn/Ranbp9/CG14712/Nup93-2/Nup133/Nup98-96/Ndc1/Nup37/Nup358/CG18787/Arts/Apl/Ranbp16/Nup153/Karybeta3/Snup/CG42304/cdm/Nup160/Acn/Nxf3/smt3/ebo/Gp210                                                                              |    70 |
+| dme03040 | dme03040 | Spliceosome - Drosophila melanogaster (fruit fly)                        | 81/1184   | 141/3488 | 0.0000000 | 0.0000003 | 0.0000003 | crn/SmF/Hrb98DE/l(1)10Bb/mago/snf/B52/Bx42/U2af50/Ref1/Hel25E/noi/Spx/U2af38/ytr/Cbp80/Cbp20/CG2685/l(1)G0007/Prp18/CG4119/x16/hfp/Tango4/CG1622/CG6227/Usp39/Sf3b1/tho2/CG3542/Sf3b2/Phf5a/CG6686/CG10333/Dhx15/tsu/CG12343/Prp8/CG9346/Cypl/Sf3b3/CG2021/CG11586/CG6610/Sf3b6/CG6418/CG10418/Sf3a2/Prp31/U4-U6-60K/Prp3/CG14641/Hpr1/CG7483/CG6015/PQBP1/BCAS2/CG15525/CG17454/c12.1/Sf3b5/Prp38/LSm3/Spf45/pea/LSm7/Prp19/SmD2/SmE/SNRPG/snRNP-U1-C/scaf6/SmD1/SmB/Acn/l(3)72Ab/Cdc5/Sf3a1/HnRNP-K/SF2/caz |    81 |
+| dme03082 | dme03082 | ATP-dependent chromatin remodeling - Drosophila melanogaster (fruit fly) | 50/1184   | 81/3488  | 0.0000002 | 0.0000085 | 0.0000080 | Act5C/brm/E(bx)/E(Pc)/His2Av/pho/mor/Uch-L5/Iswi/Snr1/Arp6/HDAC1/dom/Bap60/Tip60/BCL7-like/CG8677/MRG15/CG11970/MBD-like/MTA1-like/Bap111/CDK2AP1/Arp8/CG31917/Gas41/CG7154/YL-1/d4/CG10395/MrgBP/CG18004/DMAP1/Eaf6/Arp5/polybromo/Brd8/rept/pont/CG12659/Bap170/Chrac-16/Chrac-14/CG33695/Ino80/e(y)3/osa/Mi-2/Rcd5/Caf1-55                                                                                                                                                                                 |    50 |
+| dme03250 | dme03250 | Viral life cycle - HIV-1 - Drosophila melanogaster (fruit fly)           | 25/1184   | 33/3488  | 0.0000010 | 0.0000290 | 0.0000271 | BicD/Fur1/Fur2/TH1/Snr1/Su(Tpl)/dod/Cdk9/Ran/Gcn5/emb/ear/NELF-B/fal/spt4/Hrs/Tnpo-SR/Cpsf6/Nup358/Jasper/Spt5/Nup153/ALiX/nej/Vps4                                                                                                                                                                                                                                                                                                                                                                           |    25 |
+| dme03022 | dme03022 | Basal transcription factors - Drosophila melanogaster (fruit fly)        | 27/1184   | 40/3488  | 0.0000136 | 0.0003221 | 0.0003017 | e(y)1/hay/TfIIB/Taf4/TfIIFalpha/Trf/Taf1/Taf5/Taf6/TfIIFbeta/TfIIA-L/Taf12/Taf11/Taf2/TfIIA-S/Taf8/Taf7/Taf10b/Taf10/Tfb4/Taf13/Ssl1/mrn/Trf2/Xpd/Cdk7/Tfb5                                                                                                                                                                                                                                                                                                                                                   |    27 |
+| dme04120 | dme04120 | Ubiquitin mediated proteolysis - Drosophila melanogaster (fruit fly)     | 57/1184   | 107/3488 | 0.0000234 | 0.0004606 | 0.0004314 | ben/fzy/hyd/mr/sina/Su(dx)/Su(var)2-10/RpL40/RpS27A/shtd/lwr/eff/Ubc2/Ubc4/Cul1/Cbl/EloB/CG2924/SkpA/Roc1a/Cdc16/SkpC/Ubc10/STUB1/Smurf/Uba2/Aos1/UbcE2H/CG8188/CG4502/Cul2/CG15237/CG7220/CG7747/CG3356/Herc4/UbcE2M/Cul6/RhoBTB/Skp2/Cul5/CG2218/sip3/ago/Roc2/APC4/Ube3a/Ubi-p5E/CG33981/lmgA/Nedd4/pic/Prp19/Uba3/Traf6/EloC/Ubc7                                                                                                                                                                         |    57 |
+| dme03015 | dme03015 | mRNA surveillance pathway - Drosophila melanogaster (fruit fly)          | 45/1184   | 80/3488  | 0.0000290 | 0.0004881 | 0.0004571 | flw/mago/Pp1-13C/Pp1alpha-96A/sbr/su(f)/Pp1-87B/mts/Hrb27C/tws/Ref1/Hel25E/Clp/Cbp80/Cbp20/Bin1/Cpsf160/Dbp80/wdb/CstF64/Cpsf100/Nxt1/Upf2/Wdr82/Gle1/tsu/cbc/Pym/Upf3/Cpsf6/Srrm1/eRF1/Fip1/CG7483/RnpS1/Pnn/Smg6/CstF50/HBS1/Wdr33/Pp2A-29B/Acn/Nxf3/caz/Rnmt                                                                                                                                                                                                                                               |    45 |
+| dme03420 | dme03420 | Nucleotide excision repair - Drosophila melanogaster (fruit fly)         | 29/1184   | 51/3488  | 0.0006037 | 0.0089049 | 0.0083409 | hay/mei-9/RpII215/Xpc/RpII15/Gnf1/PCNA/Roc1a/RpII33/Rad23/Pol31/Ercc1/RfC38/Tfb4/RfC3/Rpb11/Rpb5/Ssl1/Chrac-14/Rpb7/pic/RfC4/mrn/Xpd/Rpb12/RpII140/Cdk7/Rpb4/Tfb5                                                                                                                                                                                                                                                                                                                                             |    29 |
+| dme04330 | dme04330 | Notch signaling pathway - Drosophila melanogaster (fruit fly)            | 16/1184   | 25/3488  | 0.0019792 | 0.0259490 | 0.0243055 | dsh/gro/H/Su(H)/Bx42/HDAC1/spen/Gcn5/CtBP/Atx-1/aph-1/CG6843/Nct/pen-2/nej/Psn                                                                                                                                                                                                                                                                                                                                                                                                                                |    16 |
+
+``` r
+interesting_pathways = c("Notch signaling pathway",
+                         "Nucleotide excision repair")
 
 c2_kegg_table <- custom_kegg_table(k3_c2_ekegg, 
                                    interesting_pathways)
@@ -1044,12 +967,10 @@ c2_kegg_table <- custom_kegg_table(k3_c2_ekegg,
 c2_kegg_table
 ```
 
-|          | Description                   | GeneRatio |  p.adjust | geneID                                                                                                                                                                                      |
-|:---------|:------------------------------|:----------|----------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| dme04144 | Endocytosis                   | 31/431    | 0.0054133 | Hsp68/Egfr/babo/Hsp70Ba/Hsp70Bc/Past1/sktl/WASp/siz/Sara/Rip11/Sec71/CG8243/wash/FAM21/Vps20/Eps-15/Strump/Arpc3A/Usp8/Asap/CG31064/Efa6/Hsp70Bbb/step/Rbsn-5/AP-2mu/garz/AP-2alpha/InR/btl |
-| dme04013 | MAPK signaling pathway - fly  | 25/431    | 0.0054133 | aop/dpp/Jra/Sos/peb/pnt/raw/Egfr/ttk/vn/hid/pros/hep/Mef2/phyl/Ask1/sty/Shark/Shc/edl/p38b/slpr/CYLD/Tab2/Duox                                                                              |
-| dme04391 | Hippo signaling pathway - fly | 17/431    | 0.0077243 | fj/ft/hth/tsh/vn/ex/wts/jub/yki/sav/Patj/crb/d/kibra/Myc/wg/ds                                                                                                                              |
-| dme04350 | TGF-beta signaling pathway    | 13/431    | 0.0740056 | dpp/emc/sog/babo/Rbf/Sin3A/gbb/E2f2/Sara/vis/achi/Myc/S6k                                                                                                                                   |
+|          | Description                | GeneRatio |  p.adjust | geneID                                                                                                                                                            |
+|:---------|:---------------------------|:----------|----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| dme03420 | Nucleotide excision repair | 29/1184   | 0.0089049 | hay/mei-9/RpII215/Xpc/RpII15/Gnf1/PCNA/Roc1a/RpII33/Rad23/Pol31/Ercc1/RfC38/Tfb4/RfC3/Rpb11/Rpb5/Ssl1/Chrac-14/Rpb7/pic/RfC4/mrn/Xpd/Rpb12/RpII140/Cdk7/Rpb4/Tfb5 |
+| dme04330 | Notch signaling pathway    | 16/1184   | 0.0259490 | dsh/gro/H/Su(H)/Bx42/HDAC1/spen/Gcn5/CtBP/Atx-1/aph-1/CG6843/Nct/pen-2/nej/Psn                                                                                    |
 
 ``` r
 write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"))
@@ -1089,7 +1010,7 @@ clusterHeatmap(rld_z, kmeans_cl = kmeans_cl,
 zscore_boxcondition(kmeans_cl, clust_num = 3, condition_order)
 ```
 
-    [1] "2965 genes in cluster 3"
+    [1] "2968 genes in cluster 3"
 
     Warning: Removed 4 rows containing non-finite values (`stat_boxplot()`).
 
@@ -1107,7 +1028,7 @@ k3_c3_ego <- plotEGO_dm(clust_target_genes = names((kmeans_cl)[[3]]),
 
 ![](../figures/03_clust/c3-ego-1.png)
 
-    [1] "177 enrichments found"
+    [1] "176 enrichments found"
 
 ### Finding enrichments
 
@@ -1207,27 +1128,44 @@ findEGO(k3_c3_ego, "devel", print_top_matches = FALSE)
     [7] "mesoderm development"             "axon development"                
 
 ``` r
+findEGO(k3_c3_ego, "junc", print_top_matches = FALSE)
+```
+
+    [1] "6 matches found."
+    [1] "tight junction assembly"     "tight junction organization"
+    [3] "septate junction assembly"   "cell junction organization" 
+    [5] "apical junction assembly"    "cell-cell junction assembly"
+
+### Custom EGO
+
+``` r
 interesting_pathways <- c("cell adhesion", 
                           "chemotaxis", 
-                          "cuticle development")
+                          "cuticle development",
+                          "tight junction assembly",
+                          "apical junction assembly",
+                          "septate junction assembly")
 
 c3_go_table <- custom_ego_table(k3_c3_ego, interesting_pathways)
 
 c3_go_table
 ```
 
-| Description         | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|:--------------------|:----------|----------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| cuticle development | 100/2241  | 0.0000000 | amd/Ddc/ect/Gld/kkv/knk/m/Pu/sha/Ser/Ccp84Ag/Ccp84Ad/Ccp84Ac/Ccp84Ab/ple/Cyp4g1/fng/Acp1/pio/Lcp65Ag2/Lcp65Af/Lcp65Ac/Lcp65Ab2/Alas/Cht2/Gasp/Vajk3/Cpr35B/Vajk1/TwdlT/Cpr11A/obst-A/snsl/obst-E/TwdlE/Vajk2/Cpr47Ef/Twdlbeta/Cpr49Ac/Cpr49Ae/Cpr49Ag/Cpr50Cb/Cpr51A/resilin/Cpr56F/Cpr62Bb/Cpr62Bc/Cht7/Cpr64Ab/Cpr64Ad/Cpr65Ea/Cpr65Eb/Cpr65Ec/Cpr66Cb/Cpr67Fa1/Cpr76Bc/Cpr78Cc/TwdlF/TwdlG/Cht5/TwdlW/Cpr92F/TwdlM/TwdlP/TwdlL/TwdlO/TwdlN/TwdlD/TwdlQ/TwdlC/Cpr97Ea/Cpr97Eb/snu/Cpr100A/FASN2/Vajk4/fred/Cpr66D/Cpr65Av/TwdlY/TwdlX/dpy/Cpr31A/Idgf5/Sec61alpha/Cpr47Eg/Lcp65Ag3/puc/Tb/CG34461/pot/mmy/drd/serp/rtv/verm/dsx-c73A/sdt/f/stw |
-| cell adhesion       | 93/2241   | 0.0000005 | by/CG17716/Fas2/Fas3/fw/if/Gli/sas/LanA/m/rk/Vinc/mew/aos/Con/Itgbn/cora/tutl/sinu/Tig/beat-Ia/Nrx-IV/RhoL/CadN/nrv2/klg/mspo/Cad96Ca/caps/Flo1/wrapper/Timp/Ndg/SPARC/kirre/bdl/prc/beat-Ic/alpha-Catr/CG9095/bves/Tsp/Nlg2/CG17739/CG15080/CG13506/CG10339/Mmp1/zye/CG7166/NijC/beat-Vc/beat-Va/beat-Vb/Cad88C/Cad89D/beat-IIb/beat-IIa/beat-IV/Cad96Cb/beat-VI/Cad99C/Cals/Pax/mesh/Nlg1/fred/Ccn/beat-IIIb/dyl/Nlg3/Nlg4/beat-VII/rhea/mfas/Dscam3/Cad86C/plx/LanB1/CadN2/nrm/CG43333/tx/Sema2b/Nrg/CG44153/Dscam2/beat-IIIa/Zasp52/LanB2/otk2/tyn/disco-r                                                                                   |
-| chemotaxis          | 90/2241   | 0.0719364 | bsk/Fas2/Fas3/FER/Glt/if/Lim3/sas/LanA/pk/sm/tup/ct/Ptp99A/mew/fru/eIF2beta/nvy/dac/Con/Wnt5/Wnt4/tutl/Moe/Tig/beat-Ia/Rac2/cher/tap/CadN/NetA/NetB/Rab6/side/wun/ko/Nrk/Dad/Pka-R2/caps/Cdk5alpha/jbug/bdl/beat-Ic/CG6867/wgn/daw/Oli/Dscam1/Mmp2/Drl-2/Hr51/CG15611/spz5/RhoGEF64C/beat-Vc/beat-Va/beat-Vb/beat-IIb/beat-IIa/beat-VI/DIP-gamma/RhoGAP100F/robo3/CG30456/Unc-115a/Trim9/gogo/beat-IIIb/dpr11/beta-Spec/mmy/Mp/Dscam3/conv/haf/NT1/pdm3/CadN2/Acsl/Hmgcr/dally/dysc/Sema2b/Nrg/CG44153/Dscam2/beat-IIIa/ap/trol                                                                                                                  |
+| Description               | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|:--------------------------|:----------|----------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| cuticle development       | 100/2243  | 0.0000000 | amd/Ddc/ect/Gld/kkv/knk/m/Pu/sha/Ser/Ccp84Ag/Ccp84Ad/Ccp84Ac/Ccp84Ab/ple/Cyp4g1/fng/Acp1/pio/Lcp65Ag2/Lcp65Af/Lcp65Ac/Lcp65Ab2/Alas/Cht2/Gasp/Vajk3/Cpr35B/Vajk1/TwdlT/Cpr11A/obst-A/snsl/obst-E/TwdlE/Vajk2/Cpr47Ef/Twdlbeta/Cpr49Ac/Cpr49Ae/Cpr49Ag/Cpr50Cb/Cpr51A/resilin/Cpr56F/Cpr62Bb/Cpr62Bc/Cht7/Cpr64Ab/Cpr64Ad/Cpr65Ea/Cpr65Eb/Cpr65Ec/Cpr66Cb/Cpr67Fa1/Cpr76Bc/Cpr78Cc/TwdlF/TwdlG/Cht5/TwdlW/Cpr92F/TwdlM/TwdlP/TwdlL/TwdlO/TwdlN/TwdlD/TwdlQ/TwdlC/Cpr97Ea/Cpr97Eb/snu/Cpr100A/FASN2/Vajk4/fred/Cpr66D/Cpr65Av/TwdlY/TwdlX/dpy/Cpr31A/Idgf5/Sec61alpha/Cpr47Eg/Lcp65Ag3/puc/Tb/CG34461/pot/mmy/drd/serp/rtv/verm/dsx-c73A/sdt/f/stw |
+| cell adhesion             | 93/2243   | 0.0000006 | by/CG17716/Fas2/Fas3/fw/if/Gli/sas/LanA/m/rk/Vinc/mew/aos/Con/Itgbn/cora/tutl/sinu/Tig/beat-Ia/Nrx-IV/RhoL/CadN/nrv2/klg/mspo/Cad96Ca/caps/Flo1/wrapper/Timp/Ndg/SPARC/kirre/bdl/prc/beat-Ic/alpha-Catr/CG9095/bves/Tsp/Nlg2/CG17739/CG15080/CG13506/CG10339/Mmp1/zye/CG7166/NijC/beat-Vc/beat-Va/beat-Vb/Cad88C/Cad89D/beat-IIb/beat-IIa/beat-IV/Cad96Cb/beat-VI/Cad99C/Cals/Pax/mesh/Nlg1/fred/Ccn/beat-IIIb/dyl/Nlg3/Nlg4/beat-VII/rhea/mfas/Dscam3/Cad86C/plx/LanB1/CadN2/nrm/CG43333/tx/Sema2b/Nrg/CG44153/Dscam2/beat-IIIa/Zasp52/LanB2/otk2/tyn/disco-r                                                                                   |
+| tight junction assembly   | 23/2243   | 0.0007587 | Gli/Atpalpha/sinu/pck/Nrx-IV/nrv2/wun/Tsp2A/moody/bark/kune/CG13704/crim/Tsf2/CG9628/Ssk/M6/mesh/vari/bou/sdt/Nrg/CG44325                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| septate junction assembly | 20/2243   | 0.0039903 | Gli/Atpalpha/sinu/pck/Nrx-IV/nrv2/wun/Tsp2A/moody/kune/CG13704/crim/Tsf2/CG9628/Ssk/mesh/vari/bou/Nrg/CG44325                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| apical junction assembly  | 21/2243   | 0.0411065 | Gli/Atpalpha/sinu/pck/Nrx-IV/nrv2/wun/Tsp2A/moody/kune/CG13704/crim/Tsf2/CG9628/Ssk/mesh/vari/bou/sdt/Nrg/CG44325                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| chemotaxis                | 90/2243   | 0.0745460 | bsk/Fas2/Fas3/FER/Glt/if/Lim3/sas/LanA/pk/sm/tup/ct/Ptp99A/mew/fru/eIF2beta/nvy/dac/Con/Wnt5/Wnt4/tutl/Moe/Tig/beat-Ia/Rac2/cher/tap/CadN/NetA/NetB/Rab6/side/wun/ko/Nrk/Dad/Pka-R2/caps/Cdk5alpha/jbug/bdl/beat-Ic/CG6867/wgn/daw/Oli/Dscam1/Mmp2/Drl-2/Hr51/CG15611/spz5/RhoGEF64C/beat-Vc/beat-Va/beat-Vb/beat-IIb/beat-IIa/beat-VI/DIP-gamma/RhoGAP100F/robo3/CG30456/Unc-115a/Trim9/gogo/beat-IIIb/dpr11/beta-Spec/mmy/Mp/Dscam3/conv/haf/NT1/pdm3/CadN2/Acsl/Hmgcr/dally/dysc/Sema2b/Nrg/CG44153/Dscam2/beat-IIIa/ap/trol                                                                                                                  |
 
 ``` r
 custom_ego(k3_c3_ego, interesting_pathways, 
            title = "GO, k=3, cluster 3")
 ```
 
-![](../figures/03_clust/unnamed-chunk-48-1.png)
+![](../figures/03_clust/c3-ego-custom-1.png)
 
 ``` r
 write_csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"))
@@ -1260,38 +1198,38 @@ k3_c3_ekegg
 
 |          | ID       | Description                                                                        | GeneRatio | BgRatio  |    pvalue |  p.adjust |    qvalue | geneID                                                                                                                                                                                                                                                                            | Count |
 |:---------|:---------|:-----------------------------------------------------------------------------------|:----------|:---------|----------:|----------:|----------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------:|
-| dme04080 | dme04080 | Neuroactive ligand-receptor interaction - Drosophila melanogaster (fruit fly)      | 36/536    | 67/3487  | 0.0000000 | 0.0000000 | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |    36 |
-| dme01240 | dme01240 | Biosynthesis of cofactors - Drosophila melanogaster (fruit fly)                    | 38/536    | 138/3487 | 0.0001318 | 0.0068399 | 0.0047571 | Pu/v/l(3)02640/Alp4/Alas/Ugt35A1/Ugt37C1/Ugt37B1/CG12116/CG4407/Naprt/CG15629/Coq6/Nfs1/Ugt301D1/Alp12/CG8080/Alp6/Alp7/Alp8/CG3803/GC/Alp9/Pbgs/Pmm2/CG7430/Hpd/CG12170/CG2767/Alp5/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl/FeCH/Alp1                                      |    38 |
-| dme00514 | dme00514 | Other types of O-glycan biosynthesis - Drosophila melanogaster (fruit fly)         | 15/536    | 38/3487  | 0.0002579 | 0.0068399 | 0.0047571 | rt/fng/tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/GlcAT-P/Pgant8/Pgant9/CG31915/Pgant4/CG34056/tw                                                                                                                                                                                     |    15 |
-| dme00600 | dme00600 | Sphingolipid metabolism - Drosophila melanogaster (fruit fly)                      | 13/536    | 31/3487  | 0.0003294 | 0.0068399 | 0.0047571 | Gal/Sply/wun/Sk1/laza/CG11438/CG11437/CG11426/CDase/Hexo2/bwa/Gba1b/Ect3                                                                                                                                                                                                          |    13 |
-| dme04146 | dme04146 | Peroxisome - Drosophila melanogaster (fruit fly)                                   | 27/536    | 91/3487  | 0.0003423 | 0.0068399 | 0.0047571 | Cat/Idh/ry/ScpX/Pex5/Mfe2/Pex12/CG9527/CG17597/CG17544/CG1441/ADPS/Pex11/CG8306/CG5065/CG10672/Pex7/CG3961/CG17562/CG17560/CG13827/CG12268/wat/CG12355/CG30427/CG33671/Acsl                                                                                                       |    27 |
-| dme04512 | dme04512 | ECM-receptor interaction - Drosophila melanogaster (fruit fly)                     | 7/536     | 11/3487  | 0.0003664 | 0.0068399 | 0.0047571 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |     7 |
-| dme00785 | dme00785 | Lipoic acid metabolism - Drosophila melanogaster (fruit fly)                       | 9/536     | 18/3487  | 0.0005927 | 0.0094840 | 0.0065960 | ppl/Pdha/CG6415/CG33791/CG7430/CG8199/CG3999/Pdhb/CG1544                                                                                                                                                                                                                          |     9 |
-| dme04142 | dme04142 | Lysosome - Drosophila melanogaster (fruit fly)                                     | 32/536    | 123/3487 | 0.0013003 | 0.0175558 | 0.0122099 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |    32 |
-| dme00520 | dme00520 | Amino sugar and nucleotide sugar metabolism - Drosophila melanogaster (fruit fly)  | 16/536    | 48/3487  | 0.0014450 | 0.0175558 | 0.0122099 | kkv/Pgm1/Cht2/CG17065/Gale/Cht7/Pmm2/Cht5/CG6218/Gfat2/Gnpnat/Hexo2/mmy/sgl/Cht6/Galk                                                                                                                                                                                             |    16 |
-| dme01212 | dme01212 | Fatty acid metabolism - Drosophila melanogaster (fruit fly)                        | 17/536    | 53/3487  | 0.0016753 | 0.0175558 | 0.0122099 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |    17 |
-| dme00512 | dme00512 | Mucin type O-glycan biosynthesis - Drosophila melanogaster (fruit fly)             | 10/536    | 24/3487  | 0.0017242 | 0.0175558 | 0.0122099 | tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/Pgant8/Pgant9/Pgant4/CG34056                                                                                                                                                                                                               |    10 |
-| dme00730 | dme00730 | Thiamine metabolism - Drosophila melanogaster (fruit fly)                          | 9/536     | 21/3487  | 0.0023250 | 0.0198853 | 0.0138300 | Alp4/Nfs1/Alp12/Alp6/Alp7/Alp8/Alp9/Alp5/Alp1                                                                                                                                                                                                                                     |     9 |
-| dme00830 | dme00830 | Retinol metabolism - Drosophila melanogaster (fruit fly)                           | 12/536    | 33/3487  | 0.0024568 | 0.0198853 | 0.0138300 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG15629/Ugt301D1/CG10672/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2                                                                                                                                                                                    |    12 |
-| dme01040 | dme01040 | Biosynthesis of unsaturated fatty acids - Drosophila melanogaster (fruit fly)      | 10/536    | 25/3487  | 0.0024857 | 0.0198853 | 0.0138300 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/CG18609/CG8630/CG9747/CG9743                                                                                                                                                                                                               |    10 |
-| dme00350 | dme00350 | Tyrosine metabolism - Drosophila melanogaster (fruit fly)                          | 9/536     | 22/3487  | 0.0034081 | 0.0254475 | 0.0176984 | Adh/amd/Ddc/ple/Faa/Hpd/yellow-f2/hgo/Tdc2                                                                                                                                                                                                                                        |     9 |
-| dme00053 | dme00053 | Ascorbate and aldarate metabolism - Drosophila melanogaster (fruit fly)            | 12/536    | 35/3487  | 0.0043094 | 0.0301659 | 0.0209800 | Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG6910/CG2767/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                                      |    12 |
-| dme00230 | dme00230 | Purine metabolism - Drosophila melanogaster (fruit fly)                            | 24/536    | 92/3487  | 0.0049069 | 0.0316190 | 0.0219906 | Pgm1/rut/ry/Ac76E/Gyc32E/Gycalpha99B/Gycbeta100B/Papss/CG6106/veil/CG16758/AdenoK/Adgf-A/Pde6/Gyc88E/Gyc89Db/ACXD/NT5E-2/CG32301/CG32305/CG34357/Pde9/Pde1c/Pde8                                                                                                                  |    24 |
-| dme00790 | dme00790 | Folate biosynthesis - Drosophila melanogaster (fruit fly)                          | 13/536    | 40/3487  | 0.0050816 | 0.0316190 | 0.0219906 | Hn/Pu/ple/Alp4/CG12116/Alp12/Alp6/Alp7/Alp8/Alp9/GstO3/Alp5/Alp1                                                                                                                                                                                                                  |    13 |
-| dme00860 | dme00860 | Porphyrin metabolism - Drosophila melanogaster (fruit fly)                         | 14/536    | 45/3487  | 0.0057390 | 0.0338298 | 0.0235282 | l(3)02640/Alas/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG3803/Pbgs/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/FeCH                                                                                                                                                                        |    14 |
-| dme00983 | dme00983 | Drug metabolism - other enzymes - Drosophila melanogaster (fruit fly)              | 24/536    | 94/3487  | 0.0065643 | 0.0367601 | 0.0255663 | ry/CRMP/Ugt35A1/Ugt37C1/Ugt37B1/CG17224/CG8360/CG8353/Ugt301D1/GstE1/GstE11/pyd3/CG6330/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10/Nlg4                                                                                                            |    24 |
-| dme00561 | dme00561 | Glycerolipid metabolism - Drosophila melanogaster (fruit fly)                      | 13/536    | 42/3487  | 0.0080343 | 0.0428495 | 0.0298013 | wun/Agpat1/CG1941/Agpat4/laza/CG11438/CG11437/CG11426/CG2767/CG31140/Dgk/CG34384/Mulk                                                                                                                                                                                             |    13 |
-| dme00410 | dme00410 | beta-Alanine metabolism - Drosophila melanogaster (fruit fly)                      | 9/536     | 25/3487  | 0.0091138 | 0.0463975 | 0.0322689 | b/Gad1/CRMP/CG17896/CG9527/CG17544/CG5618/pyd3/CG5044                                                                                                                                                                                                                             |     9 |
-| dme01250 | dme01250 | Biosynthesis of nucleotide sugars - Drosophila melanogaster (fruit fly)            | 10/536    | 30/3487  | 0.0111048 | 0.0535345 | 0.0372326 | Pgm1/Gale/CG6910/Pmm2/CG6218/Gfat2/Gnpnat/mmy/sgl/Galk                                                                                                                                                                                                                            |    10 |
-| dme00564 | dme00564 | Glycerophospholipid metabolism - Drosophila melanogaster (fruit fly)               | 17/536    | 63/3487  | 0.0118175 | 0.0535345 | 0.0372326 | Ace/ChAT/wun/Gpo1/CG4757/Agpat1/CG7149/Agpat4/laza/CG11438/CG11437/CG11426/CLS/CG18815/CG31140/Dgk/CG34384                                                                                                                                                                        |    17 |
-| dme00980 | dme00980 | Metabolism of xenobiotics by cytochrome P450 - Drosophila melanogaster (fruit fly) | 18/536    | 68/3487  | 0.0119497 | 0.0535345 | 0.0372326 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG3609/Ugt301D1/GstE1/GstE11/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10                                                                                                                                                |    18 |
-| dme00511 | dme00511 | Other glycan degradation - Drosophila melanogaster (fruit fly)                     | 8/536     | 22/3487  | 0.0128794 | 0.0549597 | 0.0382239 | Gal/CG5613/LManIII/LManV/LManVI/Hexo2/Gba1b/Ect3                                                                                                                                                                                                                                  |     8 |
-| dme00760 | dme00760 | Nicotinate and nicotinamide metabolism - Drosophila melanogaster (fruit fly)       | 7/536     | 18/3487  | 0.0132492 | 0.0549597 | 0.0382239 | Sirt4/Naprt/CG8080/veil/CG16758/Sirt2/NT5E-2                                                                                                                                                                                                                                      |     7 |
-| dme00040 | dme00040 | Pentose and glucuronate interconversions - Drosophila melanogaster (fruit fly)     | 14/536    | 50/3487  | 0.0154567 | 0.0618270 | 0.0430000 | Ugt35A1/Ugt37C1/Ugt37B1/CG3609/Ugt301D1/Had2/CG2767/CG3534/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                          |    14 |
-| dme00982 | dme00982 | Drug metabolism - cytochrome P450 - Drosophila melanogaster (fruit fly)            | 17/536    | 66/3487  | 0.0188116 | 0.0726518 | 0.0505285 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/GstE1/GstE11/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10                                                                                                                                                       |    17 |
-| dme04145 | dme04145 | Phagosome - Drosophila melanogaster (fruit fly)                                    | 20/536    | 82/3487  | 0.0206132 | 0.0769561 | 0.0535221 | alphaTub85E/betaTub97EF/Calr/Sec61beta/Nos/Rac2/RhoL/Rab7/Sec61gamma/Tsp/Vha100-5/VhaM9.7-a/CG11459/Vha100-4/Vha36-3/Sdic2/Sec61alpha/Vha68-2/Vha68-1/Vha13                                                                                                                       |    20 |
-| dme02010 | dme02010 | ABC transporters - Drosophila melanogaster (fruit fly)                             | 11/536    | 38/3487  | 0.0237572 | 0.0858325 | 0.0596956 | Mdr65/CG3156/CG1824/CG1494/CG4822/CG5853/CG10226/CG4562/CG11069/Mrp4/CG17646                                                                                                                                                                                                      |    11 |
-| dme00250 | dme00250 | Alanine, aspartate and glutamate metabolism - Drosophila melanogaster (fruit fly)  | 9/536     | 29/3487  | 0.0253267 | 0.0886434 | 0.0616505 | Gs1/Gad1/Ass/CG7860/Argl/CG9674/P5CDh1/Ssadh/Gfat2                                                                                                                                                                                                                                |     9 |
+| dme04080 | dme04080 | Neuroactive ligand-receptor interaction - Drosophila melanogaster (fruit fly)      | 36/538    | 67/3488  | 0.0000000 | 0.0000000 | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |    36 |
+| dme01240 | dme01240 | Biosynthesis of cofactors - Drosophila melanogaster (fruit fly)                    | 38/538    | 138/3488 | 0.0001420 | 0.0069926 | 0.0048633 | Pu/v/l(3)02640/Alp4/Alas/Ugt35A1/Ugt37C1/Ugt37B1/CG12116/CG4407/Naprt/CG15629/Coq6/Nfs1/Ugt301D1/Alp12/CG8080/Alp6/Alp7/Alp8/CG3803/GC/Alp9/Pbgs/Pmm2/CG7430/Hpd/CG12170/CG2767/Alp5/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl/FeCH/Alp1                                      |    38 |
+| dme00514 | dme00514 | Other types of O-glycan biosynthesis - Drosophila melanogaster (fruit fly)         | 15/538    | 38/3488  | 0.0002682 | 0.0069926 | 0.0048633 | rt/fng/tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/GlcAT-P/Pgant8/Pgant9/CG31915/Pgant4/CG34056/tw                                                                                                                                                                                     |    15 |
+| dme00600 | dme00600 | Sphingolipid metabolism - Drosophila melanogaster (fruit fly)                      | 13/538    | 31/3488  | 0.0003412 | 0.0069926 | 0.0048633 | Gal/Sply/wun/Sk1/laza/CG11438/CG11437/CG11426/CDase/Hexo2/bwa/Gba1b/Ect3                                                                                                                                                                                                          |    13 |
+| dme04146 | dme04146 | Peroxisome - Drosophila melanogaster (fruit fly)                                   | 27/538    | 91/3488  | 0.0003625 | 0.0069926 | 0.0048633 | Cat/Idh/ry/ScpX/Pex5/Mfe2/Pex12/CG9527/CG17597/CG17544/CG1441/ADPS/Pex11/CG8306/CG5065/CG10672/Pex7/CG3961/CG17562/CG17560/CG13827/CG12268/wat/CG12355/CG30427/CG33671/Acsl                                                                                                       |    27 |
+| dme04512 | dme04512 | ECM-receptor interaction - Drosophila melanogaster (fruit fly)                     | 7/538     | 11/3488  | 0.0003746 | 0.0069926 | 0.0048633 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |     7 |
+| dme00785 | dme00785 | Lipoic acid metabolism - Drosophila melanogaster (fruit fly)                       | 9/538     | 18/3488  | 0.0006085 | 0.0097365 | 0.0067716 | ppl/Pdha/CG6415/CG33791/CG7430/CG8199/CG3999/Pdhb/CG1544                                                                                                                                                                                                                          |     9 |
+| dme04142 | dme04142 | Lysosome - Drosophila melanogaster (fruit fly)                                     | 32/538    | 123/3488 | 0.0013796 | 0.0180365 | 0.0125442 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |    32 |
+| dme00520 | dme00520 | Amino sugar and nucleotide sugar metabolism - Drosophila melanogaster (fruit fly)  | 16/538    | 48/3488  | 0.0015004 | 0.0180365 | 0.0125442 | kkv/Pgm1/Cht2/CG17065/Gale/Cht7/Pmm2/Cht5/CG6218/Gfat2/Gnpnat/Hexo2/mmy/sgl/Cht6/Galk                                                                                                                                                                                             |    16 |
+| dme01212 | dme01212 | Fatty acid metabolism - Drosophila melanogaster (fruit fly)                        | 17/538    | 53/3488  | 0.0017416 | 0.0180365 | 0.0125442 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |    17 |
+| dme00512 | dme00512 | Mucin type O-glycan biosynthesis - Drosophila melanogaster (fruit fly)             | 10/538    | 24/3488  | 0.0017714 | 0.0180365 | 0.0125442 | tgy/CG3119/CG2975/Pgant2/Pgant5/CG8708/Pgant8/Pgant9/Pgant4/CG34056                                                                                                                                                                                                               |    10 |
+| dme00730 | dme00730 | Thiamine metabolism - Drosophila melanogaster (fruit fly)                          | 9/538     | 21/3488  | 0.0023831 | 0.0204188 | 0.0142010 | Alp4/Nfs1/Alp12/Alp6/Alp7/Alp8/Alp9/Alp5/Alp1                                                                                                                                                                                                                                     |     9 |
+| dme00830 | dme00830 | Retinol metabolism - Drosophila melanogaster (fruit fly)                           | 12/538    | 33/3488  | 0.0025316 | 0.0204188 | 0.0142010 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG15629/Ugt301D1/CG10672/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2                                                                                                                                                                                    |    12 |
+| dme01040 | dme01040 | Biosynthesis of unsaturated fatty acids - Drosophila melanogaster (fruit fly)      | 10/538    | 25/3488  | 0.0025523 | 0.0204188 | 0.0142010 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/CG18609/CG8630/CG9747/CG9743                                                                                                                                                                                                               |    10 |
+| dme00350 | dme00350 | Tyrosine metabolism - Drosophila melanogaster (fruit fly)                          | 9/538     | 22/3488  | 0.0034915 | 0.0260697 | 0.0181312 | Adh/amd/Ddc/ple/Faa/Hpd/yellow-f2/hgo/Tdc2                                                                                                                                                                                                                                        |     9 |
+| dme00053 | dme00053 | Ascorbate and aldarate metabolism - Drosophila melanogaster (fruit fly)            | 12/538    | 35/3488  | 0.0044360 | 0.0310520 | 0.0215963 | Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG6910/CG2767/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                                      |    12 |
+| dme00230 | dme00230 | Purine metabolism - Drosophila melanogaster (fruit fly)                            | 24/538    | 92/3488  | 0.0051315 | 0.0325873 | 0.0226641 | Pgm1/rut/ry/Ac76E/Gyc32E/Gycalpha99B/Gycbeta100B/Papss/CG6106/veil/CG16758/AdenoK/Adgf-A/Pde6/Gyc88E/Gyc89Db/ACXD/NT5E-2/CG32301/CG32305/CG34357/Pde9/Pde1c/Pde8                                                                                                                  |    24 |
+| dme00790 | dme00790 | Folate biosynthesis - Drosophila melanogaster (fruit fly)                          | 13/538    | 40/3488  | 0.0052373 | 0.0325873 | 0.0226641 | Hn/Pu/ple/Alp4/CG12116/Alp12/Alp6/Alp7/Alp8/Alp9/GstO3/Alp5/Alp1                                                                                                                                                                                                                  |    13 |
+| dme00860 | dme00860 | Porphyrin metabolism - Drosophila melanogaster (fruit fly)                         | 14/538    | 45/3488  | 0.0059219 | 0.0349079 | 0.0242780 | l(3)02640/Alas/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/CG3803/Pbgs/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/FeCH                                                                                                                                                                        |    14 |
+| dme00983 | dme00983 | Drug metabolism - other enzymes - Drosophila melanogaster (fruit fly)              | 24/538    | 94/3488  | 0.0068571 | 0.0383995 | 0.0267065 | ry/CRMP/Ugt35A1/Ugt37C1/Ugt37B1/CG17224/CG8360/CG8353/Ugt301D1/GstE1/GstE11/pyd3/CG6330/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10/Nlg4                                                                                                            |    24 |
+| dme00561 | dme00561 | Glycerolipid metabolism - Drosophila melanogaster (fruit fly)                      | 13/538    | 42/3488  | 0.0082715 | 0.0441147 | 0.0306813 | wun/Agpat1/CG1941/Agpat4/laza/CG11438/CG11437/CG11426/CG2767/CG31140/Dgk/CG34384/Mulk                                                                                                                                                                                             |    13 |
+| dme00410 | dme00410 | beta-Alanine metabolism - Drosophila melanogaster (fruit fly)                      | 9/538     | 25/3488  | 0.0093221 | 0.0474580 | 0.0330065 | b/Gad1/CRMP/CG17896/CG9527/CG17544/CG5618/pyd3/CG5044                                                                                                                                                                                                                             |     9 |
+| dme01250 | dme01250 | Biosynthesis of nucleotide sugars - Drosophila melanogaster (fruit fly)            | 10/538    | 30/3488  | 0.0113729 | 0.0553809 | 0.0385168 | Pgm1/Gale/CG6910/Pmm2/CG6218/Gfat2/Gnpnat/mmy/sgl/Galk                                                                                                                                                                                                                            |    10 |
+| dme00564 | dme00564 | Glycerophospholipid metabolism - Drosophila melanogaster (fruit fly)               | 17/538    | 63/3488  | 0.0122179 | 0.0554130 | 0.0385391 | Ace/ChAT/wun/Gpo1/CG4757/Agpat1/CG7149/Agpat4/laza/CG11438/CG11437/CG11426/CLS/CG18815/CG31140/Dgk/CG34384                                                                                                                                                                        |    17 |
+| dme00980 | dme00980 | Metabolism of xenobiotics by cytochrome P450 - Drosophila melanogaster (fruit fly) | 18/538    | 68/3488  | 0.0123690 | 0.0554130 | 0.0385391 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/CG3609/Ugt301D1/GstE1/GstE11/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10                                                                                                                                                |    18 |
+| dme00511 | dme00511 | Other glycan degradation - Drosophila melanogaster (fruit fly)                     | 8/538     | 22/3488  | 0.0131435 | 0.0559855 | 0.0389373 | Gal/CG5613/LManIII/LManV/LManVI/Hexo2/Gba1b/Ect3                                                                                                                                                                                                                                  |     8 |
+| dme00760 | dme00760 | Nicotinate and nicotinamide metabolism - Drosophila melanogaster (fruit fly)       | 7/538     | 18/3488  | 0.0134965 | 0.0559855 | 0.0389373 | Sirt4/Naprt/CG8080/veil/CG16758/Sirt2/NT5E-2                                                                                                                                                                                                                                      |     7 |
+| dme00040 | dme00040 | Pentose and glucuronate interconversions - Drosophila melanogaster (fruit fly)     | 14/538    | 50/3488  | 0.0159070 | 0.0636282 | 0.0442527 | Ugt35A1/Ugt37C1/Ugt37B1/CG3609/Ugt301D1/Had2/CG2767/CG3534/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/sgl                                                                                                                                                                          |    14 |
+| dme00982 | dme00982 | Drug metabolism - cytochrome P450 - Drosophila melanogaster (fruit fly)            | 17/538    | 66/3488  | 0.0194179 | 0.0749934 | 0.0521571 | Adh/Ugt35A1/Ugt37C1/Ugt37B1/Ugt301D1/GstE1/GstE11/Ugt317A1/Ugt303A1/Ugt35E2/Ugt37D1/Ugt37C2/GstD10/GstE6/GstE5/GstE2/GstE10                                                                                                                                                       |    17 |
+| dme04145 | dme04145 | Phagosome - Drosophila melanogaster (fruit fly)                                    | 20/538    | 82/3488  | 0.0213403 | 0.0796704 | 0.0554099 | alphaTub85E/betaTub97EF/Calr/Sec61beta/Nos/Rac2/RhoL/Rab7/Sec61gamma/Tsp/Vha100-5/VhaM9.7-a/CG11459/Vha100-4/Vha36-3/Sdic2/Sec61alpha/Vha68-2/Vha68-1/Vha13                                                                                                                       |    20 |
+| dme02010 | dme02010 | ABC transporters - Drosophila melanogaster (fruit fly)                             | 11/538    | 38/3488  | 0.0243233 | 0.0878778 | 0.0611180 | Mdr65/CG3156/CG1824/CG1494/CG4822/CG5853/CG10226/CG4562/CG11069/Mrp4/CG17646                                                                                                                                                                                                      |    11 |
+| dme00250 | dme00250 | Alanine, aspartate and glutamate metabolism - Drosophila melanogaster (fruit fly)  | 9/538     | 29/3488  | 0.0258530 | 0.0904855 | 0.0629316 | Gs1/Gad1/Ass/CG7860/Argl/CG9674/P5CDh1/Ssadh/Gfat2                                                                                                                                                                                                                                |     9 |
 
 ``` r
 interesting_pathways <- c("ECM-receptor interaction",
@@ -1306,173 +1244,12 @@ c3_kegg_table
 
 |          | Description                             | GeneRatio |  p.adjust | geneID                                                                                                                                                                                                                                                                            |
 |:---------|:----------------------------------------|:----------|----------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| dme04080 | Neuroactive ligand-receptor interaction | 36/536    | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |
-| dme04512 | ECM-receptor interaction                | 7/536     | 0.0068399 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |
-| dme04142 | Lysosome                                | 32/536    | 0.0175558 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |
-| dme01212 | Fatty acid metabolism                   | 17/536    | 0.0175558 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |
+| dme04080 | Neuroactive ligand-receptor interaction | 36/538    | 0.0000000 | mAChR-A/alphaTry/5-HT1A/Rdl/5-HT7/GluRIA/TkR99D/Lcch3/betaTry/deltaTry/gammaTry/Nmdar1/epsilonTry/zetaTry/Dop1R1/Try29F/Lgr1/mGluR/AkhR/GABA-B-R2/CCKLR-17D3/GABA-B-R3/CG16957/CCHa2-R/Dh44-R2/CrzR/mAChR-B/lambdaTry/kappaTry/Dh31-R/Nmdar2/Dop2R/GABA-B-R1/5-HT1B/GluRIB/Dop1R2 |
+| dme04512 | ECM-receptor interaction                | 7/538     | 0.0069926 | Col4a1/LanA/vkg/CG3168/Tsp/LanB1/LanB2                                                                                                                                                                                                                                            |
+| dme04142 | Lysosome                                | 32/538    | 0.0180365 | Gal/Tsp42Ee/Tsp42Ed/Tsp42Ea/MFS10/Bace/LManIII/LManV/LManVI/Tsp29Fa/CG5731/CG17134/Vha100-5/CG4847/CG13510/CG11459/Npc2b/CG17283/Vha100-4/Sgsh/CG6656/CG17119/Npc2g/Npc2h/CG13516/Hexo2/CG30269/Gba1b/CG33128/Ect3/CG42565/Npc1b                                                  |
+| dme01212 | Fatty acid metabolism                   | 17/538    | 0.0180365 | ScpX/Mfe2/CG9527/Hacd1/CG17597/CG17544/ACC/CG18609/CG9149/CG3961/CG3902/CG12170/CG8630/CG9747/CG9743/FASN2/Acsl                                                                                                                                                                   |
 
 ### Summary
-
-</div>
-
-# Gene boxplots
-
-Plot some cluster genes and figure out why hippo is different between
-kegg and go
-
-<div class="panel-tabset">
-
-## Wts
-
-``` r
-gene_boxplot <- function(gene_of_interest, dds, title = "title") {
-  
-  # Get normalized counts
-  df_norm <- as.data.frame(counts(dds, normalized = TRUE)[gene_of_interest, ])
-  df_norm$sample <- rownames(df_norm)
-  colnames(df_norm) <- c("counts", "sample")
-  df_norm$sample = factor(df_norm$sample, 
-                            levels = colData(dds)$sample_id)
-  df_norm$condition = df_norm$sample
-  df_norm$condition = gsub("_[0-9]", "", df_norm$condition)
-  df_norm$condition = factor(df_norm$condition, 
-                               levels = unique(colData(dds)$condition))
-  
-  # Plot
-  gene_plot <- ggplot(df_norm, aes(x = condition, y = counts, fill = condition)) +
-    geom_boxplot() +
-    geom_point(size = 0.5) +
-    labs(title = title, 
-         x = "", y = "Normalized counts") +
-    scale_fill_manual(values = col_colors) +
-    scale_y_continuous(expand = c(0, NA), limits = c(0, NA)) +
-    theme_classic() +
-    theme(axis.text.x = element_text(angle = 90), 
-          legend.position = "none") 
-  
-  return(gene_plot)
-  
-}
-```
-
-``` r
-c2_kegg_table %>% 
-  dplyr::filter(Description == "Hippo signaling pathway - fly") %>% 
-  pull(geneID) %>% 
-  strsplit(split = "/")
-```
-
-    [[1]]
-     [1] "fj"    "ft"    "hth"   "tsh"   "vn"    "ex"    "wts"   "jub"   "yki"  
-    [10] "sav"   "Patj"  "crb"   "d"     "kibra" "Myc"   "wg"    "ds"   
-
-``` r
-wts <- "FBgn0011739"
-gene_boxplot(wts, dds, title = "wts")
-```
-
-![](../figures/03_clust/genebox-wts-1.png)
-
-## Vn
-
-``` r
-vn = "FBgn0003984"
-
-gene_boxplot(vn, dds, title = "vn")
-```
-
-![](../figures/03_clust/genebox-vn-1.png)
-
-## GO terms
-
-Alright, what’s in the GO terms?
-
-``` r
-hippo_c1 <- k3_c1_ego %>% 
-  dplyr::filter(Description == "hippo signaling") %>% 
-  pull(geneID) %>% 
-  strsplit(split = "/") %>% 
-  unlist()
-
-
-df_hippo <- as_tibble(ensembl.genes) %>% 
-  filter(external_gene_name %in% hippo_c1) %>% 
-  dplyr::select(ensembl_gene_id, external_gene_name) %>% 
-  arrange(external_gene_name)
-
-df_hippo
-```
-
-| ensembl_gene_id | external_gene_name |
-|:----------------|:-------------------|
-| FBgn0020238     | 14-3-3epsilon      |
-| FBgn0015024     | CkIalpha           |
-| FBgn0015509     | Cul1               |
-| FBgn0032363     | Dlg5               |
-| FBgn0031871     | Fgop2              |
-| FBgn0033539     | Git                |
-| FBgn0035207     | Herc4              |
-| FBgn0034590     | Magi               |
-| FBgn0024329     | Mekk1              |
-| FBgn0263197     | Patronin           |
-| FBgn0031799     | Pez                |
-| FBgn0000273     | Pka-C1             |
-| FBgn0260439     | Pp2A-29B           |
-| FBgn0040752     | Prosap             |
-| FBgn0034646     | Rae1               |
-| FBgn0004636     | Rap1               |
-| FBgn0039055     | Rassf              |
-| FBgn0005649     | Rox8               |
-| FBgn0015803     | RtGEF              |
-| FBgn0262103     | Sik3               |
-| FBgn0025637     | SkpA               |
-| FBgn0040011     | Slmap              |
-| FBgn0029006     | Smurf              |
-| FBgn0262733     | Src64B             |
-| FBgn0003557     | Su(dx)             |
-| FBgn0031030     | Tao                |
-| FBgn0026317     | Tsc1               |
-| FBgn0030366     | Usp7               |
-| FBgn0261854     | aPKC               |
-| FBgn0002413     | dco                |
-| FBgn0283649     | elgi               |
-| FBgn0261456     | hpo                |
-| FBgn0002121     | l(2)gl             |
-| FBgn0261524     | lic                |
-| FBgn0020279     | lig                |
-| FBgn0038965     | mats               |
-| FBgn0259168     | mnb                |
-| FBgn0010909     | msn                |
-| FBgn0004177     | mts                |
-| FBgn0010441     | pll                |
-| FBgn0029903     | pod1               |
-| FBgn0002466     | sti                |
-| FBgn0003733     | tor                |
-| FBgn0266848     | wap                |
-
-## Hpo
-
-``` r
-gene_boxplot("FBgn0261456", dds, title = "hpo")
-```
-
-![](../figures/03_clust/genebox-hpo-1.png)
-
-## Mats
-
-``` r
-gene_boxplot("FBgn0038965", dds, title = "mats")
-```
-
-![](../figures/03_clust/genebox-mats-1.png)
-
-## Rae1
-
-``` r
-gene_boxplot("FBgn0034646", dds, title = "Rae1")
-```
-
-![](../figures/03_clust/genebox-rae1-1.png)
 
 </div>
 
@@ -1522,26 +1299,6 @@ df_combined <- df_combined %>%
 # Export
 write.csv(df_combined, file = paste0(output_dir, "cluster_genes.csv"),
           row.names = FALSE)
-```
-
-## Export GO and KEGG for figure
-
-``` r
-c1_go_table$cluster = 1
-c2_go_table$cluster = 2
-c3_go_table$cluster = 3
-
-go_tables <- rbind(c1_go_table, c2_go_table, c3_go_table)
-
-write.csv(go_tables, file = paste0(output_dir, "go_tables.csv"))
-
-c1_kegg_table$cluster = 1
-c2_kegg_table$cluster = 2
-c3_kegg_table$cluster = 3
-
-kegg_tables <- rbind(c1_kegg_table, c2_kegg_table, c3_kegg_table)
-
-write.csv(kegg_tables, file = paste0(output_dir, "kegg_tables.csv"))
 ```
 
 # Summary and discussion
