@@ -116,12 +116,17 @@ custom_kegg_table <- function(ego_tibble, interesting_pathways) {
 # c1_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% names((kmeans_cl_k2)[[1]]), ]$entrezgene_id)
 # k2_c1_kegg <- plotKEGG(c1_entrez, title = "KEGG, cluster 1")
 
-plotKEGG_dm <- function(target_genes_entrez, title = "title", font_size = 14){
+plotKEGG_dm <- function(target_genes_entrez, 
+                        universe = universe, 
+                        title = "title", font_size = 14){
   
   # Run KEGG enrichment
   message("Running KEGG for organism = drosophila melanogaster")
   ekegg = clusterProfiler::enrichKEGG(target_genes_entrez,
                                       organism = "dme",
+                                      pvalueCutoff = 0.1,
+                                      qvalueCutoff = 0.1,
+                                      universe = universe, 
                                       keyType = "ncbi-geneid")
   
   # If no GO terms found, return warning message and a tibble with NA
