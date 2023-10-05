@@ -1,0 +1,369 @@
+---
+title: kegg_plots
+author: Qian Hui TAN
+date: '`r format(Sys.time(), "%d %B %Y")`'
+format:
+  html: 
+    keep-md: true
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    smooth-scroll: true
+    code-tools: true
+    code-line-numbers: true
+  gfm: 
+    df-print: kable
+    toc: true 
+    toc-depth: 3
+    number-sections: true
+    prefer-html: true
+---
+
+
+
+# Pathview plots
+
+In this notebook, we examine KEGG `pathview` plots for our conditions of interest.
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(DESeq2)
+  library(pathview)
+})
+```
+
+
+## Read in data
+
+```{r}
+dds_dm <- readRDS("../output/01_QC/dds_filt.RDS")
+ensembl_dm <- readRDS("../output/01_QC/ensembl_genes.RDS")
+```
+
+## Functions
+
+```{r}
+
+## This function gets a list of lfcShrink fold changes from a wald dds
+## It takes in an nbinomWaldTest object, a character string contrast, and an ensembl.genes object containing gene biotype for annotations. 
+
+get_dds_res <- function(wald_dds, contrast, ensembl.genes, 
+                        lfcshrinktype = "apeglm", 
+                        shrink = TRUE, parallel = TRUE) {
+  
+  # Run: get_dds_res(wald_dds, 
+  #                  contrast = c("condition", "mdd", "ctrl"),
+  #                  ensembl.genes = ensembl.genes,
+  #                  shrink = TRUE)
+  
+  # Get the results
+  res = results(wald_dds, 
+                               contrast = contrast,  
+                               filter = rowMeans(counts(wald_dds, 
+                                                        normalized = TRUE)), 
+                               test = "Wald", alpha = 0.1, 
+                               independentFiltering = TRUE)
+  
+  # Make the condition_mdd_vs_ctrl string
+  deseq_coef <- paste(contrast[1], contrast[2], "vs", 
+                      contrast[3], sep = "_")
+  print(deseq_coef)
+  
+  # Shrink
+  if (shrink == TRUE){
+    res <- lfcShrink(wald_dds, coef = deseq_coef, 
+                                    res = res, 
+                                    type = lfcshrinktype, parallel = TRUE)
+  }
+  
+  # Add gene annotations
+  res$entrezgene_id = ensembl.genes$entrezgene_id[match(row.names(res), ensembl.genes$gene_id)]
+  res$gene_biotype = ensembl.genes$gene_biotype[match(row.names(res), ensembl.genes$gene_id)]
+  res$external_gene_name = ensembl.genes$external_gene_name[match(row.names(res), ensembl.genes$gene_id)]
+  
+  return(res)
+}
+
+```
+
+
+
+
+```{r}
+plot_pathview <- function(res_input, 
+                          kegg_pathway, 
+                          organism,
+                          name){
+  
+  pathview(gene.data = res_input,
+         pathway.id = kegg_pathway,
+         kegg.dir = "../figures/03b_keggplot/", 
+         species = organism,
+         discrete = FALSE, 
+         limit = list(gene = 3),
+         bins = 20, 
+         out.suffix = name, 
+         low = "blue", mid = "white", high = "red", 
+         na.col = "grey")
+
+}
+
+# Run:
+#plot_pathview(rld_c11, kegg_pathway = path_to_plot,
+#                organism = "hsa", 
+#                name = paste0("c11_", path_name))
+```
+
+```{r}
+# This function takes in the various rlds we've specified, and makes kegg pathview plots for all of them
+# note that the rld names and output names have been hard-coded into the function - this isn't meant
+# for generic usage, and is customized for this particular dataset because I don't feel like retyping all 
+# of this 
+
+plot_multipaths <- function(path_to_plot, path_name) {
+  # Plot the various plots
+  plot_pathview(res_w4oe_plot, kegg_pathway = path_to_plot,
+                organism = "dme", 
+                name = paste0("W4OE_", path_name))
+  
+  plot_pathview(res_o1oe_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O1OE_", path_name))
+  
+  plot_pathview(res_o1w4oe_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O1W4OE_", path_name))
+  
+  plot_pathview(res_o2ko_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O2KO_", path_name))
+  
+  plot_pathview(res_w4ko_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("W4KO_", path_name))
+  
+  plot_pathview(res_o1ko_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O1KO_", path_name))
+  
+  plot_pathview(res_o1w4ko_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O1W4KO_", path_name))
+  
+  plot_pathview(res_o2w4ko_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O2W4KO_", path_name))
+  
+  plot_pathview(res_o1o2ko_plot, kegg_pathway = path_to_plot,
+                organism = "dme", name = paste0("O1O2KO_", path_name))
+
+
+}
+
+```
+
+
+# Prepare data
+
+:::{.panel-tabset}
+## Prepare for pathview
+
+Here we prepare data for pathview. We color by log2FoldChange because that makes more sense. 
+
+
+```{r}
+# Set WT as the comparison
+dds <- dds_dm
+
+# Removing lowly expressed genes, only to be done once at the start of the differential expression step
+filter = apply(counts(dds, normalized = TRUE), 1, function(x){ mean(x) >= 10 })
+dds = dds[filter, ]
+
+# Rerun DESeq
+dds <- DESeq(dds, test = "Wald", parallel = TRUE)
+
+# Sanity check - all rownames and sampleid in colData must match. 
+# if this is FALSE, check the order of data_mat and experimental_metadata - 
+# something may have gone wrong. 
+all(rownames(colData(dds)) == colData(dds)$sample_id)
+
+resultsNames(dds)
+```
+A sanity check: rownames and sampleid must match
+
+
+## W4OE
+```{r}
+res_w4oe <- get_dds_res(dds,
+                      contrast = c("condition", "W4_OE", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_w4oe)
+```
+
+```{r}
+summary(res_w4oe$log2FoldChange)
+```
+
+Convert rownames to entrez: 
+
+```{r}
+res_w4oe_plot <- as.matrix(res_w4oe["log2FoldChange"])
+rownames(res_w4oe_plot) <- res_w4oe$entrezgene_id
+
+head(res_w4oe_plot)
+```
+
+## O1OE
+```{r}
+res_o1oe <- get_dds_res(dds,
+                      contrast = c("condition", "O1_OE", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o1oe)
+```
+Convert rownames to entrez: 
+
+```{r}
+res_o1oe_plot <- as.matrix(res_o1oe["log2FoldChange"])
+rownames(res_o1oe_plot) <- res_o1oe$entrezgene_id
+
+head(res_o1oe_plot)
+```
+
+
+## O1W4_OE
+```{r}
+res_o1w4oe <- get_dds_res(dds,
+                      contrast = c("condition", "O1W4_OE", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o1w4oe)
+
+res_o1w4oe_plot <- as.matrix(res_o1w4oe["log2FoldChange"])
+rownames(res_o1w4oe_plot) <- res_o1w4oe$entrezgene_id
+
+head(res_o1w4oe_plot)
+```
+
+## O2_KO
+```{r}
+res_o2ko <- get_dds_res(dds,
+                      contrast = c("condition", "O2_KO", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o2ko)
+
+res_o2ko_plot <- as.matrix(res_o2ko["log2FoldChange"])
+rownames(res_o2ko_plot) <- res_o2ko$entrezgene_id
+
+head(res_o2ko_plot)
+```
+
+
+## W4KO
+```{r}
+res_w4ko <- get_dds_res(dds,
+                      contrast = c("condition", "W4_KO", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_w4ko)
+
+res_w4ko_plot <- as.matrix(res_w4ko["log2FoldChange"])
+rownames(res_w4ko_plot) <- res_w4ko$entrezgene_id
+
+head(res_w4ko_plot)
+```
+
+
+
+## O1KO
+```{r}
+res_o1ko <- get_dds_res(dds,
+                      contrast = c("condition", "O1_KO", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o1ko)
+
+res_o1ko_plot <- as.matrix(res_o1ko["log2FoldChange"])
+rownames(res_o1ko_plot) <- res_o1ko$entrezgene_id
+
+head(res_o1ko_plot)
+```
+
+
+## O1W4KO
+```{r}
+res_o1w4ko <- get_dds_res(dds,
+                      contrast = c("condition", "O1W4_KO", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o1w4ko)
+
+res_o1w4ko_plot <- as.matrix(res_o1w4ko["log2FoldChange"])
+rownames(res_o1w4ko_plot) <- res_o1w4ko$entrezgene_id
+
+head(res_o1w4ko_plot)
+```
+
+
+## O2W4KO
+```{r}
+res_o2w4ko <- get_dds_res(dds,
+                      contrast = c("condition", "O2W4_KO", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o2w4ko)
+
+res_o2w4ko_plot <- as.matrix(res_o2w4ko["log2FoldChange"])
+rownames(res_o2w4ko_plot) <- res_o2w4ko$entrezgene_id
+
+head(res_o2w4ko_plot)
+```
+
+
+
+## O1O2KO
+```{r}
+res_o1o2ko <- get_dds_res(dds,
+                      contrast = c("condition", "O1O2_KO", "Ctrl"), 
+                      ensembl.genes = ensembl_dm)
+
+head(res_o1o2ko)
+
+res_o1o2ko_plot <- as.matrix(res_o1o2ko["log2FoldChange"])
+rownames(res_o1o2ko_plot) <- res_o1o2ko$entrezgene_id
+
+head(res_o1o2ko_plot)
+```
+
+:::
+
+# Plots
+
+I'd like the figures to be in a separate kegg directory, but somehow that option (`kegg.dir`) is not working and insists on saving to the default working directory.
+For now we just plot everything and then use the terminal to shift all *.png files into a separate figures directory later. 
+
+Not an ideal solution, but this will do for now. 
+
+```{r}
+plot_multipaths("04391", "hippo")
+```
+
+
+```{r}
+plot_multipaths("04013", "MAPK")
+```
+
+```{r}
+plot_multipaths("04330", "Notch")
+```
+
+```{r}
+plot_multipaths("04350", "TGFbeta")
+```
+
+# sessionInfo
+
+```{r}
+sessionInfo()
+```
+
