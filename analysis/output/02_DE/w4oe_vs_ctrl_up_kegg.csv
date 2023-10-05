@@ -1,0 +1,3 @@
+"","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"dme04213","dme04213","Longevity regulating pathway - multiple species - Drosophila melanogaster (fruit fly)","2/6","55/3488",0.0035168212442943,0.0492354974201202,0.0407210880918287,"CG32301/CG32305",2
+"dme00230","dme00230","Purine metabolism - Drosophila melanogaster (fruit fly)","2/6","92/3488",0.00963434991680446,0.0674404494176312,0.0557778153078153,"CG32301/CG32305",2

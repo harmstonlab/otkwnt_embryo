@@ -1,0 +1,4 @@
+"","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"dme00790","dme00790","Folate biosynthesis - Drosophila melanogaster (fruit fly)","8/119","40/3488",4.46571429484421e-05,0.002280614161536,0.00221798860103615,"Hn/Alp7/Alp8/Alp10/Alp9/GstO3/Mocs1/Alp1",8
+"dme00730","dme00730","Thiamine metabolism - Drosophila melanogaster (fruit fly)","6/119","21/3488",4.95785687290434e-05,0.002280614161536,0.00221798860103615,"Alp7/Alp8/Alp10/Alp9/primo-1/Alp1",6
+"dme04080","dme04080","Neuroactive ligand-receptor interaction - Drosophila melanogaster (fruit fly)","8/119","67/3488",0.00175197714073545,0.0537272989825539,0.0522519498114083,"alphaTry/5-HT7/betaTry/deltaTry/gammaTry/epsilonTry/Dop1R1/CCKLR-17D3",8

@@ -145,15 +145,11 @@ res_names
 ```
 
 
-# Wald Tests
+# Wald Tests - all
 
-- Get all the pairwise comparisons as a list
-- export to xlsx with each page being one comparison 
-
-lapply? 
-
+In this section, we export all the pairwise comparisons (W4_OE vs Ctrl, O1_OE vs Ctrl, etc) as an excel sheet. Each sheet will contain one comparison. 
 ```{r}
-
+# Function to extract results from a given comparison 
 get_res <- function(x) {
   res = results(wald_dds, name = x) 
   res$ensembl_gene_id = rownames(res)
@@ -210,24 +206,6 @@ sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
 ```
 
 
-Compile and export: 
-```{r}
-## Saving this to compile later
-
-compname <- "W4OE_vs_Ctrl"
-
-df_res <- res[ ,c("baseMean", "log2FoldChange", "padj")]
-colnames(df_res) <- c(paste0(compname, "_baseMean"),
-                         paste0(compname, "_log2fc"), 
-                         paste0(compname, "_padj"))
-
-write.csv(df_res, file = paste0(output_dir, "compile_W4OEvsCTRL.csv"))
-
-### Writing out .csv files
-write_files(res, "W4OE", "CTRL")
-```
-
-
 ### MA plot
 
 ```{r}
@@ -240,7 +218,7 @@ generate_ma(res)
 ### Volcano plot
 
 ```{r}
-#| label: C11-WT-vlc
+#| label: W4OE-WT-vlc
 ### Volcano plot
 generate_volcano(res, "W4_OE", "Ctrl")
 ```
@@ -305,13 +283,14 @@ up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
 ```
 
 ```{r}
-#write.csv(up_ekegg, file = paste0(output_dir, "upregulated_kegg.csv"))
+write.csv(up_ekegg, file = paste0(output_dir, "w4oe_vs_ctrl_up_kegg.csv"))
 ```
 
 ### KEGG - down
 
 ```{r}
 #| label: down-ekegg
+#| fig-height: 10
 
 # Get the entrez IDs
 down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
@@ -320,7 +299,7 @@ down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
 ```
 
 ```{r}
-write.csv(down_ekegg, file = paste0(output_dir, "kegg_down_w4oe_vs_ctrl.csv"))
+write.csv(down_ekegg, file = paste0(output_dir, "w4oe_vs_ctrl_down_kegg.csv"))
 ```
 
 :::
@@ -351,23 +330,6 @@ hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
 sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
 ```
 
-
-Compile and export: 
-```{r}
-## Saving this to compile later
-
-compname <- "O1OE_vs_Ctrl"
-
-df_res <- res[ ,c("baseMean", "log2FoldChange", "padj")]
-colnames(df_res) <- c(paste0(compname, "_baseMean"),
-                         paste0(compname, "_log2fc"), 
-                         paste0(compname, "_padj"))
-
-write.csv(df_res, file = paste0(output_dir, "compile_O1OEvsCTRL.csv"))
-
-### Writing out .csv files
-write_files(res, "O1OE", "CTRL")
-```
 
 
 ### MA plot
@@ -487,7 +449,7 @@ custom_ekegg(up_ekegg, interesting_pathways = up_ekegg$Description,
 
 
 ```{r}
-write.csv(up_ekegg, file = paste0(output_dir, "o1oe_ctrl_kegg_up.csv"))
+write.csv(up_ekegg, file = paste0(output_dir, "o1oe_vs_ctrl_up_kegg.csv"))
 ```
 
 ### KEGG - down
@@ -522,13 +484,1044 @@ custom_ekegg(down_ekegg,
 
 
 ```{r}
-write.csv(down_ekegg, file = paste0(output_dir, "kegg_down_o1oe_vs_ctrl.csv"))
+write.csv(down_ekegg, file = paste0(output_dir, "o1oe_vs_ctrl_down_kegg.csv"))
 ```
 
 :::
 
 
+## O1W4_OE
+:::{.panel-tabset}
 
+### Histogram
+
+```{r o1w4oe_ctrl}
+#| label: O1W4OE_CTRL
+
+results_O1W4OE_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O1W4_OE", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O1W4OE_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: O1W4OE-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O1W4OE-WT-vlc
+### Volcano plot
+generate_volcano(res, "O1W4_OE", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: O1W4OE-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "o1w4oe_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: O1W4OE-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+```
+
+```{r}
+nrow(ego)
+
+write.csv(ego, file = paste0(output_dir, "o1w4oe_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: O1W4OE-up-ekegg
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "o1w4oe_vs_ctrl_up_kegg.csv"))
+```
+
+
+```{r}
+head(up_ekegg)
+```
+
+
+### KEGG - down
+
+```{r}
+#| label: O1W4OE-down-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "o1w4oe_vs_ctrl_down_kegg.csv"))
+```
+
+```{r}
+head(down_ekegg)
+```
+
+
+:::
+
+
+## O2_KO
+:::{.panel-tabset}
+
+### Histogram
+
+```{r O2KO_ctrl}
+#| label: O2KO_CTRL
+
+results_O2KO_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O2_KO", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O2KO_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: O2KO-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O2KO-WT-vlc
+### Volcano plot
+generate_volcano(res, "O2_KO", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: O2KO-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O2KO_vs_ctrl_down_go.csv"))
+```
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: O2KO-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O2KO_vs_ctrl_down_go.csv"))
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: O2KO-up-ekegg
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "O2KO_vs_ctrl_up_kegg.csv"))
+```
+
+### KEGG - down
+
+```{r}
+#| label: O2KO-down-ekegg
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "O2KO_vs_ctrl_down_kegg.csv"))
+```
+
+:::
+
+
+## W4_KO
+:::{.panel-tabset}
+
+### Histogram
+
+```{r W4KO_ctrl}
+#| label: W4KO_CTRL
+
+results_W4KO_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "W4_KO", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_W4KO_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: W4KO-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: W4KO-WT-vlc
+### Volcano plot
+generate_volcano(res, "W4_KO", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: W4KO-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "W4KO_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: W4KO-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "W4KO_vs_ctrl_down_go.csv"))
+```
+
+
+```{r}
+head(ego)
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: W4KO-up-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "W4KO_vs_ctrl_up_kegg.csv"))
+```
+
+```{r}
+head(up_ekegg)
+```
+
+
+### KEGG - down
+
+```{r}
+#| label: W4KO-down-ekegg
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "W4KO_vs_ctrl_down_kegg.csv"))
+```
+
+```{r}
+head(down_ekegg)
+```
+
+
+:::
+
+
+## O1_KO
+:::{.panel-tabset}
+
+### Histogram
+
+```{r O1KO_ctrl}
+#| label: O1KO_CTRL
+
+results_O1KO_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O1_KO", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O1KO_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: O1KO-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O1KO-WT-vlc
+### Volcano plot
+generate_volcano(res, "O1_KO", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: O1KO-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O1KO_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: O1KO-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O1KO_vs_ctrl_down_go.csv"))
+```
+
+
+```{r}
+head(ego)
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: O1KO-up-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "O1KO_vs_ctrl_up_kegg.csv"))
+```
+
+```{r}
+head(up_ekegg)
+```
+
+
+### KEGG - down
+
+```{r}
+#| label: O1KO-down-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "O1KO_vs_ctrl_down_kegg.csv"))
+```
+
+```{r}
+head(down_ekegg)
+```
+
+
+:::
+
+
+## O1W4_KO
+:::{.panel-tabset}
+
+### Histogram
+
+```{r O1W4KO_ctrl}
+#| label: O1W4KO_CTRL
+
+results_O1W4KO_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O1W4_KO", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O1W4KO_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: O1W4KO-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O1W4KO-WT-vlc
+### Volcano plot
+generate_volcano(res, "O1W4_KO", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: O1W4KO-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O1W4KO_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: O1W4KO-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O1W4KO_vs_ctrl_down_go.csv"))
+```
+
+
+```{r}
+head(ego)
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: O1W4KO-up-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "O1W4KO_vs_ctrl_up_kegg.csv"))
+```
+
+```{r}
+head(up_ekegg)
+```
+
+
+### KEGG - down
+
+```{r}
+#| label: O1W4KO-down-ekegg
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "O1O1W4KO_vs_ctrl_down_kegg.csv"))
+```
+
+```{r}
+head(down_ekegg)
+```
+
+
+:::
+
+
+## O2W4_KO
+:::{.panel-tabset}
+
+### Histogram
+
+```{r O2W4KO_ctrl}
+#| label: O2W4KO_CTRL
+
+results_O2W4KO_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O2W4_KO", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O2W4KO_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: O2W4KO-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O2W4KO-WT-vlc
+### Volcano plot
+generate_volcano(res, "O2W4_KO", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: O2W4KO-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O2W4KO_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: O2W4KO-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O2W4KO_vs_ctrl_down_go.csv"))
+```
+
+
+```{r}
+head(ego)
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: O2W4KO-up-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "O2W4KO_vs_ctrl_up_kegg.csv"))
+```
+
+```{r}
+head(up_ekegg)
+```
+
+
+### KEGG - down
+
+```{r}
+#| label: O2W4KO-down-ekegg
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "O2W4KO_vs_ctrl_down_kegg.csv"))
+```
+
+```{r}
+head(down_ekegg)
+```
+
+
+:::
+
+
+## O1O2_KO
+:::{.panel-tabset}
+
+### Histogram
+
+```{r O1O2KO_ctrl}
+#| label: O1O2KO_CTRL
+
+results_O1O2KO_CTRL = get_dds_res(wald_dds, 
+                             contrast = c("condition", "O1O2_KO", "Ctrl"),
+                             ensembl.genes, 
+                             shrink = TRUE)
+
+res = results_O1O2KO_CTRL 
+
+hist(res$pvalue, xlab = "p-value", ylab = "Frequency")
+```
+
+**Number of significant genes (padj < 0.1 & log2FoldChange < log2(1.5)):**
+
+```{r}
+sum(res$padj < 0.1 & abs(res$log2FoldChange) > lfc.threshold, na.rm = T)
+```
+
+
+### MA plot
+
+```{r}
+#| label: O1O2KO-CTRL-MA
+
+### MA plot
+generate_ma(res)
+```
+
+### Volcano plot
+
+```{r}
+#| label: O1O2KO-WT-vlc
+### Volcano plot
+generate_volcano(res, "O1O2_KO", "Ctrl")
+```
+### GO - up
+
+```{r}
+df_res = as.data.frame(res)
+# Drop rows with NAs in pvalue - these are genes with high variability
+df_res = df_res[complete.cases(df_res[ ,c("pvalue", "padj")]), ] 
+```
+
+
+```{r}
+up_genes <- rownames(res[res$padj < 0.1 &
+                      res$log2FoldChange > lfc.threshold, ])
+
+length(up_genes)
+```
+
+```{r}
+#| label: O1O2KO-up-go
+ego <- plotEGO_dm(up_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, upregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O1O2KO_vs_ctrl_down_go.csv"))
+```
+
+```{r}
+head(ego)
+```
+
+
+### GO - down
+
+```{r}
+down_genes <- rownames(df_res[df_res$padj < 0.1 &
+                      df_res$log2FoldChange < lfc.threshold, ])
+
+length(down_genes)
+```
+
+
+```{r}
+#| label: O1O2KO-down-go
+ego <- plotEGO_dm(down_genes, universe = rownames(dds), 
+               ont = "BP",
+               title = "GO, downregulated genes")
+
+```
+
+```{r}
+nrow(ego)
+write.csv(ego, file = paste0(output_dir, "O1O2KO_vs_ctrl_down_go.csv"))
+```
+
+
+```{r}
+head(ego)
+```
+
+
+### KEGG, up
+
+```{r}
+#| label: O1O2KO-up-ekegg
+#| fig-height: 10
+
+# Get the entrez IDs
+up_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% up_genes, ]$entrezgene_id)
+
+up_ekegg <- plotKEGG_dm(up_entrez, title = "KEGG, upregulated genes")
+```
+
+```{r}
+nrow(up_ekegg)
+write.csv(up_ekegg, file = paste0(output_dir, "O1O2KO_vs_ctrl_up_kegg.csv"))
+```
+
+```{r}
+head(up_ekegg)
+```
+
+
+### KEGG - down
+
+```{r}
+#| label: O1O2KO-down-ekegg
+
+# Get the entrez IDs
+down_entrez <- na.omit(ensembl.genes[ensembl.genes$gene_id %in% down_genes, ]$entrezgene_id)
+
+down_ekegg <- plotKEGG_dm(down_entrez, title = "KEGG, downregulated genes")
+```
+
+```{r}
+nrow(down_ekegg)
+write.csv(down_ekegg, file = paste0(output_dir, "O1O2KO_vs_ctrl_down_kegg.csv"))
+```
+
+```{r}
+head(down_ekegg)
+```
+
+
+:::
+
+
+
+
+# sessionInfo
 
 
 

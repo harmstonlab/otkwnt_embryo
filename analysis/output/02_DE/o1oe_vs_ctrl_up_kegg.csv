@@ -1,0 +1,7 @@
+"","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"dme03440","dme03440","Homologous recombination - Drosophila melanogaster (fruit fly)","5/86","23/3488",0.00019225533676895,0.0151881716047471,0.0141661827092911,"mus101/mre11/mms4/rad50/mus81",5
+"dme04320","dme04320","Dorso-ventral axis formation - Drosophila melanogaster (fruit fly)","5/86","28/3488",0.000509534423849171,0.0201266097420423,0.0187723208786537,"bru1/aub/piwi/orb/AGO3",5
+"dme03430","dme03430","Mismatch repair - Drosophila melanogaster (fruit fly)","4/86","19/3488",0.00100641741932446,0.0265023253755442,0.0247190243342851,"Pms2/spel1/tos/Msh6",4
+"dme00240","dme00240","Pyrimidine metabolism - Drosophila melanogaster (fruit fly)","5/86","38/3488",0.0021439631506331,0.0423432722250038,0.0394940580379782,"Ts/nmdyn-D6/CG5757/CG3788/cN-IIIB",5
+"dme01232","dme01232","Nucleotide metabolism - Drosophila melanogaster (fruit fly)","6/86","60/3488",0.0032479901081905,0.0448076663810991,0.0417926268711117,"Ts/nmdyn-D6/CG5757/CG3788/cN-IIIB/AOX3",6
+"dme03460","dme03460","Fanconi anemia pathway - Drosophila melanogaster (fruit fly)","4/86","26/3488",0.00340311390236195,0.0448076663810991,0.0417926268711117,"Pms2/Ercc1/mms4/mus81",4
