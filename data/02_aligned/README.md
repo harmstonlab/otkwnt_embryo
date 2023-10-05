@@ -14,8 +14,8 @@ Aligned and processed read counts for RNA-seq.
 
 Reads in data from: [data/01_data_raw](../01_data_raw/). 
 
-Used as input to: [analysis/01_QualityControl/01_QualityControl.md](../../analysis/01_QualityControl/)
+Used as input to: [analysis/01_QC/01_QC.md](../../analysis/01_QC/)
 
 ## Location on server
 
-#/home/qianhui/NEWPROJECT/data/02_data_processed/
+#/home/qianhui/otkwnt_project/data/02_data_processed/
