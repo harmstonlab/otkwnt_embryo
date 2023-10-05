@@ -625,7 +625,8 @@ nrow(k3_c1_ekegg)
     [1] 6
 
 ``` r
-write_csv(k3_c1_ekegg, file = paste0(output_dir, "k3_c1_ekegg.csv"))
+write.csv(k3_c1_ekegg, file = paste0(output_dir, "k3_c1_ekegg.csv"),
+          row.names = FALSE)
 ```
 
 ### Custom KEGG
@@ -913,7 +914,7 @@ c2_go_table
 | canonical Wnt signaling pathway           | 47/3002   | 0.0538860 | arm/dsh/flw/gro/dco/hyd/Pp1alpha-96A/Pp1-87B/mts/tws/Eip63E/Ssdp/nmo/Rho1/CkIalpha/Cul1/Usp47/spen/CtBP/SkpA/Roc1a/Cdc16/Axn/Apc2/Tnks/botv/Nulp1/sotv/Nek2/CycY/Gint3/Rnf146/CG11523/hyx/RanBP3/lgs/rept/pont/dlp/pygo/tum/gish/hpo/lic/nej/ttv/RpS12                                                                                                                                                                                                                                                                     |
 
 ``` r
-write_csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
+write.csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
 ```
 
 ### KEGG - c2
@@ -973,7 +974,8 @@ c2_kegg_table
 | dme04330 | Notch signaling pathway    | 16/1184   | 0.0259490 | dsh/gro/H/Su(H)/Bx42/HDAC1/spen/Gcn5/CtBP/Atx-1/aph-1/CG6843/Nct/pen-2/nej/Psn                                                                                    |
 
 ``` r
-write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"))
+write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"),
+          row.names = FALSE)
 ```
 
 ### Summary
@@ -1190,7 +1192,11 @@ k3_c3_ekegg <- plotKEGG_dm(c3_entrez, title = "KEGG, cluster 3",
 
     [1] "32 enrichments found"
 
-### Custom KEGG
+``` r
+nrow(k3_c3_ekegg)
+```
+
+    [1] 32
 
 ``` r
 k3_c3_ekegg
@@ -1230,6 +1236,13 @@ k3_c3_ekegg
 | dme04145 | dme04145 | Phagosome - Drosophila melanogaster (fruit fly)                                    | 20/538    | 82/3488  | 0.0213403 | 0.0796704 | 0.0554099 | alphaTub85E/betaTub97EF/Calr/Sec61beta/Nos/Rac2/RhoL/Rab7/Sec61gamma/Tsp/Vha100-5/VhaM9.7-a/CG11459/Vha100-4/Vha36-3/Sdic2/Sec61alpha/Vha68-2/Vha68-1/Vha13                                                                                                                       |    20 |
 | dme02010 | dme02010 | ABC transporters - Drosophila melanogaster (fruit fly)                             | 11/538    | 38/3488  | 0.0243233 | 0.0878778 | 0.0611180 | Mdr65/CG3156/CG1824/CG1494/CG4822/CG5853/CG10226/CG4562/CG11069/Mrp4/CG17646                                                                                                                                                                                                      |    11 |
 | dme00250 | dme00250 | Alanine, aspartate and glutamate metabolism - Drosophila melanogaster (fruit fly)  | 9/538     | 29/3488  | 0.0258530 | 0.0904855 | 0.0629316 | Gs1/Gad1/Ass/CG7860/Argl/CG9674/P5CDh1/Ssadh/Gfat2                                                                                                                                                                                                                                |     9 |
+
+``` r
+write.csv(k3_c3_ekegg, file = paste0(output_dir, "k3_c3_ekegg.csv"),
+          row.names = FALSE)
+```
+
+### Custom KEGG
 
 ``` r
 interesting_pathways <- c("ECM-receptor interaction",

@@ -3820,7 +3820,8 @@ character(0)</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="fu">write_csv</span>(k3_c1_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c1_ekegg.csv&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="fu">write.csv</span>(k3_c1_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c1_ekegg.csv&quot;</span>),</span>
+<span id="cb76-2"><a href="#cb76-2"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -4237,7 +4238,7 @@ character(0)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">write_csv</span>(k3_c2_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ego.csv&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">write.csv</span>(k3_c2_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ego.csv&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -4473,7 +4474,8 @@ character(0)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a><span class="fu">write.csv</span>(k3_c2_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ekegg.csv&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a><span class="fu">write.csv</span>(k3_c2_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ekegg.csv&quot;</span>),</span>
+<span id="cb115-2"><a href="#cb115-2"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -4780,12 +4782,17 @@ character(0)</code></pre>
 <pre><code>[1] &quot;32 enrichments found&quot;</code></pre>
 </div>
 </div>
-</div>
-<div id="tabset-4-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-6-tab">
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a>k3_c3_ekegg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a><span class="fu">nrow</span>(k3_c3_ekegg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>k3_c3_ekegg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -5205,18 +5212,25 @@ character(0)</code></pre>
 </table>
 </div>
 </div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1"></a><span class="fu">write.csv</span>(k3_c3_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c3_ekegg.csv&quot;</span>),</span>
+<span id="cb157-2"><a href="#cb157-2"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
+</div>
+<div id="tabset-4-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-6-tab">
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ECM-receptor interaction&quot;</span>,</span>
-<span id="cb155-2"><a href="#cb155-2"></a>                          <span class="st">&quot;Neuroactive ligand-receptor interaction&quot;</span>,</span>
-<span id="cb155-3"><a href="#cb155-3"></a>                          <span class="st">&quot;Lysosome&quot;</span>, </span>
-<span id="cb155-4"><a href="#cb155-4"></a>                          <span class="st">&quot;Fatty acid metabolism&quot;</span>)</span>
-<span id="cb155-5"><a href="#cb155-5"></a></span>
-<span id="cb155-6"><a href="#cb155-6"></a>c3_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c3_ekegg, interesting_pathways)</span>
-<span id="cb155-7"><a href="#cb155-7"></a></span>
-<span id="cb155-8"><a href="#cb155-8"></a>c3_kegg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ECM-receptor interaction&quot;</span>,</span>
+<span id="cb158-2"><a href="#cb158-2"></a>                          <span class="st">&quot;Neuroactive ligand-receptor interaction&quot;</span>,</span>
+<span id="cb158-3"><a href="#cb158-3"></a>                          <span class="st">&quot;Lysosome&quot;</span>, </span>
+<span id="cb158-4"><a href="#cb158-4"></a>                          <span class="st">&quot;Fatty acid metabolism&quot;</span>)</span>
+<span id="cb158-5"><a href="#cb158-5"></a></span>
+<span id="cb158-6"><a href="#cb158-6"></a>c3_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c3_ekegg, interesting_pathways)</span>
+<span id="cb158-7"><a href="#cb158-7"></a></span>
+<span id="cb158-8"><a href="#cb158-8"></a>c3_kegg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -5284,9 +5298,9 @@ character(0)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a><span class="co"># to make the plots</span></span>
-<span id="cb156-2"><a href="#cb156-2"></a><span class="fu">saveRDS</span>(rld_z, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;rld_z.RDS&quot;</span>))</span>
-<span id="cb156-3"><a href="#cb156-3"></a><span class="fu">saveRDS</span>(kmeans_cl, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;kmeans_cl.RDS&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a><span class="co"># to make the plots</span></span>
+<span id="cb159-2"><a href="#cb159-2"></a><span class="fu">saveRDS</span>(rld_z, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;rld_z.RDS&quot;</span>))</span>
+<span id="cb159-3"><a href="#cb159-3"></a><span class="fu">saveRDS</span>(kmeans_cl, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;kmeans_cl.RDS&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -5295,41 +5309,41 @@ character(0)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1"></a><span class="co"># Convert cluster genes to data frame</span></span>
-<span id="cb157-2"><a href="#cb157-2"></a>df_cluster <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">unlist</span>(kmeans_cl))</span>
-<span id="cb157-3"><a href="#cb157-3"></a><span class="fu">colnames</span>(df_cluster) <span class="ot">&lt;-</span> <span class="st">&quot;cluster&quot;</span></span>
-<span id="cb157-4"><a href="#cb157-4"></a>df_cluster<span class="sc">$</span>ensembl_gene_id <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df_cluster)</span>
-<span id="cb157-5"><a href="#cb157-5"></a></span>
-<span id="cb157-6"><a href="#cb157-6"></a><span class="co"># Genes that are expressed but not in cluster - not significant. </span></span>
-<span id="cb157-7"><a href="#cb157-7"></a>not_signif <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dds)[<span class="sc">!</span><span class="fu">rownames</span>(dds) <span class="sc">%in%</span> df_cluster<span class="sc">$</span>ensembl_gene_id]</span>
-<span id="cb157-8"><a href="#cb157-8"></a>df_ns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ensembl_gene_id =</span> not_signif, </span>
-<span id="cb157-9"><a href="#cb157-9"></a>                    <span class="at">cluster =</span> <span class="st">&quot;NS&quot;</span>)</span>
-<span id="cb157-10"><a href="#cb157-10"></a></span>
-<span id="cb157-11"><a href="#cb157-11"></a><span class="co"># Combine both</span></span>
-<span id="cb157-12"><a href="#cb157-12"></a>df_combined <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_cluster, df_ns)</span>
-<span id="cb157-13"><a href="#cb157-13"></a></span>
-<span id="cb157-14"><a href="#cb157-14"></a><span class="co"># Add gene biotype</span></span>
-<span id="cb157-15"><a href="#cb157-15"></a>df_combined<span class="sc">$</span>gene_biotype <span class="ot">=</span> ensembl.genes<span class="sc">$</span>gene_biotype[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb157-16"><a href="#cb157-16"></a>                                                            ensembl.genes<span class="sc">$</span>gene_id)]</span>
-<span id="cb157-17"><a href="#cb157-17"></a><span class="co"># Add gene name</span></span>
-<span id="cb157-18"><a href="#cb157-18"></a>df_combined<span class="sc">$</span>gene_name <span class="ot">=</span> ensembl.genes<span class="sc">$</span>external_gene_name[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb157-19"><a href="#cb157-19"></a>                                                               ensembl.genes<span class="sc">$</span>gene_id)]</span>
-<span id="cb157-20"><a href="#cb157-20"></a></span>
-<span id="cb157-21"><a href="#cb157-21"></a><span class="co"># Add pvalue</span></span>
-<span id="cb157-22"><a href="#cb157-22"></a>df_combined<span class="sc">$</span>pvalue <span class="ot">=</span> res_lrt<span class="sc">$</span>pvalue[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb157-23"><a href="#cb157-23"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
-<span id="cb157-24"><a href="#cb157-24"></a><span class="co"># Add padj</span></span>
-<span id="cb157-25"><a href="#cb157-25"></a>df_combined<span class="sc">$</span>padj <span class="ot">=</span> res_lrt<span class="sc">$</span>padj[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb157-26"><a href="#cb157-26"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
-<span id="cb157-27"><a href="#cb157-27"></a></span>
-<span id="cb157-28"><a href="#cb157-28"></a><span class="co"># Arrange</span></span>
-<span id="cb157-29"><a href="#cb157-29"></a>df_combined <span class="ot">&lt;-</span> df_combined <span class="sc">%&gt;%</span> </span>
-<span id="cb157-30"><a href="#cb157-30"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ensembl_gene_id, pvalue, padj, </span>
-<span id="cb157-31"><a href="#cb157-31"></a>                gene_biotype, gene_name, cluster)</span>
-<span id="cb157-32"><a href="#cb157-32"></a></span>
-<span id="cb157-33"><a href="#cb157-33"></a><span class="co"># Export</span></span>
-<span id="cb157-34"><a href="#cb157-34"></a><span class="fu">write.csv</span>(df_combined, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;cluster_genes.csv&quot;</span>),</span>
-<span id="cb157-35"><a href="#cb157-35"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1"></a><span class="co"># Convert cluster genes to data frame</span></span>
+<span id="cb160-2"><a href="#cb160-2"></a>df_cluster <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">unlist</span>(kmeans_cl))</span>
+<span id="cb160-3"><a href="#cb160-3"></a><span class="fu">colnames</span>(df_cluster) <span class="ot">&lt;-</span> <span class="st">&quot;cluster&quot;</span></span>
+<span id="cb160-4"><a href="#cb160-4"></a>df_cluster<span class="sc">$</span>ensembl_gene_id <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df_cluster)</span>
+<span id="cb160-5"><a href="#cb160-5"></a></span>
+<span id="cb160-6"><a href="#cb160-6"></a><span class="co"># Genes that are expressed but not in cluster - not significant. </span></span>
+<span id="cb160-7"><a href="#cb160-7"></a>not_signif <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dds)[<span class="sc">!</span><span class="fu">rownames</span>(dds) <span class="sc">%in%</span> df_cluster<span class="sc">$</span>ensembl_gene_id]</span>
+<span id="cb160-8"><a href="#cb160-8"></a>df_ns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ensembl_gene_id =</span> not_signif, </span>
+<span id="cb160-9"><a href="#cb160-9"></a>                    <span class="at">cluster =</span> <span class="st">&quot;NS&quot;</span>)</span>
+<span id="cb160-10"><a href="#cb160-10"></a></span>
+<span id="cb160-11"><a href="#cb160-11"></a><span class="co"># Combine both</span></span>
+<span id="cb160-12"><a href="#cb160-12"></a>df_combined <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_cluster, df_ns)</span>
+<span id="cb160-13"><a href="#cb160-13"></a></span>
+<span id="cb160-14"><a href="#cb160-14"></a><span class="co"># Add gene biotype</span></span>
+<span id="cb160-15"><a href="#cb160-15"></a>df_combined<span class="sc">$</span>gene_biotype <span class="ot">=</span> ensembl.genes<span class="sc">$</span>gene_biotype[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb160-16"><a href="#cb160-16"></a>                                                            ensembl.genes<span class="sc">$</span>gene_id)]</span>
+<span id="cb160-17"><a href="#cb160-17"></a><span class="co"># Add gene name</span></span>
+<span id="cb160-18"><a href="#cb160-18"></a>df_combined<span class="sc">$</span>gene_name <span class="ot">=</span> ensembl.genes<span class="sc">$</span>external_gene_name[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb160-19"><a href="#cb160-19"></a>                                                               ensembl.genes<span class="sc">$</span>gene_id)]</span>
+<span id="cb160-20"><a href="#cb160-20"></a></span>
+<span id="cb160-21"><a href="#cb160-21"></a><span class="co"># Add pvalue</span></span>
+<span id="cb160-22"><a href="#cb160-22"></a>df_combined<span class="sc">$</span>pvalue <span class="ot">=</span> res_lrt<span class="sc">$</span>pvalue[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb160-23"><a href="#cb160-23"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
+<span id="cb160-24"><a href="#cb160-24"></a><span class="co"># Add padj</span></span>
+<span id="cb160-25"><a href="#cb160-25"></a>df_combined<span class="sc">$</span>padj <span class="ot">=</span> res_lrt<span class="sc">$</span>padj[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb160-26"><a href="#cb160-26"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
+<span id="cb160-27"><a href="#cb160-27"></a></span>
+<span id="cb160-28"><a href="#cb160-28"></a><span class="co"># Arrange</span></span>
+<span id="cb160-29"><a href="#cb160-29"></a>df_combined <span class="ot">&lt;-</span> df_combined <span class="sc">%&gt;%</span> </span>
+<span id="cb160-30"><a href="#cb160-30"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ensembl_gene_id, pvalue, padj, </span>
+<span id="cb160-31"><a href="#cb160-31"></a>                gene_biotype, gene_name, cluster)</span>
+<span id="cb160-32"><a href="#cb160-32"></a></span>
+<span id="cb160-33"><a href="#cb160-33"></a><span class="co"># Export</span></span>
+<span id="cb160-34"><a href="#cb160-34"></a><span class="fu">write.csv</span>(df_combined, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;cluster_genes.csv&quot;</span>),</span>
+<span id="cb160-35"><a href="#cb160-35"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -5341,7 +5355,7 @@ character(0)</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.2 (2022-10-31)
@@ -5717,761 +5731,769 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb160" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb160-1"><a href="#cb160-1"></a><span class="co">---</span></span>
-<span id="cb160-2"><a href="#cb160-2"></a><span class="an">title:</span><span class="co"> 03_clust</span></span>
-<span id="cb160-3"><a href="#cb160-3"></a><span class="an">author:</span><span class="co"> Qian Hui TAN</span></span>
-<span id="cb160-4"><a href="#cb160-4"></a><span class="an">date:</span><span class="co"> &#39;`r format(Sys.time(), &quot;%d %B %Y&quot;)`&#39;</span></span>
-<span id="cb160-5"><a href="#cb160-5"></a><span class="an">format:</span></span>
-<span id="cb160-6"><a href="#cb160-6"></a><span class="co">  html: </span></span>
-<span id="cb160-7"><a href="#cb160-7"></a><span class="co">    keep-md: true</span></span>
-<span id="cb160-8"><a href="#cb160-8"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb160-9"><a href="#cb160-9"></a><span class="co">    df-print: kable</span></span>
-<span id="cb160-10"><a href="#cb160-10"></a><span class="co">    toc: true</span></span>
-<span id="cb160-11"><a href="#cb160-11"></a><span class="co">    toc-depth: 4</span></span>
-<span id="cb160-12"><a href="#cb160-12"></a><span class="co">    code-fold: true</span></span>
-<span id="cb160-13"><a href="#cb160-13"></a><span class="co">    number-sections: true</span></span>
-<span id="cb160-14"><a href="#cb160-14"></a><span class="co">    smooth-scroll: true</span></span>
-<span id="cb160-15"><a href="#cb160-15"></a><span class="co">    code-tools: true</span></span>
-<span id="cb160-16"><a href="#cb160-16"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb160-17"><a href="#cb160-17"></a><span class="co">  gfm: </span></span>
-<span id="cb160-18"><a href="#cb160-18"></a><span class="co">    df-print: kable</span></span>
-<span id="cb160-19"><a href="#cb160-19"></a><span class="co">    toc: true </span></span>
-<span id="cb160-20"><a href="#cb160-20"></a><span class="co">    toc-depth: 4</span></span>
-<span id="cb160-21"><a href="#cb160-21"></a><span class="co">    number-sections: true</span></span>
-<span id="cb160-22"><a href="#cb160-22"></a><span class="co">    prefer-html: true</span></span>
-<span id="cb160-23"><a href="#cb160-23"></a><span class="co">---</span></span>
-<span id="cb160-26"><a href="#cb160-26"></a><span class="in">```{r}</span></span>
-<span id="cb160-27"><a href="#cb160-27"></a><span class="co">#| label = &quot;setup&quot;,</span></span>
-<span id="cb160-28"><a href="#cb160-28"></a><span class="co">#| include = FALSE</span></span>
-<span id="cb160-29"><a href="#cb160-29"></a></span>
-<span id="cb160-30"><a href="#cb160-30"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, fig.height=8, </span></span>
-<span id="cb160-31"><a href="#cb160-31"></a>                      <span class="at">fig.path=</span><span class="st">&#39;../figures/03_clust/&#39;</span>,</span>
-<span id="cb160-32"><a href="#cb160-32"></a>                      <span class="at">dev=</span><span class="fu">c</span>(<span class="st">&quot;png&quot;</span>))</span>
-<span id="cb160-33"><a href="#cb160-33"></a></span>
-<span id="cb160-34"><a href="#cb160-34"></a><span class="in">```</span></span>
-<span id="cb160-35"><a href="#cb160-35"></a></span>
-<span id="cb160-36"><a href="#cb160-36"></a><span class="fu"># Clustering </span></span>
-<span id="cb160-37"><a href="#cb160-37"></a></span>
-<span id="cb160-38"><a href="#cb160-38"></a></span>
-<span id="cb160-39"><a href="#cb160-39"></a><span class="fu"># Setup</span></span>
-<span id="cb160-40"><a href="#cb160-40"></a></span>
-<span id="cb160-43"><a href="#cb160-43"></a><span class="in">```{r}</span></span>
-<span id="cb160-44"><a href="#cb160-44"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
-<span id="cb160-45"><a href="#cb160-45"></a>    <span class="fu">library</span>(DESeq2)</span>
-<span id="cb160-46"><a href="#cb160-46"></a>    <span class="fu">library</span>(pheatmap)</span>
-<span id="cb160-47"><a href="#cb160-47"></a>    <span class="fu">library</span>(clusterProfiler)</span>
-<span id="cb160-48"><a href="#cb160-48"></a>    <span class="fu">library</span>(ComplexHeatmap)</span>
-<span id="cb160-49"><a href="#cb160-49"></a>    <span class="fu">library</span>(circlize)</span>
-<span id="cb160-50"><a href="#cb160-50"></a>    <span class="fu">library</span>(org.Dm.eg.db)</span>
-<span id="cb160-51"><a href="#cb160-51"></a>    <span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb160-52"><a href="#cb160-52"></a>    <span class="co"># General tidying up</span></span>
-<span id="cb160-53"><a href="#cb160-53"></a>    <span class="fu">library</span>(tidyverse)</span>
-<span id="cb160-54"><a href="#cb160-54"></a>    <span class="fu">library</span>(reshape2)</span>
-<span id="cb160-55"><a href="#cb160-55"></a>    <span class="fu">library</span>(knitr)</span>
-<span id="cb160-56"><a href="#cb160-56"></a>    <span class="fu">library</span>(grid)</span>
-<span id="cb160-57"><a href="#cb160-57"></a>})</span>
-<span id="cb160-58"><a href="#cb160-58"></a></span>
-<span id="cb160-59"><a href="#cb160-59"></a><span class="fu">source</span>(<span class="st">&quot;../../scripts/R/clustering_functions.R&quot;</span>)</span>
-<span id="cb160-60"><a href="#cb160-60"></a><span class="fu">source</span>(<span class="st">&quot;../../scripts/R/go_kegg_functions.R&quot;</span>)</span>
-<span id="cb160-61"><a href="#cb160-61"></a><span class="in">```</span></span>
-<span id="cb160-62"><a href="#cb160-62"></a></span>
-<span id="cb160-63"><a href="#cb160-63"></a></span>
-<span id="cb160-66"><a href="#cb160-66"></a><span class="in">```{r}</span></span>
-<span id="cb160-67"><a href="#cb160-67"></a><span class="co"># Initialize the starting seed</span></span>
-<span id="cb160-68"><a href="#cb160-68"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb160-69"><a href="#cb160-69"></a><span class="in">```</span></span>
-<span id="cb160-70"><a href="#cb160-70"></a></span>
-<span id="cb160-73"><a href="#cb160-73"></a><span class="in">```{r}</span></span>
-<span id="cb160-74"><a href="#cb160-74"></a><span class="do">## If the output directory doesn&#39;t exist, create it</span></span>
-<span id="cb160-75"><a href="#cb160-75"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;../output/03_clust&quot;</span>)){</span>
-<span id="cb160-76"><a href="#cb160-76"></a>  <span class="fu">dir.create</span>(<span class="st">&quot;../output/03_clust&quot;</span>)</span>
-<span id="cb160-77"><a href="#cb160-77"></a>}</span>
-<span id="cb160-78"><a href="#cb160-78"></a></span>
-<span id="cb160-79"><a href="#cb160-79"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&quot;../output/03_clust/&quot;</span></span>
-<span id="cb160-80"><a href="#cb160-80"></a><span class="in">```</span></span>
-<span id="cb160-81"><a href="#cb160-81"></a></span>
-<span id="cb160-82"><a href="#cb160-82"></a><span class="fu"># Read in data</span></span>
-<span id="cb160-83"><a href="#cb160-83"></a></span>
-<span id="cb160-84"><a href="#cb160-84"></a>Run DESeq: </span>
-<span id="cb160-85"><a href="#cb160-85"></a></span>
-<span id="cb160-88"><a href="#cb160-88"></a><span class="in">```{r}</span></span>
-<span id="cb160-89"><a href="#cb160-89"></a>dds <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../output/01_QC/dds_filt.RDS&quot;</span>)</span>
-<span id="cb160-90"><a href="#cb160-90"></a>ensembl.genes<span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../output/01_QC/ensembl_genes.RDS&quot;</span>)</span>
-<span id="cb160-91"><a href="#cb160-91"></a>lfc.threshold <span class="ot">=</span> <span class="fu">log2</span>(<span class="fl">1.5</span>)</span>
-<span id="cb160-92"><a href="#cb160-92"></a></span>
-<span id="cb160-93"><a href="#cb160-93"></a><span class="co"># Removing lowly expressed genes, only to be done once at the start of the differential expression step</span></span>
-<span id="cb160-94"><a href="#cb160-94"></a>filter <span class="ot">=</span> <span class="fu">apply</span>(<span class="fu">counts</span>(dds, <span class="at">normalized =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>, <span class="cf">function</span>(x){ <span class="fu">mean</span>(x) <span class="sc">&gt;=</span> <span class="dv">10</span> })</span>
-<span id="cb160-95"><a href="#cb160-95"></a>dds <span class="ot">=</span> dds[filter, ]</span>
-<span id="cb160-96"><a href="#cb160-96"></a></span>
-<span id="cb160-97"><a href="#cb160-97"></a><span class="co"># Check for typos - number of samples in sample_order and colData(dds) should be </span></span>
-<span id="cb160-98"><a href="#cb160-98"></a></span>
-<span id="cb160-99"><a href="#cb160-99"></a>  <span class="fu">design</span>(dds)</span>
-<span id="cb160-100"><a href="#cb160-100"></a>  </span>
-<span id="cb160-101"><a href="#cb160-101"></a>  dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds, <span class="at">test =</span> <span class="st">&quot;LRT&quot;</span>, </span>
-<span id="cb160-102"><a href="#cb160-102"></a>               <span class="at">reduced =</span> <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb160-103"><a href="#cb160-103"></a>               <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb160-104"><a href="#cb160-104"></a>  </span>
-<span id="cb160-105"><a href="#cb160-105"></a>  <span class="co"># use blind = FALSE to account for experimental design</span></span>
-<span id="cb160-106"><a href="#cb160-106"></a>  rld <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds, <span class="at">blind =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-107"><a href="#cb160-107"></a></span>
-<span id="cb160-108"><a href="#cb160-108"></a><span class="in">```</span></span>
-<span id="cb160-109"><a href="#cb160-109"></a></span>
-<span id="cb160-112"><a href="#cb160-112"></a><span class="in">```{r}</span></span>
-<span id="cb160-113"><a href="#cb160-113"></a><span class="co"># export dds_filt</span></span>
-<span id="cb160-114"><a href="#cb160-114"></a></span>
-<span id="cb160-115"><a href="#cb160-115"></a><span class="fu">saveRDS</span>(dds, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;dds_filt.RDS&quot;</span>))</span>
-<span id="cb160-116"><a href="#cb160-116"></a><span class="in">```</span></span>
-<span id="cb160-117"><a href="#cb160-117"></a></span>
-<span id="cb160-118"><a href="#cb160-118"></a></span>
-<span id="cb160-119"><a href="#cb160-119"></a><span class="fu"># Likelihood ratio test</span></span>
-<span id="cb160-120"><a href="#cb160-120"></a></span>
-<span id="cb160-123"><a href="#cb160-123"></a><span class="in">```{r}</span></span>
-<span id="cb160-124"><a href="#cb160-124"></a>res_lrt <span class="ot">&lt;-</span> <span class="fu">results</span>(dds)</span>
-<span id="cb160-125"><a href="#cb160-125"></a></span>
-<span id="cb160-126"><a href="#cb160-126"></a>res_lrt<span class="sc">$</span>gene_biotype<span class="ot">=</span> ensembl.genes<span class="sc">$</span>gene_biotype[<span class="fu">match</span>(<span class="fu">row.names</span>(res_lrt), ensembl.genes<span class="sc">$</span>gene_id)]</span>
-<span id="cb160-127"><a href="#cb160-127"></a>res_lrt<span class="sc">$</span>external_gene_name<span class="ot">=</span> ensembl.genes<span class="sc">$</span>external_gene_name[<span class="fu">match</span>(<span class="fu">row.names</span>(res_lrt), ensembl.genes<span class="sc">$</span>gene_id)]</span>
-<span id="cb160-128"><a href="#cb160-128"></a></span>
-<span id="cb160-129"><a href="#cb160-129"></a>res_lrt<span class="sc">$</span>ensembl_gene_id <span class="ot">=</span> <span class="fu">rownames</span>(res_lrt)</span>
-<span id="cb160-130"><a href="#cb160-130"></a><span class="co">#head(res_lrt)</span></span>
-<span id="cb160-131"><a href="#cb160-131"></a><span class="in">```</span></span>
-<span id="cb160-132"><a href="#cb160-132"></a></span>
-<span id="cb160-135"><a href="#cb160-135"></a><span class="in">```{r}</span></span>
-<span id="cb160-136"><a href="#cb160-136"></a><span class="co">#| label: hist-pval</span></span>
-<span id="cb160-137"><a href="#cb160-137"></a><span class="fu">hist</span>(res_lrt<span class="sc">$</span>pvalue)</span>
-<span id="cb160-138"><a href="#cb160-138"></a><span class="in">```</span></span>
-<span id="cb160-139"><a href="#cb160-139"></a></span>
-<span id="cb160-140"><a href="#cb160-140"></a>Number of significant genes (padj &lt; 0.1):</span>
-<span id="cb160-141"><a href="#cb160-141"></a></span>
-<span id="cb160-144"><a href="#cb160-144"></a><span class="in">```{r}</span></span>
-<span id="cb160-145"><a href="#cb160-145"></a><span class="fu">sum</span>(res_lrt<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb160-146"><a href="#cb160-146"></a><span class="in">```</span></span>
-<span id="cb160-147"><a href="#cb160-147"></a></span>
-<span id="cb160-148"><a href="#cb160-148"></a></span>
-<span id="cb160-151"><a href="#cb160-151"></a><span class="in">```{r}</span></span>
-<span id="cb160-152"><a href="#cb160-152"></a><span class="fu">summary</span>(res_lrt)</span>
-<span id="cb160-153"><a href="#cb160-153"></a><span class="in">```</span></span>
-<span id="cb160-154"><a href="#cb160-154"></a></span>
-<span id="cb160-155"><a href="#cb160-155"></a>Checking coefficients: </span>
-<span id="cb160-158"><a href="#cb160-158"></a><span class="in">```{r}</span></span>
-<span id="cb160-159"><a href="#cb160-159"></a><span class="fu">resultsNames</span>(dds)</span>
-<span id="cb160-160"><a href="#cb160-160"></a><span class="in">```</span></span>
-<span id="cb160-161"><a href="#cb160-161"></a></span>
-<span id="cb160-162"><a href="#cb160-162"></a></span>
-<span id="cb160-165"><a href="#cb160-165"></a><span class="in">```{r}</span></span>
-<span id="cb160-166"><a href="#cb160-166"></a><span class="co"># Select significant results</span></span>
-<span id="cb160-167"><a href="#cb160-167"></a>significant_results <span class="ot">=</span> res_lrt[<span class="sc">!</span><span class="fu">is.na</span>(res_lrt<span class="sc">$</span>padj) <span class="sc">&amp;</span> </span>
-<span id="cb160-168"><a href="#cb160-168"></a>                                    res_lrt<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span>, ]</span>
-<span id="cb160-169"><a href="#cb160-169"></a></span>
-<span id="cb160-170"><a href="#cb160-170"></a></span>
-<span id="cb160-171"><a href="#cb160-171"></a>rld_signif <span class="ot">=</span> <span class="fu">assay</span>(rld)[<span class="fu">rownames</span>(significant_results), ]</span>
-<span id="cb160-172"><a href="#cb160-172"></a></span>
-<span id="cb160-173"><a href="#cb160-173"></a>rld_z <span class="ot">=</span> <span class="fu">t</span>(<span class="fu">apply</span>(rld_signif, <span class="dv">1</span>, <span class="cf">function</span>(x){ (x <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">/</span> <span class="fu">sd</span>(x)}))</span>
-<span id="cb160-174"><a href="#cb160-174"></a><span class="in">```</span></span>
-<span id="cb160-175"><a href="#cb160-175"></a></span>
-<span id="cb160-176"><a href="#cb160-176"></a></span>
-<span id="cb160-177"><a href="#cb160-177"></a></span>
-<span id="cb160-178"><a href="#cb160-178"></a><span class="fu"># Determining optimal number of clusters</span></span>
-<span id="cb160-179"><a href="#cb160-179"></a></span>
-<span id="cb160-180"><a href="#cb160-180"></a>:::{.panel-tabset}</span>
-<span id="cb160-181"><a href="#cb160-181"></a></span>
-<span id="cb160-182"><a href="#cb160-182"></a><span class="fu">## Elbow plot</span></span>
-<span id="cb160-183"><a href="#cb160-183"></a></span>
-<span id="cb160-186"><a href="#cb160-186"></a><span class="in">```{r}</span></span>
-<span id="cb160-187"><a href="#cb160-187"></a><span class="co">#| label: optclust-wss</span></span>
-<span id="cb160-188"><a href="#cb160-188"></a><span class="co">#| warning: FALSE</span></span>
-<span id="cb160-189"><a href="#cb160-189"></a></span>
-<span id="cb160-190"><a href="#cb160-190"></a>k.max <span class="ot">&lt;-</span> <span class="dv">15</span></span>
-<span id="cb160-191"><a href="#cb160-191"></a>wss <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>k.max,</span>
-<span id="cb160-192"><a href="#cb160-192"></a> <span class="cf">function</span>(k){<span class="fu">kmeans</span>(rld_z, k, <span class="at">nstart=</span><span class="dv">100</span>,</span>
-<span id="cb160-193"><a href="#cb160-193"></a> <span class="at">iter.max =</span> <span class="dv">20</span> )<span class="sc">$</span>tot.withinss})</span>
-<span id="cb160-194"><a href="#cb160-194"></a></span>
-<span id="cb160-195"><a href="#cb160-195"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>k.max, wss,</span>
-<span id="cb160-196"><a href="#cb160-196"></a> <span class="at">type=</span><span class="st">&quot;b&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb160-197"><a href="#cb160-197"></a> <span class="at">xlab=</span><span class="st">&quot;Number of clusters K&quot;</span>,</span>
-<span id="cb160-198"><a href="#cb160-198"></a> <span class="at">ylab=</span><span class="st">&quot;Total within-clusters sum of squares&quot;</span>)</span>
-<span id="cb160-199"><a href="#cb160-199"></a><span class="in">```</span></span>
-<span id="cb160-200"><a href="#cb160-200"></a></span>
-<span id="cb160-201"><a href="#cb160-201"></a></span>
-<span id="cb160-202"><a href="#cb160-202"></a><span class="fu">## Average silhouette width</span></span>
-<span id="cb160-203"><a href="#cb160-203"></a></span>
-<span id="cb160-204"><a href="#cb160-204"></a>We perform kmeans for 2-10 clusters, and calculate the average silhouette width for each kmeans. </span>
-<span id="cb160-205"><a href="#cb160-205"></a></span>
-<span id="cb160-206"><a href="#cb160-206"></a></span>
-<span id="cb160-207"><a href="#cb160-207"></a>What&#39;s the best k (maximum average silhouette width)?</span>
-<span id="cb160-210"><a href="#cb160-210"></a><span class="in">```{r}</span></span>
-<span id="cb160-211"><a href="#cb160-211"></a><span class="co">#| warning: false</span></span>
-<span id="cb160-212"><a href="#cb160-212"></a><span class="co"># We will use different methods and try 1-10 clusters.</span></span>
-<span id="cb160-213"><a href="#cb160-213"></a></span>
-<span id="cb160-214"><a href="#cb160-214"></a>d <span class="ot">&lt;-</span> <span class="fu">dist</span>(rld_z)</span>
-<span id="cb160-215"><a href="#cb160-215"></a><span class="fu">summary</span>(d)</span>
-<span id="cb160-216"><a href="#cb160-216"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb160-217"><a href="#cb160-217"></a>ks <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb160-218"><a href="#cb160-218"></a>ASW <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ks, <span class="at">FUN =</span> <span class="cf">function</span>(k) {</span>
-<span id="cb160-219"><a href="#cb160-219"></a>  fpc<span class="sc">::</span><span class="fu">cluster.stats</span>(d, <span class="fu">kmeans</span>(rld_z, <span class="at">centers=</span>k, <span class="at">nstart =</span> <span class="dv">5</span>)<span class="sc">$</span>cluster)<span class="sc">$</span>avg.silwidth</span>
-<span id="cb160-220"><a href="#cb160-220"></a>  })</span>
-<span id="cb160-221"><a href="#cb160-221"></a></span>
-<span id="cb160-222"><a href="#cb160-222"></a>best_k <span class="ot">&lt;-</span> ks[<span class="fu">which.max</span>(ASW)]</span>
-<span id="cb160-223"><a href="#cb160-223"></a>best_k</span>
-<span id="cb160-224"><a href="#cb160-224"></a><span class="in">```</span></span>
-<span id="cb160-225"><a href="#cb160-225"></a></span>
-<span id="cb160-226"><a href="#cb160-226"></a><span class="fu">### ASW </span></span>
-<span id="cb160-227"><a href="#cb160-227"></a></span>
-<span id="cb160-230"><a href="#cb160-230"></a><span class="in">```{r}</span></span>
-<span id="cb160-231"><a href="#cb160-231"></a><span class="co">#| label: optclust-asw</span></span>
-<span id="cb160-232"><a href="#cb160-232"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(ks, ASW), <span class="fu">aes</span>(ks, ASW)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb160-233"><a href="#cb160-233"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> best_k, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb160-234"><a href="#cb160-234"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Average silhouette width for varying k clusters&quot;</span>)</span>
-<span id="cb160-235"><a href="#cb160-235"></a><span class="in">```</span></span>
-<span id="cb160-236"><a href="#cb160-236"></a></span>
-<span id="cb160-237"><a href="#cb160-237"></a>2 clusters looks best, but silhouette width constantly decreases until we reach k = 7. Which means either 3 clusters, or 8 clusters. </span>
-<span id="cb160-238"><a href="#cb160-238"></a></span>
-<span id="cb160-239"><a href="#cb160-239"></a><span class="fu">## Silhouette plots</span></span>
-<span id="cb160-240"><a href="#cb160-240"></a></span>
-<span id="cb160-241"><a href="#cb160-241"></a><span class="fu">### k = 3</span></span>
-<span id="cb160-244"><a href="#cb160-244"></a><span class="in">```{r}</span></span>
-<span id="cb160-245"><a href="#cb160-245"></a><span class="co">#| label: silplot-k3</span></span>
-<span id="cb160-246"><a href="#cb160-246"></a><span class="co">#| warning: FALSE</span></span>
-<span id="cb160-247"><a href="#cb160-247"></a>k3_coef <span class="ot">&lt;-</span> <span class="fu">cluster_kmeans</span>(<span class="at">rld_z =</span> rld_z, <span class="at">nclust =</span> <span class="dv">3</span>, </span>
-<span id="cb160-248"><a href="#cb160-248"></a>                          <span class="at">plot_sil =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb160-249"><a href="#cb160-249"></a><span class="in">```</span></span>
-<span id="cb160-250"><a href="#cb160-250"></a></span>
-<span id="cb160-251"><a href="#cb160-251"></a>:::</span>
-<span id="cb160-252"><a href="#cb160-252"></a></span>
-<span id="cb160-253"><a href="#cb160-253"></a><span class="fu"># Heatmap</span></span>
-<span id="cb160-254"><a href="#cb160-254"></a></span>
-<span id="cb160-257"><a href="#cb160-257"></a><span class="in">```{r}</span></span>
-<span id="cb160-258"><a href="#cb160-258"></a><span class="co">#| label: heatmap-setup</span></span>
-<span id="cb160-259"><a href="#cb160-259"></a></span>
-<span id="cb160-260"><a href="#cb160-260"></a>sample_order <span class="ot">=</span> <span class="fu">colData</span>(dds)<span class="sc">$</span>sample_id</span>
-<span id="cb160-261"><a href="#cb160-261"></a>condition_order <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Ctrl&quot;</span>, </span>
-<span id="cb160-262"><a href="#cb160-262"></a>                     <span class="st">&quot;W4_OE&quot;</span>, <span class="st">&quot;O1_OE&quot;</span>, <span class="st">&quot;O1W4_OE&quot;</span>, <span class="st">&quot;O2_KO&quot;</span>, </span>
-<span id="cb160-263"><a href="#cb160-263"></a>                     <span class="st">&quot;W4_KO&quot;</span>, <span class="st">&quot;O1_KO&quot;</span>, <span class="st">&quot;O1W4_KO&quot;</span>, <span class="st">&quot;O2W4_KO&quot;</span>, <span class="st">&quot;O1O2_KO&quot;</span>)</span>
-<span id="cb160-264"><a href="#cb160-264"></a></span>
-<span id="cb160-265"><a href="#cb160-265"></a><span class="do">#### ------ Row and column annotations ----- ####</span></span>
-<span id="cb160-266"><a href="#cb160-266"></a>row_ann <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(k3_coef<span class="sc">$</span>cluster)</span>
-<span id="cb160-267"><a href="#cb160-267"></a><span class="fu">colnames</span>(row_ann) <span class="ot">=</span> <span class="st">&quot;cluster&quot;</span></span>
-<span id="cb160-268"><a href="#cb160-268"></a>row_ann<span class="sc">$</span>cluster <span class="ot">=</span> <span class="fu">factor</span>(row_ann<span class="sc">$</span>cluster, </span>
-<span id="cb160-269"><a href="#cb160-269"></a>                         <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(row_ann<span class="sc">$</span>cluster)))</span>
-<span id="cb160-270"><a href="#cb160-270"></a></span>
-<span id="cb160-271"><a href="#cb160-271"></a>col_ann <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">condition =</span> <span class="fu">rep</span>(condition_order, <span class="at">each =</span> <span class="dv">2</span>))</span>
-<span id="cb160-272"><a href="#cb160-272"></a><span class="fu">rownames</span>(col_ann) <span class="ot">&lt;-</span> sample_order</span>
-<span id="cb160-273"><a href="#cb160-273"></a></span>
-<span id="cb160-274"><a href="#cb160-274"></a>ann_colors <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb160-275"><a href="#cb160-275"></a>    <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">&quot;Ctrl&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey30&quot;</span>,</span>
-<span id="cb160-276"><a href="#cb160-276"></a>                  <span class="co"># OE</span></span>
-<span id="cb160-277"><a href="#cb160-277"></a>                  <span class="st">&quot;W4_OE&quot;</span> <span class="ot">=</span> <span class="st">&#39;#00362d&#39;</span>, <span class="st">&quot;O1_OE&quot;</span> <span class="ot">=</span> <span class="st">&#39;#3a6f60&#39;</span>, </span>
-<span id="cb160-278"><a href="#cb160-278"></a>                  <span class="st">&quot;O1W4_OE&quot;</span> <span class="ot">=</span> <span class="st">&#39;#80ac95&#39;</span>, <span class="st">&quot;O2_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#ceebcb&#39;</span>,</span>
-<span id="cb160-279"><a href="#cb160-279"></a>                  <span class="co"># KO</span></span>
-<span id="cb160-280"><a href="#cb160-280"></a>                  <span class="st">&quot;W4_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#552200&#39;</span>, <span class="st">&quot;O1_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#834a25&#39;</span>, </span>
-<span id="cb160-281"><a href="#cb160-281"></a>                  <span class="st">&quot;O1W4_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#b0764f&#39;</span>, <span class="st">&quot;O2W4_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#daa680&#39;</span>, </span>
-<span id="cb160-282"><a href="#cb160-282"></a>                  <span class="st">&quot;O1O2_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#ffdab8&#39;</span>),</span>
-<span id="cb160-283"><a href="#cb160-283"></a>    <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey90&quot;</span>, <span class="st">&quot;2&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey70&quot;</span>, <span class="st">&quot;3&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey10&quot;</span>)</span>
-<span id="cb160-284"><a href="#cb160-284"></a>)</span>
-<span id="cb160-285"><a href="#cb160-285"></a></span>
-<span id="cb160-286"><a href="#cb160-286"></a>col_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;darkgrey&quot;</span>, <span class="co">#Ctrls</span></span>
-<span id="cb160-287"><a href="#cb160-287"></a>                <span class="st">&#39;#00362d&#39;</span>, <span class="st">&#39;#3a6f60&#39;</span>, <span class="st">&#39;#80ac95&#39;</span>, <span class="st">&#39;#ceebcb&#39;</span>, <span class="co">#OEs</span></span>
-<span id="cb160-288"><a href="#cb160-288"></a>                <span class="st">&#39;#552200&#39;</span>, <span class="st">&#39;#834a25&#39;</span>, <span class="st">&#39;#b0764f&#39;</span>, <span class="st">&#39;#daa680&#39;</span>, <span class="st">&#39;#ffdab8&#39;</span> <span class="co">#KOs</span></span>
-<span id="cb160-289"><a href="#cb160-289"></a>                )</span>
-<span id="cb160-290"><a href="#cb160-290"></a></span>
-<span id="cb160-291"><a href="#cb160-291"></a><span class="in">```</span></span>
-<span id="cb160-292"><a href="#cb160-292"></a></span>
-<span id="cb160-293"><a href="#cb160-293"></a></span>
-<span id="cb160-294"><a href="#cb160-294"></a><span class="fu">## Kmeans, 3 clusters</span></span>
-<span id="cb160-297"><a href="#cb160-297"></a><span class="in">```{r}</span></span>
-<span id="cb160-298"><a href="#cb160-298"></a><span class="co">#| label: heatmap-k3</span></span>
-<span id="cb160-299"><a href="#cb160-299"></a></span>
-<span id="cb160-300"><a href="#cb160-300"></a>heatmap_plot <span class="ot">&lt;-</span> <span class="fu">plot_kmeans_heatmap</span>(rld_z, <span class="at">k_coef =</span> k3_coef,  </span>
-<span id="cb160-301"><a href="#cb160-301"></a>                    <span class="at">sample_order =</span> sample_order,</span>
-<span id="cb160-302"><a href="#cb160-302"></a>                    <span class="at">labels_col =</span> condition_order, </span>
-<span id="cb160-303"><a href="#cb160-303"></a>                    <span class="at">show_rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb160-304"><a href="#cb160-304"></a>                    <span class="at">show_colnames =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb160-305"><a href="#cb160-305"></a>                    <span class="at">annotation_row =</span> row_ann, </span>
-<span id="cb160-306"><a href="#cb160-306"></a>                    <span class="at">annotation_col =</span> col_ann,</span>
-<span id="cb160-307"><a href="#cb160-307"></a>                    <span class="at">annotation_colors =</span> ann_colors)</span>
-<span id="cb160-308"><a href="#cb160-308"></a></span>
-<span id="cb160-309"><a href="#cb160-309"></a>heatmap_plot</span>
-<span id="cb160-310"><a href="#cb160-310"></a><span class="in">```</span></span>
-<span id="cb160-311"><a href="#cb160-311"></a></span>
-<span id="cb160-312"><a href="#cb160-312"></a></span>
-<span id="cb160-315"><a href="#cb160-315"></a><span class="in">```{r}</span></span>
-<span id="cb160-316"><a href="#cb160-316"></a><span class="fu">saveRDS</span>(heatmap_plot, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;heatmap_plot.RDS&quot;</span>))</span>
-<span id="cb160-317"><a href="#cb160-317"></a><span class="in">```</span></span>
-<span id="cb160-318"><a href="#cb160-318"></a></span>
-<span id="cb160-319"><a href="#cb160-319"></a></span>
-<span id="cb160-320"><a href="#cb160-320"></a></span>
-<span id="cb160-323"><a href="#cb160-323"></a><span class="in">```{r}</span></span>
-<span id="cb160-324"><a href="#cb160-324"></a><span class="co"># save this</span></span>
-<span id="cb160-325"><a href="#cb160-325"></a></span>
-<span id="cb160-326"><a href="#cb160-326"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">c</span>(<span class="st">&quot;../figures/03_clust/heatmap.pdf&quot;</span>),</span>
-<span id="cb160-327"><a href="#cb160-327"></a>       <span class="at">plot =</span> heatmap_plot,</span>
-<span id="cb160-328"><a href="#cb160-328"></a>       <span class="at">width =</span> <span class="dv">210</span>, </span>
-<span id="cb160-329"><a href="#cb160-329"></a>       <span class="at">height =</span> <span class="dv">145</span>, </span>
-<span id="cb160-330"><a href="#cb160-330"></a>       <span class="at">device =</span> <span class="st">&quot;pdf&quot;</span>,</span>
-<span id="cb160-331"><a href="#cb160-331"></a>       <span class="at">dpi =</span> <span class="st">&quot;retina&quot;</span>,</span>
-<span id="cb160-332"><a href="#cb160-332"></a>       <span class="at">units =</span> <span class="fu">c</span>(<span class="st">&quot;mm&quot;</span>))</span>
-<span id="cb160-333"><a href="#cb160-333"></a><span class="in">```</span></span>
-<span id="cb160-334"><a href="#cb160-334"></a></span>
-<span id="cb160-335"><a href="#cb160-335"></a></span>
-<span id="cb160-338"><a href="#cb160-338"></a><span class="in">```{r}</span></span>
-<span id="cb160-339"><a href="#cb160-339"></a><span class="co">#| label: heatmap-nolegend</span></span>
-<span id="cb160-340"><a href="#cb160-340"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb160-341"><a href="#cb160-341"></a><span class="co">#| fig-height: 5</span></span>
-<span id="cb160-342"><a href="#cb160-342"></a></span>
-<span id="cb160-343"><a href="#cb160-343"></a><span class="co"># Same plot as above, but remove the legend</span></span>
-<span id="cb160-344"><a href="#cb160-344"></a></span>
-<span id="cb160-345"><a href="#cb160-345"></a>heatmap_noleg <span class="ot">&lt;-</span> <span class="fu">plot_kmeans_heatmap</span>(rld_z, <span class="at">k_coef =</span> k3_coef,  </span>
-<span id="cb160-346"><a href="#cb160-346"></a>                    <span class="at">sample_order =</span> sample_order,</span>
-<span id="cb160-347"><a href="#cb160-347"></a>                    <span class="at">labels_col =</span> condition_order, </span>
-<span id="cb160-348"><a href="#cb160-348"></a>                    <span class="at">show_rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb160-349"><a href="#cb160-349"></a>                    <span class="at">show_colnames =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb160-350"><a href="#cb160-350"></a>                    <span class="at">annotation_row =</span> row_ann, </span>
-<span id="cb160-351"><a href="#cb160-351"></a>                    <span class="at">annotation_col =</span> col_ann,</span>
-<span id="cb160-352"><a href="#cb160-352"></a>                    <span class="at">annotation_colors =</span> ann_colors, </span>
-<span id="cb160-353"><a href="#cb160-353"></a>                    <span class="at">annotation_legend =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-354"><a href="#cb160-354"></a></span>
-<span id="cb160-355"><a href="#cb160-355"></a>heatmap_noleg</span>
-<span id="cb160-356"><a href="#cb160-356"></a><span class="in">```</span></span>
-<span id="cb160-357"><a href="#cb160-357"></a></span>
-<span id="cb160-360"><a href="#cb160-360"></a><span class="in">```{r}</span></span>
-<span id="cb160-361"><a href="#cb160-361"></a><span class="fu">saveRDS</span>(heatmap_noleg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;heatmap_noleg.RDS&quot;</span>))</span>
-<span id="cb160-362"><a href="#cb160-362"></a><span class="in">```</span></span>
-<span id="cb160-363"><a href="#cb160-363"></a></span>
-<span id="cb160-364"><a href="#cb160-364"></a></span>
-<span id="cb160-365"><a href="#cb160-365"></a></span>
-<span id="cb160-368"><a href="#cb160-368"></a><span class="in">```{r}</span></span>
-<span id="cb160-369"><a href="#cb160-369"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">c</span>(<span class="st">&quot;../figures/03_clust/heatmap_noleg.svg&quot;</span>),</span>
-<span id="cb160-370"><a href="#cb160-370"></a>       <span class="at">plot =</span> heatmap_noleg,</span>
-<span id="cb160-371"><a href="#cb160-371"></a>       <span class="at">width =</span> <span class="dv">210</span>, </span>
-<span id="cb160-372"><a href="#cb160-372"></a>       <span class="at">height =</span> <span class="dv">145</span>, </span>
-<span id="cb160-373"><a href="#cb160-373"></a>       <span class="at">device =</span> <span class="st">&quot;svg&quot;</span>,</span>
-<span id="cb160-374"><a href="#cb160-374"></a>       <span class="at">units =</span> <span class="fu">c</span>(<span class="st">&quot;mm&quot;</span>))</span>
-<span id="cb160-375"><a href="#cb160-375"></a><span class="in">```</span></span>
-<span id="cb160-376"><a href="#cb160-376"></a></span>
-<span id="cb160-377"><a href="#cb160-377"></a></span>
-<span id="cb160-380"><a href="#cb160-380"></a><span class="in">```{r}</span></span>
-<span id="cb160-381"><a href="#cb160-381"></a>kmeans_cl <span class="ot">&lt;-</span> <span class="fu">get_cluster_genes</span>(k3_coef, <span class="at">nclust =</span> <span class="dv">3</span>)</span>
-<span id="cb160-382"><a href="#cb160-382"></a><span class="in">```</span></span>
-<span id="cb160-383"><a href="#cb160-383"></a></span>
-<span id="cb160-384"><a href="#cb160-384"></a></span>
-<span id="cb160-385"><a href="#cb160-385"></a></span>
-<span id="cb160-386"><a href="#cb160-386"></a><span class="fu">## Cluster 1</span></span>
-<span id="cb160-389"><a href="#cb160-389"></a><span class="in">```{r}</span></span>
-<span id="cb160-390"><a href="#cb160-390"></a><span class="co">#| label: c1-heatmap</span></span>
-<span id="cb160-391"><a href="#cb160-391"></a></span>
-<span id="cb160-392"><a href="#cb160-392"></a>ha <span class="ot">=</span> <span class="fu">HeatmapAnnotation</span>(<span class="at">condition =</span> <span class="fu">rep</span>(condition_order, <span class="at">each =</span> <span class="dv">2</span>),</span>
-<span id="cb160-393"><a href="#cb160-393"></a>                       <span class="at">col =</span> ann_colors)</span>
-<span id="cb160-394"><a href="#cb160-394"></a></span>
-<span id="cb160-395"><a href="#cb160-395"></a></span>
-<span id="cb160-396"><a href="#cb160-396"></a><span class="fu">clusterHeatmap</span>(rld_z, <span class="at">kmeans_cl =</span> kmeans_cl, </span>
-<span id="cb160-397"><a href="#cb160-397"></a>               <span class="at">clust_num =</span> <span class="dv">1</span>,</span>
-<span id="cb160-398"><a href="#cb160-398"></a>               <span class="at">sample_order =</span> sample_order,</span>
-<span id="cb160-399"><a href="#cb160-399"></a>              <span class="at">cluster_rows =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb160-400"><a href="#cb160-400"></a>              <span class="at">font_size =</span> <span class="dv">8</span>,</span>
-<span id="cb160-401"><a href="#cb160-401"></a>              <span class="at">top_annotation =</span> ha</span>
-<span id="cb160-402"><a href="#cb160-402"></a>)</span>
-<span id="cb160-403"><a href="#cb160-403"></a><span class="in">```</span></span>
-<span id="cb160-404"><a href="#cb160-404"></a></span>
-<span id="cb160-405"><a href="#cb160-405"></a>:::{.panel-tabset}</span>
-<span id="cb160-406"><a href="#cb160-406"></a></span>
-<span id="cb160-407"><a href="#cb160-407"></a><span class="fu">### Zscore boxplot</span></span>
-<span id="cb160-408"><a href="#cb160-408"></a></span>
-<span id="cb160-411"><a href="#cb160-411"></a><span class="in">```{r}</span></span>
-<span id="cb160-412"><a href="#cb160-412"></a><span class="co">#| label: c1-zscorebox</span></span>
-<span id="cb160-413"><a href="#cb160-413"></a></span>
-<span id="cb160-414"><a href="#cb160-414"></a><span class="fu">zscore_boxcondition</span>(kmeans_cl, <span class="at">clust_num =</span> <span class="dv">1</span>, </span>
-<span id="cb160-415"><a href="#cb160-415"></a>                    <span class="at">condition_order =</span> condition_order)</span>
-<span id="cb160-416"><a href="#cb160-416"></a><span class="in">```</span></span>
-<span id="cb160-417"><a href="#cb160-417"></a></span>
-<span id="cb160-418"><a href="#cb160-418"></a></span>
-<span id="cb160-419"><a href="#cb160-419"></a></span>
-<span id="cb160-420"><a href="#cb160-420"></a><span class="fu">### GO - c1</span></span>
-<span id="cb160-421"><a href="#cb160-421"></a></span>
-<span id="cb160-424"><a href="#cb160-424"></a><span class="in">```{r}</span></span>
-<span id="cb160-425"><a href="#cb160-425"></a><span class="co">#| label: c1-ego</span></span>
-<span id="cb160-426"><a href="#cb160-426"></a>k3_c1_ego <span class="ot">&lt;-</span> <span class="fu">plotEGO_dm</span>(<span class="at">clust_target_genes =</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">1</span>]]), </span>
-<span id="cb160-427"><a href="#cb160-427"></a>                     <span class="at">universe =</span> <span class="fu">rownames</span>(dds), </span>
-<span id="cb160-428"><a href="#cb160-428"></a>                     <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 1&quot;</span>)</span>
-<span id="cb160-429"><a href="#cb160-429"></a><span class="in">```</span></span>
-<span id="cb160-430"><a href="#cb160-430"></a></span>
-<span id="cb160-431"><a href="#cb160-431"></a>How many enrichments? </span>
-<span id="cb160-432"><a href="#cb160-432"></a></span>
-<span id="cb160-435"><a href="#cb160-435"></a><span class="in">```{r}</span></span>
-<span id="cb160-436"><a href="#cb160-436"></a><span class="fu">nrow</span>(k3_c1_ego)</span>
-<span id="cb160-437"><a href="#cb160-437"></a><span class="in">```</span></span>
-<span id="cb160-438"><a href="#cb160-438"></a></span>
-<span id="cb160-439"><a href="#cb160-439"></a><span class="fu">### Finding enrichments</span></span>
-<span id="cb160-442"><a href="#cb160-442"></a><span class="in">```{r}</span></span>
-<span id="cb160-443"><a href="#cb160-443"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;Wnt&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-444"><a href="#cb160-444"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;hippo&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-445"><a href="#cb160-445"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;signaling&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-446"><a href="#cb160-446"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;mito[st]&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-447"><a href="#cb160-447"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;senes|apop|death&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-448"><a href="#cb160-448"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;neuro&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-449"><a href="#cb160-449"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;transcript|transl&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-450"><a href="#cb160-450"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;migrat|taxi&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-451"><a href="#cb160-451"></a><span class="in">```</span></span>
-<span id="cb160-452"><a href="#cb160-452"></a></span>
-<span id="cb160-453"><a href="#cb160-453"></a></span>
-<span id="cb160-454"><a href="#cb160-454"></a><span class="fu">### Custom EGO</span></span>
-<span id="cb160-457"><a href="#cb160-457"></a><span class="in">```{r}</span></span>
-<span id="cb160-458"><a href="#cb160-458"></a><span class="co">#| label: c1-ego-custom</span></span>
-<span id="cb160-459"><a href="#cb160-459"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;negative regulation of canonical Wnt signaling pathway&quot;</span>, </span>
-<span id="cb160-460"><a href="#cb160-460"></a>                          <span class="co"># signaling</span></span>
-<span id="cb160-461"><a href="#cb160-461"></a>                          <span class="st">&quot;negative regulation of ERBB signaling pathway&quot;</span>,</span>
-<span id="cb160-462"><a href="#cb160-462"></a>                          <span class="st">&quot;negative regulation of epidermal growth factor receptor signaling pathway&quot;</span>,</span>
-<span id="cb160-463"><a href="#cb160-463"></a>                          <span class="st">&quot;insulin receptor signaling pathway&quot;</span>,</span>
-<span id="cb160-464"><a href="#cb160-464"></a>                          <span class="st">&quot;fibroblast growth factor receptor signaling pathway&quot;</span>,</span>
-<span id="cb160-465"><a href="#cb160-465"></a>                          <span class="st">&quot;neuron projection guidance&quot;</span>,</span>
-<span id="cb160-466"><a href="#cb160-466"></a>                          <span class="st">&quot;chemotaxis&quot;</span>)</span>
-<span id="cb160-467"><a href="#cb160-467"></a></span>
-<span id="cb160-468"><a href="#cb160-468"></a><span class="fu">custom_ego</span>(k3_c1_ego, interesting_pathways,</span>
-<span id="cb160-469"><a href="#cb160-469"></a>           <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 1&quot;</span>, </span>
-<span id="cb160-470"><a href="#cb160-470"></a>           <span class="at">font_size =</span> <span class="dv">12</span>)</span>
-<span id="cb160-471"><a href="#cb160-471"></a></span>
-<span id="cb160-472"><a href="#cb160-472"></a>c1_go_table <span class="ot">&lt;-</span> <span class="fu">custom_ego_table</span>(k3_c1_ego, interesting_pathways)</span>
-<span id="cb160-473"><a href="#cb160-473"></a></span>
-<span id="cb160-474"><a href="#cb160-474"></a>c1_go_table</span>
-<span id="cb160-475"><a href="#cb160-475"></a><span class="in">```</span></span>
-<span id="cb160-476"><a href="#cb160-476"></a></span>
-<span id="cb160-479"><a href="#cb160-479"></a><span class="in">```{r}</span></span>
-<span id="cb160-480"><a href="#cb160-480"></a><span class="fu">write_csv</span>(k3_c1_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c1_ego.csv&quot;</span>))</span>
-<span id="cb160-481"><a href="#cb160-481"></a><span class="in">```</span></span>
-<span id="cb160-482"><a href="#cb160-482"></a></span>
-<span id="cb160-483"><a href="#cb160-483"></a></span>
-<span id="cb160-484"><a href="#cb160-484"></a><span class="fu">### KEGG - c1</span></span>
-<span id="cb160-485"><a href="#cb160-485"></a></span>
-<span id="cb160-488"><a href="#cb160-488"></a><span class="in">```{r}</span></span>
-<span id="cb160-489"><a href="#cb160-489"></a><span class="co">#| label: c1-ekegg</span></span>
-<span id="cb160-490"><a href="#cb160-490"></a><span class="co">#| fig-height: 7</span></span>
-<span id="cb160-491"><a href="#cb160-491"></a></span>
-<span id="cb160-492"><a href="#cb160-492"></a><span class="co"># Get entrez ids</span></span>
-<span id="cb160-493"><a href="#cb160-493"></a>c1_entrez <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(ensembl.genes[ensembl.genes<span class="sc">$</span>gene_id <span class="sc">%in%</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">1</span>]]), ]<span class="sc">$</span>entrezgene_id)</span>
-<span id="cb160-494"><a href="#cb160-494"></a></span>
-<span id="cb160-495"><a href="#cb160-495"></a>kegg_universe <span class="ot">=</span> ensembl.genes[ensembl.genes<span class="sc">$</span>ensembl_gene_id <span class="sc">%in%</span> <span class="fu">rownames</span>(dds), ]<span class="sc">$</span>entrezgene_id</span>
-<span id="cb160-496"><a href="#cb160-496"></a></span>
-<span id="cb160-497"><a href="#cb160-497"></a><span class="co"># Run KEGG</span></span>
-<span id="cb160-498"><a href="#cb160-498"></a>k3_c1_ekegg <span class="ot">&lt;-</span> <span class="fu">plotKEGG_dm</span>(c1_entrez, </span>
-<span id="cb160-499"><a href="#cb160-499"></a>                           <span class="at">universe =</span> kegg_universe, <span class="at">title =</span> <span class="st">&quot;KEGG, cluster 1&quot;</span>)</span>
-<span id="cb160-500"><a href="#cb160-500"></a><span class="in">```</span></span>
-<span id="cb160-501"><a href="#cb160-501"></a></span>
-<span id="cb160-504"><a href="#cb160-504"></a><span class="in">```{r}</span></span>
-<span id="cb160-505"><a href="#cb160-505"></a><span class="fu">nrow</span>(k3_c1_ekegg)</span>
-<span id="cb160-506"><a href="#cb160-506"></a></span>
-<span id="cb160-507"><a href="#cb160-507"></a><span class="fu">write_csv</span>(k3_c1_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c1_ekegg.csv&quot;</span>))</span>
-<span id="cb160-508"><a href="#cb160-508"></a><span class="in">```</span></span>
-<span id="cb160-509"><a href="#cb160-509"></a></span>
-<span id="cb160-510"><a href="#cb160-510"></a><span class="fu">### Custom KEGG</span></span>
-<span id="cb160-511"><a href="#cb160-511"></a></span>
-<span id="cb160-514"><a href="#cb160-514"></a><span class="in">```{r}</span></span>
-<span id="cb160-515"><a href="#cb160-515"></a>interesting_pathways <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Endocytosis&quot;</span>, </span>
-<span id="cb160-516"><a href="#cb160-516"></a>                         <span class="st">&quot;MAPK signaling pathway - fly&quot;</span>,</span>
-<span id="cb160-517"><a href="#cb160-517"></a>                         <span class="st">&quot;Hippo signaling pathway - fly&quot;</span>,</span>
-<span id="cb160-518"><a href="#cb160-518"></a>                         <span class="st">&quot;TGF-beta signaling pathway&quot;</span>)</span>
-<span id="cb160-519"><a href="#cb160-519"></a></span>
-<span id="cb160-520"><a href="#cb160-520"></a>c1_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c1_ekegg, </span>
-<span id="cb160-521"><a href="#cb160-521"></a>                                   interesting_pathways)</span>
-<span id="cb160-522"><a href="#cb160-522"></a></span>
-<span id="cb160-523"><a href="#cb160-523"></a>c1_kegg_table</span>
-<span id="cb160-524"><a href="#cb160-524"></a><span class="in">```</span></span>
-<span id="cb160-525"><a href="#cb160-525"></a></span>
-<span id="cb160-526"><a href="#cb160-526"></a></span>
-<span id="cb160-527"><a href="#cb160-527"></a></span>
-<span id="cb160-528"><a href="#cb160-528"></a></span>
-<span id="cb160-529"><a href="#cb160-529"></a><span class="fu">### Summary</span></span>
-<span id="cb160-530"><a href="#cb160-530"></a></span>
-<span id="cb160-531"><a href="#cb160-531"></a></span>
-<span id="cb160-532"><a href="#cb160-532"></a></span>
-<span id="cb160-533"><a href="#cb160-533"></a>:::</span>
-<span id="cb160-534"><a href="#cb160-534"></a></span>
-<span id="cb160-535"><a href="#cb160-535"></a></span>
-<span id="cb160-536"><a href="#cb160-536"></a></span>
-<span id="cb160-537"><a href="#cb160-537"></a><span class="fu">## Cluster 2</span></span>
-<span id="cb160-538"><a href="#cb160-538"></a></span>
-<span id="cb160-541"><a href="#cb160-541"></a><span class="in">```{r}</span></span>
-<span id="cb160-542"><a href="#cb160-542"></a><span class="co">#| label: c2-heatmap</span></span>
-<span id="cb160-543"><a href="#cb160-543"></a><span class="fu">clusterHeatmap</span>(rld_z, <span class="at">kmeans_cl =</span> kmeans_cl, </span>
-<span id="cb160-544"><a href="#cb160-544"></a>               <span class="at">clust_num =</span> <span class="dv">2</span>, <span class="at">sample_order =</span> sample_order,</span>
-<span id="cb160-545"><a href="#cb160-545"></a>              <span class="at">cluster_rows =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb160-546"><a href="#cb160-546"></a>              <span class="at">font_size =</span> <span class="dv">8</span>,</span>
-<span id="cb160-547"><a href="#cb160-547"></a>              <span class="at">top_annotation  =</span> ha)</span>
-<span id="cb160-548"><a href="#cb160-548"></a><span class="in">```</span></span>
-<span id="cb160-549"><a href="#cb160-549"></a></span>
-<span id="cb160-550"><a href="#cb160-550"></a>:::{.panel-tabset}</span>
-<span id="cb160-551"><a href="#cb160-551"></a></span>
-<span id="cb160-552"><a href="#cb160-552"></a><span class="fu">### Zscore-boxplot</span></span>
-<span id="cb160-555"><a href="#cb160-555"></a><span class="in">```{r}</span></span>
-<span id="cb160-556"><a href="#cb160-556"></a><span class="co">#| label: c2-zscorebox</span></span>
-<span id="cb160-557"><a href="#cb160-557"></a><span class="fu">zscore_boxcondition</span>(kmeans_cl, <span class="at">clust_num =</span> <span class="dv">2</span>, condition_order)</span>
-<span id="cb160-558"><a href="#cb160-558"></a><span class="in">```</span></span>
-<span id="cb160-559"><a href="#cb160-559"></a></span>
-<span id="cb160-560"><a href="#cb160-560"></a><span class="fu">### GO - c2</span></span>
-<span id="cb160-561"><a href="#cb160-561"></a></span>
-<span id="cb160-564"><a href="#cb160-564"></a><span class="in">```{r}</span></span>
-<span id="cb160-565"><a href="#cb160-565"></a><span class="co">#| label: c2-ego</span></span>
-<span id="cb160-566"><a href="#cb160-566"></a><span class="co">#| fig-height: 6</span></span>
-<span id="cb160-567"><a href="#cb160-567"></a></span>
-<span id="cb160-568"><a href="#cb160-568"></a>k3_c2_ego <span class="ot">&lt;-</span> <span class="fu">plotEGO_dm</span>(<span class="at">clust_target_genes =</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">2</span>]]), </span>
-<span id="cb160-569"><a href="#cb160-569"></a>                     <span class="at">universe =</span> <span class="fu">rownames</span>(dds), </span>
-<span id="cb160-570"><a href="#cb160-570"></a>                     <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 2&quot;</span>)</span>
-<span id="cb160-571"><a href="#cb160-571"></a><span class="in">```</span></span>
-<span id="cb160-572"><a href="#cb160-572"></a></span>
-<span id="cb160-573"><a href="#cb160-573"></a></span>
-<span id="cb160-574"><a href="#cb160-574"></a><span class="fu">### Finding enrichments</span></span>
-<span id="cb160-577"><a href="#cb160-577"></a><span class="in">```{r}</span></span>
-<span id="cb160-578"><a href="#cb160-578"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;Wnt&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-579"><a href="#cb160-579"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;signal&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-580"><a href="#cb160-580"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;autophag&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-581"><a href="#cb160-581"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;senes|apop|death&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-582"><a href="#cb160-582"></a></span>
-<span id="cb160-583"><a href="#cb160-583"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;adhes&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-584"><a href="#cb160-584"></a></span>
-<span id="cb160-585"><a href="#cb160-585"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;neuro&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-586"><a href="#cb160-586"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;axis|cuti&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-587"><a href="#cb160-587"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;diff|prolif|mitot&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-588"><a href="#cb160-588"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;migrat|taxi&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-589"><a href="#cb160-589"></a><span class="in">```</span></span>
-<span id="cb160-590"><a href="#cb160-590"></a></span>
-<span id="cb160-591"><a href="#cb160-591"></a></span>
-<span id="cb160-592"><a href="#cb160-592"></a><span class="fu">### Custom EGO</span></span>
-<span id="cb160-595"><a href="#cb160-595"></a><span class="in">```{r}</span></span>
-<span id="cb160-596"><a href="#cb160-596"></a><span class="co">#| label: c2-ego-custom</span></span>
-<span id="cb160-597"><a href="#cb160-597"></a></span>
-<span id="cb160-598"><a href="#cb160-598"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb160-599"><a href="#cb160-599"></a>  <span class="co"># Wnt</span></span>
-<span id="cb160-600"><a href="#cb160-600"></a>  <span class="st">&quot;canonical Wnt signaling pathway&quot;</span>,</span>
-<span id="cb160-601"><a href="#cb160-601"></a>  <span class="co"># pathways</span></span>
-<span id="cb160-602"><a href="#cb160-602"></a>  <span class="st">&quot;smoothened signaling pathway&quot;</span>,</span>
-<span id="cb160-603"><a href="#cb160-603"></a>  <span class="st">&quot;Toll signaling pathway&quot;</span>,</span>
-<span id="cb160-604"><a href="#cb160-604"></a>  <span class="co"># axis specification</span></span>
-<span id="cb160-605"><a href="#cb160-605"></a>  <span class="st">&quot;dorsal/ventral axis specification&quot;</span>,</span>
-<span id="cb160-606"><a href="#cb160-606"></a>  <span class="st">&quot;axis specification&quot;</span>,</span>
-<span id="cb160-607"><a href="#cb160-607"></a>  <span class="st">&quot;negative regulation of mitotic cell cycle&quot;</span></span>
-<span id="cb160-608"><a href="#cb160-608"></a>  </span>
-<span id="cb160-609"><a href="#cb160-609"></a>  )</span>
-<span id="cb160-610"><a href="#cb160-610"></a></span>
-<span id="cb160-611"><a href="#cb160-611"></a><span class="fu">custom_ego</span>(k3_c2_ego, interesting_pathways, </span>
-<span id="cb160-612"><a href="#cb160-612"></a>           <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 2&quot;</span>, </span>
-<span id="cb160-613"><a href="#cb160-613"></a>           <span class="at">font_size =</span> <span class="dv">12</span>)</span>
-<span id="cb160-614"><a href="#cb160-614"></a></span>
-<span id="cb160-615"><a href="#cb160-615"></a>c2_go_table <span class="ot">&lt;-</span> <span class="fu">custom_ego_table</span>(k3_c2_ego, interesting_pathways)</span>
-<span id="cb160-616"><a href="#cb160-616"></a></span>
-<span id="cb160-617"><a href="#cb160-617"></a>c2_go_table</span>
-<span id="cb160-618"><a href="#cb160-618"></a><span class="in">```</span></span>
-<span id="cb160-619"><a href="#cb160-619"></a></span>
-<span id="cb160-620"><a href="#cb160-620"></a></span>
-<span id="cb160-621"><a href="#cb160-621"></a></span>
-<span id="cb160-624"><a href="#cb160-624"></a><span class="in">```{r}</span></span>
-<span id="cb160-625"><a href="#cb160-625"></a><span class="fu">write_csv</span>(k3_c2_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ego.csv&quot;</span>))</span>
-<span id="cb160-626"><a href="#cb160-626"></a><span class="in">```</span></span>
-<span id="cb160-627"><a href="#cb160-627"></a></span>
-<span id="cb160-628"><a href="#cb160-628"></a><span class="fu">### KEGG - c2</span></span>
-<span id="cb160-631"><a href="#cb160-631"></a><span class="in">```{r}</span></span>
-<span id="cb160-632"><a href="#cb160-632"></a><span class="co">#| label: c2-ekegg</span></span>
-<span id="cb160-633"><a href="#cb160-633"></a><span class="co">#| fig-height: 10</span></span>
-<span id="cb160-634"><a href="#cb160-634"></a><span class="co"># Get the entrez IDs</span></span>
-<span id="cb160-635"><a href="#cb160-635"></a>c2_entrez <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(ensembl.genes[ensembl.genes<span class="sc">$</span>gene_id <span class="sc">%in%</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">2</span>]]), ]<span class="sc">$</span>entrezgene_id)</span>
-<span id="cb160-636"><a href="#cb160-636"></a><span class="co"># Run KEGG</span></span>
-<span id="cb160-637"><a href="#cb160-637"></a>k3_c2_ekegg <span class="ot">&lt;-</span> <span class="fu">plotKEGG_dm</span>(c2_entrez, </span>
-<span id="cb160-638"><a href="#cb160-638"></a>                           <span class="at">universe =</span> kegg_universe, </span>
-<span id="cb160-639"><a href="#cb160-639"></a>                           <span class="at">title =</span> <span class="st">&quot;KEGG, cluster 2&quot;</span>)</span>
-<span id="cb160-640"><a href="#cb160-640"></a><span class="in">```</span></span>
-<span id="cb160-641"><a href="#cb160-641"></a></span>
-<span id="cb160-644"><a href="#cb160-644"></a><span class="in">```{r}</span></span>
-<span id="cb160-645"><a href="#cb160-645"></a><span class="fu">nrow</span>(k3_c2_ekegg)</span>
-<span id="cb160-646"><a href="#cb160-646"></a></span>
-<span id="cb160-647"><a href="#cb160-647"></a>k3_c2_ekegg</span>
-<span id="cb160-648"><a href="#cb160-648"></a><span class="in">```</span></span>
-<span id="cb160-649"><a href="#cb160-649"></a></span>
-<span id="cb160-650"><a href="#cb160-650"></a></span>
-<span id="cb160-653"><a href="#cb160-653"></a><span class="in">```{r}</span></span>
-<span id="cb160-654"><a href="#cb160-654"></a>interesting_pathways <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Notch signaling pathway&quot;</span>,</span>
-<span id="cb160-655"><a href="#cb160-655"></a>                         <span class="st">&quot;Nucleotide excision repair&quot;</span>)</span>
-<span id="cb160-656"><a href="#cb160-656"></a></span>
-<span id="cb160-657"><a href="#cb160-657"></a>c2_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c2_ekegg, </span>
-<span id="cb160-658"><a href="#cb160-658"></a>                                   interesting_pathways)</span>
-<span id="cb160-659"><a href="#cb160-659"></a></span>
-<span id="cb160-660"><a href="#cb160-660"></a>c2_kegg_table</span>
-<span id="cb160-661"><a href="#cb160-661"></a><span class="in">```</span></span>
-<span id="cb160-662"><a href="#cb160-662"></a></span>
-<span id="cb160-663"><a href="#cb160-663"></a></span>
-<span id="cb160-666"><a href="#cb160-666"></a><span class="in">```{r}</span></span>
-<span id="cb160-667"><a href="#cb160-667"></a><span class="fu">write.csv</span>(k3_c2_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ekegg.csv&quot;</span>))</span>
-<span id="cb160-668"><a href="#cb160-668"></a><span class="in">```</span></span>
-<span id="cb160-669"><a href="#cb160-669"></a></span>
-<span id="cb160-670"><a href="#cb160-670"></a><span class="fu">### Summary</span></span>
-<span id="cb160-671"><a href="#cb160-671"></a></span>
-<span id="cb160-672"><a href="#cb160-672"></a></span>
-<span id="cb160-673"><a href="#cb160-673"></a></span>
-<span id="cb160-674"><a href="#cb160-674"></a>:::</span>
-<span id="cb160-675"><a href="#cb160-675"></a></span>
-<span id="cb160-676"><a href="#cb160-676"></a></span>
-<span id="cb160-677"><a href="#cb160-677"></a></span>
-<span id="cb160-678"><a href="#cb160-678"></a><span class="fu">## Cluster 3</span></span>
-<span id="cb160-679"><a href="#cb160-679"></a></span>
-<span id="cb160-682"><a href="#cb160-682"></a><span class="in">```{r}</span></span>
-<span id="cb160-683"><a href="#cb160-683"></a><span class="co">#| label: c3-heatmap</span></span>
-<span id="cb160-684"><a href="#cb160-684"></a><span class="fu">clusterHeatmap</span>(rld_z, <span class="at">kmeans_cl =</span> kmeans_cl, </span>
-<span id="cb160-685"><a href="#cb160-685"></a>               <span class="at">clust_num =</span> <span class="dv">3</span>, <span class="at">sample_order =</span> sample_order,</span>
-<span id="cb160-686"><a href="#cb160-686"></a>              <span class="at">cluster_rows =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb160-687"><a href="#cb160-687"></a>              <span class="at">font_size =</span> <span class="dv">8</span>, </span>
-<span id="cb160-688"><a href="#cb160-688"></a>              <span class="at">top_annotation =</span> ha)</span>
-<span id="cb160-689"><a href="#cb160-689"></a><span class="in">```</span></span>
-<span id="cb160-690"><a href="#cb160-690"></a></span>
-<span id="cb160-691"><a href="#cb160-691"></a>:::{.panel-tabset}</span>
-<span id="cb160-692"><a href="#cb160-692"></a></span>
-<span id="cb160-693"><a href="#cb160-693"></a><span class="fu">### Zscore boxplot</span></span>
-<span id="cb160-694"><a href="#cb160-694"></a></span>
-<span id="cb160-697"><a href="#cb160-697"></a><span class="in">```{r}</span></span>
-<span id="cb160-698"><a href="#cb160-698"></a><span class="co">#| label: c3-zscorebox</span></span>
-<span id="cb160-699"><a href="#cb160-699"></a></span>
-<span id="cb160-700"><a href="#cb160-700"></a><span class="fu">zscore_boxcondition</span>(kmeans_cl, <span class="at">clust_num =</span> <span class="dv">3</span>, condition_order)</span>
-<span id="cb160-701"><a href="#cb160-701"></a><span class="in">```</span></span>
-<span id="cb160-702"><a href="#cb160-702"></a><span class="fu">### GO - c3</span></span>
-<span id="cb160-703"><a href="#cb160-703"></a></span>
-<span id="cb160-706"><a href="#cb160-706"></a><span class="in">```{r}</span></span>
-<span id="cb160-707"><a href="#cb160-707"></a><span class="co">#| label: c3-ego</span></span>
-<span id="cb160-708"><a href="#cb160-708"></a>k3_c3_ego <span class="ot">&lt;-</span> <span class="fu">plotEGO_dm</span>(<span class="at">clust_target_genes =</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">3</span>]]), </span>
-<span id="cb160-709"><a href="#cb160-709"></a>                     <span class="at">universe =</span> <span class="fu">rownames</span>(dds), </span>
-<span id="cb160-710"><a href="#cb160-710"></a>                     <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 3&quot;</span>)</span>
-<span id="cb160-711"><a href="#cb160-711"></a><span class="in">```</span></span>
-<span id="cb160-712"><a href="#cb160-712"></a></span>
-<span id="cb160-713"><a href="#cb160-713"></a></span>
-<span id="cb160-714"><a href="#cb160-714"></a><span class="fu">### Finding enrichments</span></span>
-<span id="cb160-717"><a href="#cb160-717"></a><span class="in">```{r}</span></span>
-<span id="cb160-718"><a href="#cb160-718"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;Wnt&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-719"><a href="#cb160-719"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;hippo&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-720"><a href="#cb160-720"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;signaling&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-721"><a href="#cb160-721"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;mito[st]&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-722"><a href="#cb160-722"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;senes|apop|death&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-723"><a href="#cb160-723"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;transcript|transl&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-724"><a href="#cb160-724"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;adhes&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-725"><a href="#cb160-725"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;diff|prolif&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-726"><a href="#cb160-726"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;migrat|taxi&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-727"><a href="#cb160-727"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;devel&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-728"><a href="#cb160-728"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;junc&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-729"><a href="#cb160-729"></a><span class="in">```</span></span>
-<span id="cb160-730"><a href="#cb160-730"></a></span>
-<span id="cb160-731"><a href="#cb160-731"></a><span class="fu">### Custom EGO</span></span>
-<span id="cb160-732"><a href="#cb160-732"></a></span>
-<span id="cb160-735"><a href="#cb160-735"></a><span class="in">```{r}</span></span>
-<span id="cb160-736"><a href="#cb160-736"></a><span class="co">#| label: c3-ego-custom</span></span>
-<span id="cb160-737"><a href="#cb160-737"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;cell adhesion&quot;</span>, </span>
-<span id="cb160-738"><a href="#cb160-738"></a>                          <span class="st">&quot;chemotaxis&quot;</span>, </span>
-<span id="cb160-739"><a href="#cb160-739"></a>                          <span class="st">&quot;cuticle development&quot;</span>,</span>
-<span id="cb160-740"><a href="#cb160-740"></a>                          <span class="st">&quot;tight junction assembly&quot;</span>,</span>
-<span id="cb160-741"><a href="#cb160-741"></a>                          <span class="st">&quot;apical junction assembly&quot;</span>,</span>
-<span id="cb160-742"><a href="#cb160-742"></a>                          <span class="st">&quot;septate junction assembly&quot;</span>)</span>
-<span id="cb160-743"><a href="#cb160-743"></a></span>
-<span id="cb160-744"><a href="#cb160-744"></a>c3_go_table <span class="ot">&lt;-</span> <span class="fu">custom_ego_table</span>(k3_c3_ego, interesting_pathways)</span>
-<span id="cb160-745"><a href="#cb160-745"></a></span>
-<span id="cb160-746"><a href="#cb160-746"></a>c3_go_table</span>
-<span id="cb160-747"><a href="#cb160-747"></a></span>
-<span id="cb160-748"><a href="#cb160-748"></a><span class="fu">custom_ego</span>(k3_c3_ego, interesting_pathways, </span>
-<span id="cb160-749"><a href="#cb160-749"></a>           <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 3&quot;</span>)</span>
-<span id="cb160-750"><a href="#cb160-750"></a><span class="in">```</span></span>
-<span id="cb160-751"><a href="#cb160-751"></a></span>
-<span id="cb160-752"><a href="#cb160-752"></a></span>
-<span id="cb160-753"><a href="#cb160-753"></a></span>
-<span id="cb160-756"><a href="#cb160-756"></a><span class="in">```{r}</span></span>
-<span id="cb160-757"><a href="#cb160-757"></a><span class="fu">write_csv</span>(k3_c3_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c3_ego.csv&quot;</span>))</span>
-<span id="cb160-758"><a href="#cb160-758"></a><span class="in">```</span></span>
-<span id="cb160-759"><a href="#cb160-759"></a></span>
-<span id="cb160-760"><a href="#cb160-760"></a><span class="fu">### KEGG - c3</span></span>
-<span id="cb160-761"><a href="#cb160-761"></a></span>
-<span id="cb160-762"><a href="#cb160-762"></a></span>
-<span id="cb160-763"><a href="#cb160-763"></a> Run KEGG enrichment</span>
-<span id="cb160-766"><a href="#cb160-766"></a><span class="in">```{r}</span></span>
-<span id="cb160-767"><a href="#cb160-767"></a><span class="co">#| label: c3-ekegg</span></span>
-<span id="cb160-768"><a href="#cb160-768"></a><span class="co">#| fig-height: 10</span></span>
-<span id="cb160-769"><a href="#cb160-769"></a></span>
-<span id="cb160-770"><a href="#cb160-770"></a>c3_entrez <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(ensembl.genes[ensembl.genes<span class="sc">$</span>gene_id <span class="sc">%in%</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">3</span>]]), ]<span class="sc">$</span>entrezgene_id)</span>
-<span id="cb160-771"><a href="#cb160-771"></a></span>
-<span id="cb160-772"><a href="#cb160-772"></a>k3_c3_ekegg <span class="ot">&lt;-</span> <span class="fu">plotKEGG_dm</span>(c3_entrez, <span class="at">title =</span> <span class="st">&quot;KEGG, cluster 3&quot;</span>, </span>
-<span id="cb160-773"><a href="#cb160-773"></a>                           <span class="at">universe =</span> kegg_universe)</span>
-<span id="cb160-774"><a href="#cb160-774"></a></span>
-<span id="cb160-775"><a href="#cb160-775"></a><span class="in">```</span></span>
-<span id="cb160-776"><a href="#cb160-776"></a></span>
-<span id="cb160-777"><a href="#cb160-777"></a><span class="fu">### Custom KEGG</span></span>
-<span id="cb160-778"><a href="#cb160-778"></a></span>
-<span id="cb160-781"><a href="#cb160-781"></a><span class="in">```{r}</span></span>
-<span id="cb160-782"><a href="#cb160-782"></a>k3_c3_ekegg</span>
-<span id="cb160-783"><a href="#cb160-783"></a><span class="in">```</span></span>
-<span id="cb160-784"><a href="#cb160-784"></a></span>
-<span id="cb160-785"><a href="#cb160-785"></a></span>
-<span id="cb160-788"><a href="#cb160-788"></a><span class="in">```{r}</span></span>
-<span id="cb160-789"><a href="#cb160-789"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ECM-receptor interaction&quot;</span>,</span>
-<span id="cb160-790"><a href="#cb160-790"></a>                          <span class="st">&quot;Neuroactive ligand-receptor interaction&quot;</span>,</span>
-<span id="cb160-791"><a href="#cb160-791"></a>                          <span class="st">&quot;Lysosome&quot;</span>, </span>
-<span id="cb160-792"><a href="#cb160-792"></a>                          <span class="st">&quot;Fatty acid metabolism&quot;</span>)</span>
-<span id="cb160-793"><a href="#cb160-793"></a></span>
-<span id="cb160-794"><a href="#cb160-794"></a>c3_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c3_ekegg, interesting_pathways)</span>
-<span id="cb160-795"><a href="#cb160-795"></a></span>
-<span id="cb160-796"><a href="#cb160-796"></a>c3_kegg_table</span>
-<span id="cb160-797"><a href="#cb160-797"></a><span class="in">```</span></span>
-<span id="cb160-798"><a href="#cb160-798"></a></span>
-<span id="cb160-799"><a href="#cb160-799"></a></span>
-<span id="cb160-800"><a href="#cb160-800"></a><span class="fu">### Summary</span></span>
-<span id="cb160-801"><a href="#cb160-801"></a></span>
-<span id="cb160-802"><a href="#cb160-802"></a></span>
-<span id="cb160-803"><a href="#cb160-803"></a></span>
-<span id="cb160-804"><a href="#cb160-804"></a>:::</span>
-<span id="cb160-805"><a href="#cb160-805"></a></span>
-<span id="cb160-806"><a href="#cb160-806"></a><span class="fu"># Exports</span></span>
-<span id="cb160-807"><a href="#cb160-807"></a></span>
-<span id="cb160-810"><a href="#cb160-810"></a><span class="in">```{r}</span></span>
-<span id="cb160-811"><a href="#cb160-811"></a><span class="co"># to make the plots</span></span>
-<span id="cb160-812"><a href="#cb160-812"></a><span class="fu">saveRDS</span>(rld_z, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;rld_z.RDS&quot;</span>))</span>
-<span id="cb160-813"><a href="#cb160-813"></a><span class="fu">saveRDS</span>(kmeans_cl, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;kmeans_cl.RDS&quot;</span>))</span>
-<span id="cb160-814"><a href="#cb160-814"></a><span class="in">```</span></span>
-<span id="cb160-815"><a href="#cb160-815"></a></span>
-<span id="cb160-816"><a href="#cb160-816"></a><span class="fu"># Export cluster genes for compilation </span></span>
-<span id="cb160-817"><a href="#cb160-817"></a></span>
-<span id="cb160-820"><a href="#cb160-820"></a><span class="in">```{r}</span></span>
-<span id="cb160-821"><a href="#cb160-821"></a><span class="co"># Convert cluster genes to data frame</span></span>
-<span id="cb160-822"><a href="#cb160-822"></a>df_cluster <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">unlist</span>(kmeans_cl))</span>
-<span id="cb160-823"><a href="#cb160-823"></a><span class="fu">colnames</span>(df_cluster) <span class="ot">&lt;-</span> <span class="st">&quot;cluster&quot;</span></span>
-<span id="cb160-824"><a href="#cb160-824"></a>df_cluster<span class="sc">$</span>ensembl_gene_id <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df_cluster)</span>
-<span id="cb160-825"><a href="#cb160-825"></a></span>
-<span id="cb160-826"><a href="#cb160-826"></a><span class="co"># Genes that are expressed but not in cluster - not significant. </span></span>
-<span id="cb160-827"><a href="#cb160-827"></a>not_signif <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dds)[<span class="sc">!</span><span class="fu">rownames</span>(dds) <span class="sc">%in%</span> df_cluster<span class="sc">$</span>ensembl_gene_id]</span>
-<span id="cb160-828"><a href="#cb160-828"></a>df_ns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ensembl_gene_id =</span> not_signif, </span>
-<span id="cb160-829"><a href="#cb160-829"></a>                    <span class="at">cluster =</span> <span class="st">&quot;NS&quot;</span>)</span>
-<span id="cb160-830"><a href="#cb160-830"></a></span>
-<span id="cb160-831"><a href="#cb160-831"></a><span class="co"># Combine both</span></span>
-<span id="cb160-832"><a href="#cb160-832"></a>df_combined <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_cluster, df_ns)</span>
-<span id="cb160-833"><a href="#cb160-833"></a></span>
-<span id="cb160-834"><a href="#cb160-834"></a><span class="co"># Add gene biotype</span></span>
-<span id="cb160-835"><a href="#cb160-835"></a>df_combined<span class="sc">$</span>gene_biotype <span class="ot">=</span> ensembl.genes<span class="sc">$</span>gene_biotype[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb160-836"><a href="#cb160-836"></a>                                                            ensembl.genes<span class="sc">$</span>gene_id)]</span>
-<span id="cb160-837"><a href="#cb160-837"></a><span class="co"># Add gene name</span></span>
-<span id="cb160-838"><a href="#cb160-838"></a>df_combined<span class="sc">$</span>gene_name <span class="ot">=</span> ensembl.genes<span class="sc">$</span>external_gene_name[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb160-839"><a href="#cb160-839"></a>                                                               ensembl.genes<span class="sc">$</span>gene_id)]</span>
-<span id="cb160-840"><a href="#cb160-840"></a></span>
-<span id="cb160-841"><a href="#cb160-841"></a><span class="co"># Add pvalue</span></span>
-<span id="cb160-842"><a href="#cb160-842"></a>df_combined<span class="sc">$</span>pvalue <span class="ot">=</span> res_lrt<span class="sc">$</span>pvalue[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb160-843"><a href="#cb160-843"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
-<span id="cb160-844"><a href="#cb160-844"></a><span class="co"># Add padj</span></span>
-<span id="cb160-845"><a href="#cb160-845"></a>df_combined<span class="sc">$</span>padj <span class="ot">=</span> res_lrt<span class="sc">$</span>padj[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
-<span id="cb160-846"><a href="#cb160-846"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
-<span id="cb160-847"><a href="#cb160-847"></a></span>
-<span id="cb160-848"><a href="#cb160-848"></a><span class="co"># Arrange</span></span>
-<span id="cb160-849"><a href="#cb160-849"></a>df_combined <span class="ot">&lt;-</span> df_combined <span class="sc">%&gt;%</span> </span>
-<span id="cb160-850"><a href="#cb160-850"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ensembl_gene_id, pvalue, padj, </span>
-<span id="cb160-851"><a href="#cb160-851"></a>                gene_biotype, gene_name, cluster)</span>
-<span id="cb160-852"><a href="#cb160-852"></a></span>
-<span id="cb160-853"><a href="#cb160-853"></a><span class="co"># Export</span></span>
-<span id="cb160-854"><a href="#cb160-854"></a><span class="fu">write.csv</span>(df_combined, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;cluster_genes.csv&quot;</span>),</span>
-<span id="cb160-855"><a href="#cb160-855"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb160-856"><a href="#cb160-856"></a><span class="in">```</span></span>
-<span id="cb160-857"><a href="#cb160-857"></a></span>
-<span id="cb160-858"><a href="#cb160-858"></a><span class="fu"># Summary and discussion</span></span>
-<span id="cb160-859"><a href="#cb160-859"></a></span>
-<span id="cb160-860"><a href="#cb160-860"></a></span>
-<span id="cb160-861"><a href="#cb160-861"></a><span class="fu"># Session info</span></span>
-<span id="cb160-862"><a href="#cb160-862"></a></span>
-<span id="cb160-865"><a href="#cb160-865"></a><span class="in">```{r}</span></span>
-<span id="cb160-866"><a href="#cb160-866"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb160-867"><a href="#cb160-867"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb163" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb163-1"><a href="#cb163-1"></a><span class="co">---</span></span>
+<span id="cb163-2"><a href="#cb163-2"></a><span class="an">title:</span><span class="co"> 03_clust</span></span>
+<span id="cb163-3"><a href="#cb163-3"></a><span class="an">author:</span><span class="co"> Qian Hui TAN</span></span>
+<span id="cb163-4"><a href="#cb163-4"></a><span class="an">date:</span><span class="co"> &#39;`r format(Sys.time(), &quot;%d %B %Y&quot;)`&#39;</span></span>
+<span id="cb163-5"><a href="#cb163-5"></a><span class="an">format:</span></span>
+<span id="cb163-6"><a href="#cb163-6"></a><span class="co">  html: </span></span>
+<span id="cb163-7"><a href="#cb163-7"></a><span class="co">    keep-md: true</span></span>
+<span id="cb163-8"><a href="#cb163-8"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb163-9"><a href="#cb163-9"></a><span class="co">    df-print: kable</span></span>
+<span id="cb163-10"><a href="#cb163-10"></a><span class="co">    toc: true</span></span>
+<span id="cb163-11"><a href="#cb163-11"></a><span class="co">    toc-depth: 4</span></span>
+<span id="cb163-12"><a href="#cb163-12"></a><span class="co">    code-fold: true</span></span>
+<span id="cb163-13"><a href="#cb163-13"></a><span class="co">    number-sections: true</span></span>
+<span id="cb163-14"><a href="#cb163-14"></a><span class="co">    smooth-scroll: true</span></span>
+<span id="cb163-15"><a href="#cb163-15"></a><span class="co">    code-tools: true</span></span>
+<span id="cb163-16"><a href="#cb163-16"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb163-17"><a href="#cb163-17"></a><span class="co">  gfm: </span></span>
+<span id="cb163-18"><a href="#cb163-18"></a><span class="co">    df-print: kable</span></span>
+<span id="cb163-19"><a href="#cb163-19"></a><span class="co">    toc: true </span></span>
+<span id="cb163-20"><a href="#cb163-20"></a><span class="co">    toc-depth: 4</span></span>
+<span id="cb163-21"><a href="#cb163-21"></a><span class="co">    number-sections: true</span></span>
+<span id="cb163-22"><a href="#cb163-22"></a><span class="co">    prefer-html: true</span></span>
+<span id="cb163-23"><a href="#cb163-23"></a><span class="co">---</span></span>
+<span id="cb163-26"><a href="#cb163-26"></a><span class="in">```{r}</span></span>
+<span id="cb163-27"><a href="#cb163-27"></a><span class="co">#| label = &quot;setup&quot;,</span></span>
+<span id="cb163-28"><a href="#cb163-28"></a><span class="co">#| include = FALSE</span></span>
+<span id="cb163-29"><a href="#cb163-29"></a></span>
+<span id="cb163-30"><a href="#cb163-30"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, fig.height=8, </span></span>
+<span id="cb163-31"><a href="#cb163-31"></a>                      <span class="at">fig.path=</span><span class="st">&#39;../figures/03_clust/&#39;</span>,</span>
+<span id="cb163-32"><a href="#cb163-32"></a>                      <span class="at">dev=</span><span class="fu">c</span>(<span class="st">&quot;png&quot;</span>))</span>
+<span id="cb163-33"><a href="#cb163-33"></a></span>
+<span id="cb163-34"><a href="#cb163-34"></a><span class="in">```</span></span>
+<span id="cb163-35"><a href="#cb163-35"></a></span>
+<span id="cb163-36"><a href="#cb163-36"></a><span class="fu"># Clustering </span></span>
+<span id="cb163-37"><a href="#cb163-37"></a></span>
+<span id="cb163-38"><a href="#cb163-38"></a></span>
+<span id="cb163-39"><a href="#cb163-39"></a><span class="fu"># Setup</span></span>
+<span id="cb163-40"><a href="#cb163-40"></a></span>
+<span id="cb163-43"><a href="#cb163-43"></a><span class="in">```{r}</span></span>
+<span id="cb163-44"><a href="#cb163-44"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb163-45"><a href="#cb163-45"></a>    <span class="fu">library</span>(DESeq2)</span>
+<span id="cb163-46"><a href="#cb163-46"></a>    <span class="fu">library</span>(pheatmap)</span>
+<span id="cb163-47"><a href="#cb163-47"></a>    <span class="fu">library</span>(clusterProfiler)</span>
+<span id="cb163-48"><a href="#cb163-48"></a>    <span class="fu">library</span>(ComplexHeatmap)</span>
+<span id="cb163-49"><a href="#cb163-49"></a>    <span class="fu">library</span>(circlize)</span>
+<span id="cb163-50"><a href="#cb163-50"></a>    <span class="fu">library</span>(org.Dm.eg.db)</span>
+<span id="cb163-51"><a href="#cb163-51"></a>    <span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb163-52"><a href="#cb163-52"></a>    <span class="co"># General tidying up</span></span>
+<span id="cb163-53"><a href="#cb163-53"></a>    <span class="fu">library</span>(tidyverse)</span>
+<span id="cb163-54"><a href="#cb163-54"></a>    <span class="fu">library</span>(reshape2)</span>
+<span id="cb163-55"><a href="#cb163-55"></a>    <span class="fu">library</span>(knitr)</span>
+<span id="cb163-56"><a href="#cb163-56"></a>    <span class="fu">library</span>(grid)</span>
+<span id="cb163-57"><a href="#cb163-57"></a>})</span>
+<span id="cb163-58"><a href="#cb163-58"></a></span>
+<span id="cb163-59"><a href="#cb163-59"></a><span class="fu">source</span>(<span class="st">&quot;../../scripts/R/clustering_functions.R&quot;</span>)</span>
+<span id="cb163-60"><a href="#cb163-60"></a><span class="fu">source</span>(<span class="st">&quot;../../scripts/R/go_kegg_functions.R&quot;</span>)</span>
+<span id="cb163-61"><a href="#cb163-61"></a><span class="in">```</span></span>
+<span id="cb163-62"><a href="#cb163-62"></a></span>
+<span id="cb163-63"><a href="#cb163-63"></a></span>
+<span id="cb163-66"><a href="#cb163-66"></a><span class="in">```{r}</span></span>
+<span id="cb163-67"><a href="#cb163-67"></a><span class="co"># Initialize the starting seed</span></span>
+<span id="cb163-68"><a href="#cb163-68"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb163-69"><a href="#cb163-69"></a><span class="in">```</span></span>
+<span id="cb163-70"><a href="#cb163-70"></a></span>
+<span id="cb163-73"><a href="#cb163-73"></a><span class="in">```{r}</span></span>
+<span id="cb163-74"><a href="#cb163-74"></a><span class="do">## If the output directory doesn&#39;t exist, create it</span></span>
+<span id="cb163-75"><a href="#cb163-75"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;../output/03_clust&quot;</span>)){</span>
+<span id="cb163-76"><a href="#cb163-76"></a>  <span class="fu">dir.create</span>(<span class="st">&quot;../output/03_clust&quot;</span>)</span>
+<span id="cb163-77"><a href="#cb163-77"></a>}</span>
+<span id="cb163-78"><a href="#cb163-78"></a></span>
+<span id="cb163-79"><a href="#cb163-79"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&quot;../output/03_clust/&quot;</span></span>
+<span id="cb163-80"><a href="#cb163-80"></a><span class="in">```</span></span>
+<span id="cb163-81"><a href="#cb163-81"></a></span>
+<span id="cb163-82"><a href="#cb163-82"></a><span class="fu"># Read in data</span></span>
+<span id="cb163-83"><a href="#cb163-83"></a></span>
+<span id="cb163-84"><a href="#cb163-84"></a>Run DESeq: </span>
+<span id="cb163-85"><a href="#cb163-85"></a></span>
+<span id="cb163-88"><a href="#cb163-88"></a><span class="in">```{r}</span></span>
+<span id="cb163-89"><a href="#cb163-89"></a>dds <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../output/01_QC/dds_filt.RDS&quot;</span>)</span>
+<span id="cb163-90"><a href="#cb163-90"></a>ensembl.genes<span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../output/01_QC/ensembl_genes.RDS&quot;</span>)</span>
+<span id="cb163-91"><a href="#cb163-91"></a>lfc.threshold <span class="ot">=</span> <span class="fu">log2</span>(<span class="fl">1.5</span>)</span>
+<span id="cb163-92"><a href="#cb163-92"></a></span>
+<span id="cb163-93"><a href="#cb163-93"></a><span class="co"># Removing lowly expressed genes, only to be done once at the start of the differential expression step</span></span>
+<span id="cb163-94"><a href="#cb163-94"></a>filter <span class="ot">=</span> <span class="fu">apply</span>(<span class="fu">counts</span>(dds, <span class="at">normalized =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>, <span class="cf">function</span>(x){ <span class="fu">mean</span>(x) <span class="sc">&gt;=</span> <span class="dv">10</span> })</span>
+<span id="cb163-95"><a href="#cb163-95"></a>dds <span class="ot">=</span> dds[filter, ]</span>
+<span id="cb163-96"><a href="#cb163-96"></a></span>
+<span id="cb163-97"><a href="#cb163-97"></a><span class="co"># Check for typos - number of samples in sample_order and colData(dds) should be </span></span>
+<span id="cb163-98"><a href="#cb163-98"></a></span>
+<span id="cb163-99"><a href="#cb163-99"></a>  <span class="fu">design</span>(dds)</span>
+<span id="cb163-100"><a href="#cb163-100"></a>  </span>
+<span id="cb163-101"><a href="#cb163-101"></a>  dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds, <span class="at">test =</span> <span class="st">&quot;LRT&quot;</span>, </span>
+<span id="cb163-102"><a href="#cb163-102"></a>               <span class="at">reduced =</span> <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb163-103"><a href="#cb163-103"></a>               <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb163-104"><a href="#cb163-104"></a>  </span>
+<span id="cb163-105"><a href="#cb163-105"></a>  <span class="co"># use blind = FALSE to account for experimental design</span></span>
+<span id="cb163-106"><a href="#cb163-106"></a>  rld <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds, <span class="at">blind =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-107"><a href="#cb163-107"></a></span>
+<span id="cb163-108"><a href="#cb163-108"></a><span class="in">```</span></span>
+<span id="cb163-109"><a href="#cb163-109"></a></span>
+<span id="cb163-112"><a href="#cb163-112"></a><span class="in">```{r}</span></span>
+<span id="cb163-113"><a href="#cb163-113"></a><span class="co"># export dds_filt</span></span>
+<span id="cb163-114"><a href="#cb163-114"></a></span>
+<span id="cb163-115"><a href="#cb163-115"></a><span class="fu">saveRDS</span>(dds, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;dds_filt.RDS&quot;</span>))</span>
+<span id="cb163-116"><a href="#cb163-116"></a><span class="in">```</span></span>
+<span id="cb163-117"><a href="#cb163-117"></a></span>
+<span id="cb163-118"><a href="#cb163-118"></a></span>
+<span id="cb163-119"><a href="#cb163-119"></a><span class="fu"># Likelihood ratio test</span></span>
+<span id="cb163-120"><a href="#cb163-120"></a></span>
+<span id="cb163-123"><a href="#cb163-123"></a><span class="in">```{r}</span></span>
+<span id="cb163-124"><a href="#cb163-124"></a>res_lrt <span class="ot">&lt;-</span> <span class="fu">results</span>(dds)</span>
+<span id="cb163-125"><a href="#cb163-125"></a></span>
+<span id="cb163-126"><a href="#cb163-126"></a>res_lrt<span class="sc">$</span>gene_biotype<span class="ot">=</span> ensembl.genes<span class="sc">$</span>gene_biotype[<span class="fu">match</span>(<span class="fu">row.names</span>(res_lrt), ensembl.genes<span class="sc">$</span>gene_id)]</span>
+<span id="cb163-127"><a href="#cb163-127"></a>res_lrt<span class="sc">$</span>external_gene_name<span class="ot">=</span> ensembl.genes<span class="sc">$</span>external_gene_name[<span class="fu">match</span>(<span class="fu">row.names</span>(res_lrt), ensembl.genes<span class="sc">$</span>gene_id)]</span>
+<span id="cb163-128"><a href="#cb163-128"></a></span>
+<span id="cb163-129"><a href="#cb163-129"></a>res_lrt<span class="sc">$</span>ensembl_gene_id <span class="ot">=</span> <span class="fu">rownames</span>(res_lrt)</span>
+<span id="cb163-130"><a href="#cb163-130"></a><span class="co">#head(res_lrt)</span></span>
+<span id="cb163-131"><a href="#cb163-131"></a><span class="in">```</span></span>
+<span id="cb163-132"><a href="#cb163-132"></a></span>
+<span id="cb163-135"><a href="#cb163-135"></a><span class="in">```{r}</span></span>
+<span id="cb163-136"><a href="#cb163-136"></a><span class="co">#| label: hist-pval</span></span>
+<span id="cb163-137"><a href="#cb163-137"></a><span class="fu">hist</span>(res_lrt<span class="sc">$</span>pvalue)</span>
+<span id="cb163-138"><a href="#cb163-138"></a><span class="in">```</span></span>
+<span id="cb163-139"><a href="#cb163-139"></a></span>
+<span id="cb163-140"><a href="#cb163-140"></a>Number of significant genes (padj &lt; 0.1):</span>
+<span id="cb163-141"><a href="#cb163-141"></a></span>
+<span id="cb163-144"><a href="#cb163-144"></a><span class="in">```{r}</span></span>
+<span id="cb163-145"><a href="#cb163-145"></a><span class="fu">sum</span>(res_lrt<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb163-146"><a href="#cb163-146"></a><span class="in">```</span></span>
+<span id="cb163-147"><a href="#cb163-147"></a></span>
+<span id="cb163-148"><a href="#cb163-148"></a></span>
+<span id="cb163-151"><a href="#cb163-151"></a><span class="in">```{r}</span></span>
+<span id="cb163-152"><a href="#cb163-152"></a><span class="fu">summary</span>(res_lrt)</span>
+<span id="cb163-153"><a href="#cb163-153"></a><span class="in">```</span></span>
+<span id="cb163-154"><a href="#cb163-154"></a></span>
+<span id="cb163-155"><a href="#cb163-155"></a>Checking coefficients: </span>
+<span id="cb163-158"><a href="#cb163-158"></a><span class="in">```{r}</span></span>
+<span id="cb163-159"><a href="#cb163-159"></a><span class="fu">resultsNames</span>(dds)</span>
+<span id="cb163-160"><a href="#cb163-160"></a><span class="in">```</span></span>
+<span id="cb163-161"><a href="#cb163-161"></a></span>
+<span id="cb163-162"><a href="#cb163-162"></a></span>
+<span id="cb163-165"><a href="#cb163-165"></a><span class="in">```{r}</span></span>
+<span id="cb163-166"><a href="#cb163-166"></a><span class="co"># Select significant results</span></span>
+<span id="cb163-167"><a href="#cb163-167"></a>significant_results <span class="ot">=</span> res_lrt[<span class="sc">!</span><span class="fu">is.na</span>(res_lrt<span class="sc">$</span>padj) <span class="sc">&amp;</span> </span>
+<span id="cb163-168"><a href="#cb163-168"></a>                                    res_lrt<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span>, ]</span>
+<span id="cb163-169"><a href="#cb163-169"></a></span>
+<span id="cb163-170"><a href="#cb163-170"></a></span>
+<span id="cb163-171"><a href="#cb163-171"></a>rld_signif <span class="ot">=</span> <span class="fu">assay</span>(rld)[<span class="fu">rownames</span>(significant_results), ]</span>
+<span id="cb163-172"><a href="#cb163-172"></a></span>
+<span id="cb163-173"><a href="#cb163-173"></a>rld_z <span class="ot">=</span> <span class="fu">t</span>(<span class="fu">apply</span>(rld_signif, <span class="dv">1</span>, <span class="cf">function</span>(x){ (x <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">/</span> <span class="fu">sd</span>(x)}))</span>
+<span id="cb163-174"><a href="#cb163-174"></a><span class="in">```</span></span>
+<span id="cb163-175"><a href="#cb163-175"></a></span>
+<span id="cb163-176"><a href="#cb163-176"></a></span>
+<span id="cb163-177"><a href="#cb163-177"></a></span>
+<span id="cb163-178"><a href="#cb163-178"></a><span class="fu"># Determining optimal number of clusters</span></span>
+<span id="cb163-179"><a href="#cb163-179"></a></span>
+<span id="cb163-180"><a href="#cb163-180"></a>:::{.panel-tabset}</span>
+<span id="cb163-181"><a href="#cb163-181"></a></span>
+<span id="cb163-182"><a href="#cb163-182"></a><span class="fu">## Elbow plot</span></span>
+<span id="cb163-183"><a href="#cb163-183"></a></span>
+<span id="cb163-186"><a href="#cb163-186"></a><span class="in">```{r}</span></span>
+<span id="cb163-187"><a href="#cb163-187"></a><span class="co">#| label: optclust-wss</span></span>
+<span id="cb163-188"><a href="#cb163-188"></a><span class="co">#| warning: FALSE</span></span>
+<span id="cb163-189"><a href="#cb163-189"></a></span>
+<span id="cb163-190"><a href="#cb163-190"></a>k.max <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb163-191"><a href="#cb163-191"></a>wss <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>k.max,</span>
+<span id="cb163-192"><a href="#cb163-192"></a> <span class="cf">function</span>(k){<span class="fu">kmeans</span>(rld_z, k, <span class="at">nstart=</span><span class="dv">100</span>,</span>
+<span id="cb163-193"><a href="#cb163-193"></a> <span class="at">iter.max =</span> <span class="dv">20</span> )<span class="sc">$</span>tot.withinss})</span>
+<span id="cb163-194"><a href="#cb163-194"></a></span>
+<span id="cb163-195"><a href="#cb163-195"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>k.max, wss,</span>
+<span id="cb163-196"><a href="#cb163-196"></a> <span class="at">type=</span><span class="st">&quot;b&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb163-197"><a href="#cb163-197"></a> <span class="at">xlab=</span><span class="st">&quot;Number of clusters K&quot;</span>,</span>
+<span id="cb163-198"><a href="#cb163-198"></a> <span class="at">ylab=</span><span class="st">&quot;Total within-clusters sum of squares&quot;</span>)</span>
+<span id="cb163-199"><a href="#cb163-199"></a><span class="in">```</span></span>
+<span id="cb163-200"><a href="#cb163-200"></a></span>
+<span id="cb163-201"><a href="#cb163-201"></a></span>
+<span id="cb163-202"><a href="#cb163-202"></a><span class="fu">## Average silhouette width</span></span>
+<span id="cb163-203"><a href="#cb163-203"></a></span>
+<span id="cb163-204"><a href="#cb163-204"></a>We perform kmeans for 2-10 clusters, and calculate the average silhouette width for each kmeans. </span>
+<span id="cb163-205"><a href="#cb163-205"></a></span>
+<span id="cb163-206"><a href="#cb163-206"></a></span>
+<span id="cb163-207"><a href="#cb163-207"></a>What&#39;s the best k (maximum average silhouette width)?</span>
+<span id="cb163-210"><a href="#cb163-210"></a><span class="in">```{r}</span></span>
+<span id="cb163-211"><a href="#cb163-211"></a><span class="co">#| warning: false</span></span>
+<span id="cb163-212"><a href="#cb163-212"></a><span class="co"># We will use different methods and try 1-10 clusters.</span></span>
+<span id="cb163-213"><a href="#cb163-213"></a></span>
+<span id="cb163-214"><a href="#cb163-214"></a>d <span class="ot">&lt;-</span> <span class="fu">dist</span>(rld_z)</span>
+<span id="cb163-215"><a href="#cb163-215"></a><span class="fu">summary</span>(d)</span>
+<span id="cb163-216"><a href="#cb163-216"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb163-217"><a href="#cb163-217"></a>ks <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb163-218"><a href="#cb163-218"></a>ASW <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ks, <span class="at">FUN =</span> <span class="cf">function</span>(k) {</span>
+<span id="cb163-219"><a href="#cb163-219"></a>  fpc<span class="sc">::</span><span class="fu">cluster.stats</span>(d, <span class="fu">kmeans</span>(rld_z, <span class="at">centers=</span>k, <span class="at">nstart =</span> <span class="dv">5</span>)<span class="sc">$</span>cluster)<span class="sc">$</span>avg.silwidth</span>
+<span id="cb163-220"><a href="#cb163-220"></a>  })</span>
+<span id="cb163-221"><a href="#cb163-221"></a></span>
+<span id="cb163-222"><a href="#cb163-222"></a>best_k <span class="ot">&lt;-</span> ks[<span class="fu">which.max</span>(ASW)]</span>
+<span id="cb163-223"><a href="#cb163-223"></a>best_k</span>
+<span id="cb163-224"><a href="#cb163-224"></a><span class="in">```</span></span>
+<span id="cb163-225"><a href="#cb163-225"></a></span>
+<span id="cb163-226"><a href="#cb163-226"></a><span class="fu">### ASW </span></span>
+<span id="cb163-227"><a href="#cb163-227"></a></span>
+<span id="cb163-230"><a href="#cb163-230"></a><span class="in">```{r}</span></span>
+<span id="cb163-231"><a href="#cb163-231"></a><span class="co">#| label: optclust-asw</span></span>
+<span id="cb163-232"><a href="#cb163-232"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(ks, ASW), <span class="fu">aes</span>(ks, ASW)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb163-233"><a href="#cb163-233"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> best_k, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb163-234"><a href="#cb163-234"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Average silhouette width for varying k clusters&quot;</span>)</span>
+<span id="cb163-235"><a href="#cb163-235"></a><span class="in">```</span></span>
+<span id="cb163-236"><a href="#cb163-236"></a></span>
+<span id="cb163-237"><a href="#cb163-237"></a>2 clusters looks best, but silhouette width constantly decreases until we reach k = 7. Which means either 3 clusters, or 8 clusters. </span>
+<span id="cb163-238"><a href="#cb163-238"></a></span>
+<span id="cb163-239"><a href="#cb163-239"></a><span class="fu">## Silhouette plots</span></span>
+<span id="cb163-240"><a href="#cb163-240"></a></span>
+<span id="cb163-241"><a href="#cb163-241"></a><span class="fu">### k = 3</span></span>
+<span id="cb163-244"><a href="#cb163-244"></a><span class="in">```{r}</span></span>
+<span id="cb163-245"><a href="#cb163-245"></a><span class="co">#| label: silplot-k3</span></span>
+<span id="cb163-246"><a href="#cb163-246"></a><span class="co">#| warning: FALSE</span></span>
+<span id="cb163-247"><a href="#cb163-247"></a>k3_coef <span class="ot">&lt;-</span> <span class="fu">cluster_kmeans</span>(<span class="at">rld_z =</span> rld_z, <span class="at">nclust =</span> <span class="dv">3</span>, </span>
+<span id="cb163-248"><a href="#cb163-248"></a>                          <span class="at">plot_sil =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb163-249"><a href="#cb163-249"></a><span class="in">```</span></span>
+<span id="cb163-250"><a href="#cb163-250"></a></span>
+<span id="cb163-251"><a href="#cb163-251"></a>:::</span>
+<span id="cb163-252"><a href="#cb163-252"></a></span>
+<span id="cb163-253"><a href="#cb163-253"></a><span class="fu"># Heatmap</span></span>
+<span id="cb163-254"><a href="#cb163-254"></a></span>
+<span id="cb163-257"><a href="#cb163-257"></a><span class="in">```{r}</span></span>
+<span id="cb163-258"><a href="#cb163-258"></a><span class="co">#| label: heatmap-setup</span></span>
+<span id="cb163-259"><a href="#cb163-259"></a></span>
+<span id="cb163-260"><a href="#cb163-260"></a>sample_order <span class="ot">=</span> <span class="fu">colData</span>(dds)<span class="sc">$</span>sample_id</span>
+<span id="cb163-261"><a href="#cb163-261"></a>condition_order <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Ctrl&quot;</span>, </span>
+<span id="cb163-262"><a href="#cb163-262"></a>                     <span class="st">&quot;W4_OE&quot;</span>, <span class="st">&quot;O1_OE&quot;</span>, <span class="st">&quot;O1W4_OE&quot;</span>, <span class="st">&quot;O2_KO&quot;</span>, </span>
+<span id="cb163-263"><a href="#cb163-263"></a>                     <span class="st">&quot;W4_KO&quot;</span>, <span class="st">&quot;O1_KO&quot;</span>, <span class="st">&quot;O1W4_KO&quot;</span>, <span class="st">&quot;O2W4_KO&quot;</span>, <span class="st">&quot;O1O2_KO&quot;</span>)</span>
+<span id="cb163-264"><a href="#cb163-264"></a></span>
+<span id="cb163-265"><a href="#cb163-265"></a><span class="do">#### ------ Row and column annotations ----- ####</span></span>
+<span id="cb163-266"><a href="#cb163-266"></a>row_ann <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(k3_coef<span class="sc">$</span>cluster)</span>
+<span id="cb163-267"><a href="#cb163-267"></a><span class="fu">colnames</span>(row_ann) <span class="ot">=</span> <span class="st">&quot;cluster&quot;</span></span>
+<span id="cb163-268"><a href="#cb163-268"></a>row_ann<span class="sc">$</span>cluster <span class="ot">=</span> <span class="fu">factor</span>(row_ann<span class="sc">$</span>cluster, </span>
+<span id="cb163-269"><a href="#cb163-269"></a>                         <span class="at">levels =</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(row_ann<span class="sc">$</span>cluster)))</span>
+<span id="cb163-270"><a href="#cb163-270"></a></span>
+<span id="cb163-271"><a href="#cb163-271"></a>col_ann <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">condition =</span> <span class="fu">rep</span>(condition_order, <span class="at">each =</span> <span class="dv">2</span>))</span>
+<span id="cb163-272"><a href="#cb163-272"></a><span class="fu">rownames</span>(col_ann) <span class="ot">&lt;-</span> sample_order</span>
+<span id="cb163-273"><a href="#cb163-273"></a></span>
+<span id="cb163-274"><a href="#cb163-274"></a>ann_colors <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb163-275"><a href="#cb163-275"></a>    <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">&quot;Ctrl&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey30&quot;</span>,</span>
+<span id="cb163-276"><a href="#cb163-276"></a>                  <span class="co"># OE</span></span>
+<span id="cb163-277"><a href="#cb163-277"></a>                  <span class="st">&quot;W4_OE&quot;</span> <span class="ot">=</span> <span class="st">&#39;#00362d&#39;</span>, <span class="st">&quot;O1_OE&quot;</span> <span class="ot">=</span> <span class="st">&#39;#3a6f60&#39;</span>, </span>
+<span id="cb163-278"><a href="#cb163-278"></a>                  <span class="st">&quot;O1W4_OE&quot;</span> <span class="ot">=</span> <span class="st">&#39;#80ac95&#39;</span>, <span class="st">&quot;O2_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#ceebcb&#39;</span>,</span>
+<span id="cb163-279"><a href="#cb163-279"></a>                  <span class="co"># KO</span></span>
+<span id="cb163-280"><a href="#cb163-280"></a>                  <span class="st">&quot;W4_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#552200&#39;</span>, <span class="st">&quot;O1_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#834a25&#39;</span>, </span>
+<span id="cb163-281"><a href="#cb163-281"></a>                  <span class="st">&quot;O1W4_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#b0764f&#39;</span>, <span class="st">&quot;O2W4_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#daa680&#39;</span>, </span>
+<span id="cb163-282"><a href="#cb163-282"></a>                  <span class="st">&quot;O1O2_KO&quot;</span> <span class="ot">=</span> <span class="st">&#39;#ffdab8&#39;</span>),</span>
+<span id="cb163-283"><a href="#cb163-283"></a>    <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey90&quot;</span>, <span class="st">&quot;2&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey70&quot;</span>, <span class="st">&quot;3&quot;</span> <span class="ot">=</span> <span class="st">&quot;grey10&quot;</span>)</span>
+<span id="cb163-284"><a href="#cb163-284"></a>)</span>
+<span id="cb163-285"><a href="#cb163-285"></a></span>
+<span id="cb163-286"><a href="#cb163-286"></a>col_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;darkgrey&quot;</span>, <span class="co">#Ctrls</span></span>
+<span id="cb163-287"><a href="#cb163-287"></a>                <span class="st">&#39;#00362d&#39;</span>, <span class="st">&#39;#3a6f60&#39;</span>, <span class="st">&#39;#80ac95&#39;</span>, <span class="st">&#39;#ceebcb&#39;</span>, <span class="co">#OEs</span></span>
+<span id="cb163-288"><a href="#cb163-288"></a>                <span class="st">&#39;#552200&#39;</span>, <span class="st">&#39;#834a25&#39;</span>, <span class="st">&#39;#b0764f&#39;</span>, <span class="st">&#39;#daa680&#39;</span>, <span class="st">&#39;#ffdab8&#39;</span> <span class="co">#KOs</span></span>
+<span id="cb163-289"><a href="#cb163-289"></a>                )</span>
+<span id="cb163-290"><a href="#cb163-290"></a></span>
+<span id="cb163-291"><a href="#cb163-291"></a><span class="in">```</span></span>
+<span id="cb163-292"><a href="#cb163-292"></a></span>
+<span id="cb163-293"><a href="#cb163-293"></a></span>
+<span id="cb163-294"><a href="#cb163-294"></a><span class="fu">## Kmeans, 3 clusters</span></span>
+<span id="cb163-297"><a href="#cb163-297"></a><span class="in">```{r}</span></span>
+<span id="cb163-298"><a href="#cb163-298"></a><span class="co">#| label: heatmap-k3</span></span>
+<span id="cb163-299"><a href="#cb163-299"></a></span>
+<span id="cb163-300"><a href="#cb163-300"></a>heatmap_plot <span class="ot">&lt;-</span> <span class="fu">plot_kmeans_heatmap</span>(rld_z, <span class="at">k_coef =</span> k3_coef,  </span>
+<span id="cb163-301"><a href="#cb163-301"></a>                    <span class="at">sample_order =</span> sample_order,</span>
+<span id="cb163-302"><a href="#cb163-302"></a>                    <span class="at">labels_col =</span> condition_order, </span>
+<span id="cb163-303"><a href="#cb163-303"></a>                    <span class="at">show_rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb163-304"><a href="#cb163-304"></a>                    <span class="at">show_colnames =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb163-305"><a href="#cb163-305"></a>                    <span class="at">annotation_row =</span> row_ann, </span>
+<span id="cb163-306"><a href="#cb163-306"></a>                    <span class="at">annotation_col =</span> col_ann,</span>
+<span id="cb163-307"><a href="#cb163-307"></a>                    <span class="at">annotation_colors =</span> ann_colors)</span>
+<span id="cb163-308"><a href="#cb163-308"></a></span>
+<span id="cb163-309"><a href="#cb163-309"></a>heatmap_plot</span>
+<span id="cb163-310"><a href="#cb163-310"></a><span class="in">```</span></span>
+<span id="cb163-311"><a href="#cb163-311"></a></span>
+<span id="cb163-312"><a href="#cb163-312"></a></span>
+<span id="cb163-315"><a href="#cb163-315"></a><span class="in">```{r}</span></span>
+<span id="cb163-316"><a href="#cb163-316"></a><span class="fu">saveRDS</span>(heatmap_plot, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;heatmap_plot.RDS&quot;</span>))</span>
+<span id="cb163-317"><a href="#cb163-317"></a><span class="in">```</span></span>
+<span id="cb163-318"><a href="#cb163-318"></a></span>
+<span id="cb163-319"><a href="#cb163-319"></a></span>
+<span id="cb163-320"><a href="#cb163-320"></a></span>
+<span id="cb163-323"><a href="#cb163-323"></a><span class="in">```{r}</span></span>
+<span id="cb163-324"><a href="#cb163-324"></a><span class="co"># save this</span></span>
+<span id="cb163-325"><a href="#cb163-325"></a></span>
+<span id="cb163-326"><a href="#cb163-326"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">c</span>(<span class="st">&quot;../figures/03_clust/heatmap.pdf&quot;</span>),</span>
+<span id="cb163-327"><a href="#cb163-327"></a>       <span class="at">plot =</span> heatmap_plot,</span>
+<span id="cb163-328"><a href="#cb163-328"></a>       <span class="at">width =</span> <span class="dv">210</span>, </span>
+<span id="cb163-329"><a href="#cb163-329"></a>       <span class="at">height =</span> <span class="dv">145</span>, </span>
+<span id="cb163-330"><a href="#cb163-330"></a>       <span class="at">device =</span> <span class="st">&quot;pdf&quot;</span>,</span>
+<span id="cb163-331"><a href="#cb163-331"></a>       <span class="at">dpi =</span> <span class="st">&quot;retina&quot;</span>,</span>
+<span id="cb163-332"><a href="#cb163-332"></a>       <span class="at">units =</span> <span class="fu">c</span>(<span class="st">&quot;mm&quot;</span>))</span>
+<span id="cb163-333"><a href="#cb163-333"></a><span class="in">```</span></span>
+<span id="cb163-334"><a href="#cb163-334"></a></span>
+<span id="cb163-335"><a href="#cb163-335"></a></span>
+<span id="cb163-338"><a href="#cb163-338"></a><span class="in">```{r}</span></span>
+<span id="cb163-339"><a href="#cb163-339"></a><span class="co">#| label: heatmap-nolegend</span></span>
+<span id="cb163-340"><a href="#cb163-340"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb163-341"><a href="#cb163-341"></a><span class="co">#| fig-height: 5</span></span>
+<span id="cb163-342"><a href="#cb163-342"></a></span>
+<span id="cb163-343"><a href="#cb163-343"></a><span class="co"># Same plot as above, but remove the legend</span></span>
+<span id="cb163-344"><a href="#cb163-344"></a></span>
+<span id="cb163-345"><a href="#cb163-345"></a>heatmap_noleg <span class="ot">&lt;-</span> <span class="fu">plot_kmeans_heatmap</span>(rld_z, <span class="at">k_coef =</span> k3_coef,  </span>
+<span id="cb163-346"><a href="#cb163-346"></a>                    <span class="at">sample_order =</span> sample_order,</span>
+<span id="cb163-347"><a href="#cb163-347"></a>                    <span class="at">labels_col =</span> condition_order, </span>
+<span id="cb163-348"><a href="#cb163-348"></a>                    <span class="at">show_rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb163-349"><a href="#cb163-349"></a>                    <span class="at">show_colnames =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb163-350"><a href="#cb163-350"></a>                    <span class="at">annotation_row =</span> row_ann, </span>
+<span id="cb163-351"><a href="#cb163-351"></a>                    <span class="at">annotation_col =</span> col_ann,</span>
+<span id="cb163-352"><a href="#cb163-352"></a>                    <span class="at">annotation_colors =</span> ann_colors, </span>
+<span id="cb163-353"><a href="#cb163-353"></a>                    <span class="at">annotation_legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-354"><a href="#cb163-354"></a></span>
+<span id="cb163-355"><a href="#cb163-355"></a>heatmap_noleg</span>
+<span id="cb163-356"><a href="#cb163-356"></a><span class="in">```</span></span>
+<span id="cb163-357"><a href="#cb163-357"></a></span>
+<span id="cb163-360"><a href="#cb163-360"></a><span class="in">```{r}</span></span>
+<span id="cb163-361"><a href="#cb163-361"></a><span class="fu">saveRDS</span>(heatmap_noleg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;heatmap_noleg.RDS&quot;</span>))</span>
+<span id="cb163-362"><a href="#cb163-362"></a><span class="in">```</span></span>
+<span id="cb163-363"><a href="#cb163-363"></a></span>
+<span id="cb163-364"><a href="#cb163-364"></a></span>
+<span id="cb163-365"><a href="#cb163-365"></a></span>
+<span id="cb163-368"><a href="#cb163-368"></a><span class="in">```{r}</span></span>
+<span id="cb163-369"><a href="#cb163-369"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">c</span>(<span class="st">&quot;../figures/03_clust/heatmap_noleg.svg&quot;</span>),</span>
+<span id="cb163-370"><a href="#cb163-370"></a>       <span class="at">plot =</span> heatmap_noleg,</span>
+<span id="cb163-371"><a href="#cb163-371"></a>       <span class="at">width =</span> <span class="dv">210</span>, </span>
+<span id="cb163-372"><a href="#cb163-372"></a>       <span class="at">height =</span> <span class="dv">145</span>, </span>
+<span id="cb163-373"><a href="#cb163-373"></a>       <span class="at">device =</span> <span class="st">&quot;svg&quot;</span>,</span>
+<span id="cb163-374"><a href="#cb163-374"></a>       <span class="at">units =</span> <span class="fu">c</span>(<span class="st">&quot;mm&quot;</span>))</span>
+<span id="cb163-375"><a href="#cb163-375"></a><span class="in">```</span></span>
+<span id="cb163-376"><a href="#cb163-376"></a></span>
+<span id="cb163-377"><a href="#cb163-377"></a></span>
+<span id="cb163-380"><a href="#cb163-380"></a><span class="in">```{r}</span></span>
+<span id="cb163-381"><a href="#cb163-381"></a>kmeans_cl <span class="ot">&lt;-</span> <span class="fu">get_cluster_genes</span>(k3_coef, <span class="at">nclust =</span> <span class="dv">3</span>)</span>
+<span id="cb163-382"><a href="#cb163-382"></a><span class="in">```</span></span>
+<span id="cb163-383"><a href="#cb163-383"></a></span>
+<span id="cb163-384"><a href="#cb163-384"></a></span>
+<span id="cb163-385"><a href="#cb163-385"></a></span>
+<span id="cb163-386"><a href="#cb163-386"></a><span class="fu">## Cluster 1</span></span>
+<span id="cb163-389"><a href="#cb163-389"></a><span class="in">```{r}</span></span>
+<span id="cb163-390"><a href="#cb163-390"></a><span class="co">#| label: c1-heatmap</span></span>
+<span id="cb163-391"><a href="#cb163-391"></a></span>
+<span id="cb163-392"><a href="#cb163-392"></a>ha <span class="ot">=</span> <span class="fu">HeatmapAnnotation</span>(<span class="at">condition =</span> <span class="fu">rep</span>(condition_order, <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb163-393"><a href="#cb163-393"></a>                       <span class="at">col =</span> ann_colors)</span>
+<span id="cb163-394"><a href="#cb163-394"></a></span>
+<span id="cb163-395"><a href="#cb163-395"></a></span>
+<span id="cb163-396"><a href="#cb163-396"></a><span class="fu">clusterHeatmap</span>(rld_z, <span class="at">kmeans_cl =</span> kmeans_cl, </span>
+<span id="cb163-397"><a href="#cb163-397"></a>               <span class="at">clust_num =</span> <span class="dv">1</span>,</span>
+<span id="cb163-398"><a href="#cb163-398"></a>               <span class="at">sample_order =</span> sample_order,</span>
+<span id="cb163-399"><a href="#cb163-399"></a>              <span class="at">cluster_rows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb163-400"><a href="#cb163-400"></a>              <span class="at">font_size =</span> <span class="dv">8</span>,</span>
+<span id="cb163-401"><a href="#cb163-401"></a>              <span class="at">top_annotation =</span> ha</span>
+<span id="cb163-402"><a href="#cb163-402"></a>)</span>
+<span id="cb163-403"><a href="#cb163-403"></a><span class="in">```</span></span>
+<span id="cb163-404"><a href="#cb163-404"></a></span>
+<span id="cb163-405"><a href="#cb163-405"></a>:::{.panel-tabset}</span>
+<span id="cb163-406"><a href="#cb163-406"></a></span>
+<span id="cb163-407"><a href="#cb163-407"></a><span class="fu">### Zscore boxplot</span></span>
+<span id="cb163-408"><a href="#cb163-408"></a></span>
+<span id="cb163-411"><a href="#cb163-411"></a><span class="in">```{r}</span></span>
+<span id="cb163-412"><a href="#cb163-412"></a><span class="co">#| label: c1-zscorebox</span></span>
+<span id="cb163-413"><a href="#cb163-413"></a></span>
+<span id="cb163-414"><a href="#cb163-414"></a><span class="fu">zscore_boxcondition</span>(kmeans_cl, <span class="at">clust_num =</span> <span class="dv">1</span>, </span>
+<span id="cb163-415"><a href="#cb163-415"></a>                    <span class="at">condition_order =</span> condition_order)</span>
+<span id="cb163-416"><a href="#cb163-416"></a><span class="in">```</span></span>
+<span id="cb163-417"><a href="#cb163-417"></a></span>
+<span id="cb163-418"><a href="#cb163-418"></a></span>
+<span id="cb163-419"><a href="#cb163-419"></a></span>
+<span id="cb163-420"><a href="#cb163-420"></a><span class="fu">### GO - c1</span></span>
+<span id="cb163-421"><a href="#cb163-421"></a></span>
+<span id="cb163-424"><a href="#cb163-424"></a><span class="in">```{r}</span></span>
+<span id="cb163-425"><a href="#cb163-425"></a><span class="co">#| label: c1-ego</span></span>
+<span id="cb163-426"><a href="#cb163-426"></a>k3_c1_ego <span class="ot">&lt;-</span> <span class="fu">plotEGO_dm</span>(<span class="at">clust_target_genes =</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">1</span>]]), </span>
+<span id="cb163-427"><a href="#cb163-427"></a>                     <span class="at">universe =</span> <span class="fu">rownames</span>(dds), </span>
+<span id="cb163-428"><a href="#cb163-428"></a>                     <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 1&quot;</span>)</span>
+<span id="cb163-429"><a href="#cb163-429"></a><span class="in">```</span></span>
+<span id="cb163-430"><a href="#cb163-430"></a></span>
+<span id="cb163-431"><a href="#cb163-431"></a>How many enrichments? </span>
+<span id="cb163-432"><a href="#cb163-432"></a></span>
+<span id="cb163-435"><a href="#cb163-435"></a><span class="in">```{r}</span></span>
+<span id="cb163-436"><a href="#cb163-436"></a><span class="fu">nrow</span>(k3_c1_ego)</span>
+<span id="cb163-437"><a href="#cb163-437"></a><span class="in">```</span></span>
+<span id="cb163-438"><a href="#cb163-438"></a></span>
+<span id="cb163-439"><a href="#cb163-439"></a><span class="fu">### Finding enrichments</span></span>
+<span id="cb163-442"><a href="#cb163-442"></a><span class="in">```{r}</span></span>
+<span id="cb163-443"><a href="#cb163-443"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;Wnt&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-444"><a href="#cb163-444"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;hippo&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-445"><a href="#cb163-445"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;signaling&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-446"><a href="#cb163-446"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;mito[st]&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-447"><a href="#cb163-447"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;senes|apop|death&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-448"><a href="#cb163-448"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;neuro&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-449"><a href="#cb163-449"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;transcript|transl&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-450"><a href="#cb163-450"></a><span class="fu">findEGO</span>(k3_c1_ego, <span class="st">&quot;migrat|taxi&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-451"><a href="#cb163-451"></a><span class="in">```</span></span>
+<span id="cb163-452"><a href="#cb163-452"></a></span>
+<span id="cb163-453"><a href="#cb163-453"></a></span>
+<span id="cb163-454"><a href="#cb163-454"></a><span class="fu">### Custom EGO</span></span>
+<span id="cb163-457"><a href="#cb163-457"></a><span class="in">```{r}</span></span>
+<span id="cb163-458"><a href="#cb163-458"></a><span class="co">#| label: c1-ego-custom</span></span>
+<span id="cb163-459"><a href="#cb163-459"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;negative regulation of canonical Wnt signaling pathway&quot;</span>, </span>
+<span id="cb163-460"><a href="#cb163-460"></a>                          <span class="co"># signaling</span></span>
+<span id="cb163-461"><a href="#cb163-461"></a>                          <span class="st">&quot;negative regulation of ERBB signaling pathway&quot;</span>,</span>
+<span id="cb163-462"><a href="#cb163-462"></a>                          <span class="st">&quot;negative regulation of epidermal growth factor receptor signaling pathway&quot;</span>,</span>
+<span id="cb163-463"><a href="#cb163-463"></a>                          <span class="st">&quot;insulin receptor signaling pathway&quot;</span>,</span>
+<span id="cb163-464"><a href="#cb163-464"></a>                          <span class="st">&quot;fibroblast growth factor receptor signaling pathway&quot;</span>,</span>
+<span id="cb163-465"><a href="#cb163-465"></a>                          <span class="st">&quot;neuron projection guidance&quot;</span>,</span>
+<span id="cb163-466"><a href="#cb163-466"></a>                          <span class="st">&quot;chemotaxis&quot;</span>)</span>
+<span id="cb163-467"><a href="#cb163-467"></a></span>
+<span id="cb163-468"><a href="#cb163-468"></a><span class="fu">custom_ego</span>(k3_c1_ego, interesting_pathways,</span>
+<span id="cb163-469"><a href="#cb163-469"></a>           <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 1&quot;</span>, </span>
+<span id="cb163-470"><a href="#cb163-470"></a>           <span class="at">font_size =</span> <span class="dv">12</span>)</span>
+<span id="cb163-471"><a href="#cb163-471"></a></span>
+<span id="cb163-472"><a href="#cb163-472"></a>c1_go_table <span class="ot">&lt;-</span> <span class="fu">custom_ego_table</span>(k3_c1_ego, interesting_pathways)</span>
+<span id="cb163-473"><a href="#cb163-473"></a></span>
+<span id="cb163-474"><a href="#cb163-474"></a>c1_go_table</span>
+<span id="cb163-475"><a href="#cb163-475"></a><span class="in">```</span></span>
+<span id="cb163-476"><a href="#cb163-476"></a></span>
+<span id="cb163-479"><a href="#cb163-479"></a><span class="in">```{r}</span></span>
+<span id="cb163-480"><a href="#cb163-480"></a><span class="fu">write_csv</span>(k3_c1_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c1_ego.csv&quot;</span>))</span>
+<span id="cb163-481"><a href="#cb163-481"></a><span class="in">```</span></span>
+<span id="cb163-482"><a href="#cb163-482"></a></span>
+<span id="cb163-483"><a href="#cb163-483"></a></span>
+<span id="cb163-484"><a href="#cb163-484"></a><span class="fu">### KEGG - c1</span></span>
+<span id="cb163-485"><a href="#cb163-485"></a></span>
+<span id="cb163-488"><a href="#cb163-488"></a><span class="in">```{r}</span></span>
+<span id="cb163-489"><a href="#cb163-489"></a><span class="co">#| label: c1-ekegg</span></span>
+<span id="cb163-490"><a href="#cb163-490"></a><span class="co">#| fig-height: 7</span></span>
+<span id="cb163-491"><a href="#cb163-491"></a></span>
+<span id="cb163-492"><a href="#cb163-492"></a><span class="co"># Get entrez ids</span></span>
+<span id="cb163-493"><a href="#cb163-493"></a>c1_entrez <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(ensembl.genes[ensembl.genes<span class="sc">$</span>gene_id <span class="sc">%in%</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">1</span>]]), ]<span class="sc">$</span>entrezgene_id)</span>
+<span id="cb163-494"><a href="#cb163-494"></a></span>
+<span id="cb163-495"><a href="#cb163-495"></a>kegg_universe <span class="ot">=</span> ensembl.genes[ensembl.genes<span class="sc">$</span>ensembl_gene_id <span class="sc">%in%</span> <span class="fu">rownames</span>(dds), ]<span class="sc">$</span>entrezgene_id</span>
+<span id="cb163-496"><a href="#cb163-496"></a></span>
+<span id="cb163-497"><a href="#cb163-497"></a><span class="co"># Run KEGG</span></span>
+<span id="cb163-498"><a href="#cb163-498"></a>k3_c1_ekegg <span class="ot">&lt;-</span> <span class="fu">plotKEGG_dm</span>(c1_entrez, </span>
+<span id="cb163-499"><a href="#cb163-499"></a>                           <span class="at">universe =</span> kegg_universe, <span class="at">title =</span> <span class="st">&quot;KEGG, cluster 1&quot;</span>)</span>
+<span id="cb163-500"><a href="#cb163-500"></a><span class="in">```</span></span>
+<span id="cb163-501"><a href="#cb163-501"></a></span>
+<span id="cb163-504"><a href="#cb163-504"></a><span class="in">```{r}</span></span>
+<span id="cb163-505"><a href="#cb163-505"></a><span class="fu">nrow</span>(k3_c1_ekegg)</span>
+<span id="cb163-506"><a href="#cb163-506"></a></span>
+<span id="cb163-507"><a href="#cb163-507"></a><span class="fu">write.csv</span>(k3_c1_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c1_ekegg.csv&quot;</span>),</span>
+<span id="cb163-508"><a href="#cb163-508"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-509"><a href="#cb163-509"></a><span class="in">```</span></span>
+<span id="cb163-510"><a href="#cb163-510"></a></span>
+<span id="cb163-511"><a href="#cb163-511"></a><span class="fu">### Custom KEGG</span></span>
+<span id="cb163-512"><a href="#cb163-512"></a></span>
+<span id="cb163-515"><a href="#cb163-515"></a><span class="in">```{r}</span></span>
+<span id="cb163-516"><a href="#cb163-516"></a>interesting_pathways <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Endocytosis&quot;</span>, </span>
+<span id="cb163-517"><a href="#cb163-517"></a>                         <span class="st">&quot;MAPK signaling pathway - fly&quot;</span>,</span>
+<span id="cb163-518"><a href="#cb163-518"></a>                         <span class="st">&quot;Hippo signaling pathway - fly&quot;</span>,</span>
+<span id="cb163-519"><a href="#cb163-519"></a>                         <span class="st">&quot;TGF-beta signaling pathway&quot;</span>)</span>
+<span id="cb163-520"><a href="#cb163-520"></a></span>
+<span id="cb163-521"><a href="#cb163-521"></a>c1_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c1_ekegg, </span>
+<span id="cb163-522"><a href="#cb163-522"></a>                                   interesting_pathways)</span>
+<span id="cb163-523"><a href="#cb163-523"></a></span>
+<span id="cb163-524"><a href="#cb163-524"></a>c1_kegg_table</span>
+<span id="cb163-525"><a href="#cb163-525"></a><span class="in">```</span></span>
+<span id="cb163-526"><a href="#cb163-526"></a></span>
+<span id="cb163-527"><a href="#cb163-527"></a></span>
+<span id="cb163-528"><a href="#cb163-528"></a></span>
+<span id="cb163-529"><a href="#cb163-529"></a></span>
+<span id="cb163-530"><a href="#cb163-530"></a><span class="fu">### Summary</span></span>
+<span id="cb163-531"><a href="#cb163-531"></a></span>
+<span id="cb163-532"><a href="#cb163-532"></a></span>
+<span id="cb163-533"><a href="#cb163-533"></a></span>
+<span id="cb163-534"><a href="#cb163-534"></a>:::</span>
+<span id="cb163-535"><a href="#cb163-535"></a></span>
+<span id="cb163-536"><a href="#cb163-536"></a></span>
+<span id="cb163-537"><a href="#cb163-537"></a></span>
+<span id="cb163-538"><a href="#cb163-538"></a><span class="fu">## Cluster 2</span></span>
+<span id="cb163-539"><a href="#cb163-539"></a></span>
+<span id="cb163-542"><a href="#cb163-542"></a><span class="in">```{r}</span></span>
+<span id="cb163-543"><a href="#cb163-543"></a><span class="co">#| label: c2-heatmap</span></span>
+<span id="cb163-544"><a href="#cb163-544"></a><span class="fu">clusterHeatmap</span>(rld_z, <span class="at">kmeans_cl =</span> kmeans_cl, </span>
+<span id="cb163-545"><a href="#cb163-545"></a>               <span class="at">clust_num =</span> <span class="dv">2</span>, <span class="at">sample_order =</span> sample_order,</span>
+<span id="cb163-546"><a href="#cb163-546"></a>              <span class="at">cluster_rows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb163-547"><a href="#cb163-547"></a>              <span class="at">font_size =</span> <span class="dv">8</span>,</span>
+<span id="cb163-548"><a href="#cb163-548"></a>              <span class="at">top_annotation  =</span> ha)</span>
+<span id="cb163-549"><a href="#cb163-549"></a><span class="in">```</span></span>
+<span id="cb163-550"><a href="#cb163-550"></a></span>
+<span id="cb163-551"><a href="#cb163-551"></a>:::{.panel-tabset}</span>
+<span id="cb163-552"><a href="#cb163-552"></a></span>
+<span id="cb163-553"><a href="#cb163-553"></a><span class="fu">### Zscore-boxplot</span></span>
+<span id="cb163-556"><a href="#cb163-556"></a><span class="in">```{r}</span></span>
+<span id="cb163-557"><a href="#cb163-557"></a><span class="co">#| label: c2-zscorebox</span></span>
+<span id="cb163-558"><a href="#cb163-558"></a><span class="fu">zscore_boxcondition</span>(kmeans_cl, <span class="at">clust_num =</span> <span class="dv">2</span>, condition_order)</span>
+<span id="cb163-559"><a href="#cb163-559"></a><span class="in">```</span></span>
+<span id="cb163-560"><a href="#cb163-560"></a></span>
+<span id="cb163-561"><a href="#cb163-561"></a><span class="fu">### GO - c2</span></span>
+<span id="cb163-562"><a href="#cb163-562"></a></span>
+<span id="cb163-565"><a href="#cb163-565"></a><span class="in">```{r}</span></span>
+<span id="cb163-566"><a href="#cb163-566"></a><span class="co">#| label: c2-ego</span></span>
+<span id="cb163-567"><a href="#cb163-567"></a><span class="co">#| fig-height: 6</span></span>
+<span id="cb163-568"><a href="#cb163-568"></a></span>
+<span id="cb163-569"><a href="#cb163-569"></a>k3_c2_ego <span class="ot">&lt;-</span> <span class="fu">plotEGO_dm</span>(<span class="at">clust_target_genes =</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">2</span>]]), </span>
+<span id="cb163-570"><a href="#cb163-570"></a>                     <span class="at">universe =</span> <span class="fu">rownames</span>(dds), </span>
+<span id="cb163-571"><a href="#cb163-571"></a>                     <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 2&quot;</span>)</span>
+<span id="cb163-572"><a href="#cb163-572"></a><span class="in">```</span></span>
+<span id="cb163-573"><a href="#cb163-573"></a></span>
+<span id="cb163-574"><a href="#cb163-574"></a></span>
+<span id="cb163-575"><a href="#cb163-575"></a><span class="fu">### Finding enrichments</span></span>
+<span id="cb163-578"><a href="#cb163-578"></a><span class="in">```{r}</span></span>
+<span id="cb163-579"><a href="#cb163-579"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;Wnt&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-580"><a href="#cb163-580"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;signal&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-581"><a href="#cb163-581"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;autophag&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-582"><a href="#cb163-582"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;senes|apop|death&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-583"><a href="#cb163-583"></a></span>
+<span id="cb163-584"><a href="#cb163-584"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;adhes&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-585"><a href="#cb163-585"></a></span>
+<span id="cb163-586"><a href="#cb163-586"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;neuro&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-587"><a href="#cb163-587"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;axis|cuti&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-588"><a href="#cb163-588"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;diff|prolif|mitot&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-589"><a href="#cb163-589"></a><span class="fu">findEGO</span>(k3_c2_ego, <span class="st">&quot;migrat|taxi&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-590"><a href="#cb163-590"></a><span class="in">```</span></span>
+<span id="cb163-591"><a href="#cb163-591"></a></span>
+<span id="cb163-592"><a href="#cb163-592"></a></span>
+<span id="cb163-593"><a href="#cb163-593"></a><span class="fu">### Custom EGO</span></span>
+<span id="cb163-596"><a href="#cb163-596"></a><span class="in">```{r}</span></span>
+<span id="cb163-597"><a href="#cb163-597"></a><span class="co">#| label: c2-ego-custom</span></span>
+<span id="cb163-598"><a href="#cb163-598"></a></span>
+<span id="cb163-599"><a href="#cb163-599"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb163-600"><a href="#cb163-600"></a>  <span class="co"># Wnt</span></span>
+<span id="cb163-601"><a href="#cb163-601"></a>  <span class="st">&quot;canonical Wnt signaling pathway&quot;</span>,</span>
+<span id="cb163-602"><a href="#cb163-602"></a>  <span class="co"># pathways</span></span>
+<span id="cb163-603"><a href="#cb163-603"></a>  <span class="st">&quot;smoothened signaling pathway&quot;</span>,</span>
+<span id="cb163-604"><a href="#cb163-604"></a>  <span class="st">&quot;Toll signaling pathway&quot;</span>,</span>
+<span id="cb163-605"><a href="#cb163-605"></a>  <span class="co"># axis specification</span></span>
+<span id="cb163-606"><a href="#cb163-606"></a>  <span class="st">&quot;dorsal/ventral axis specification&quot;</span>,</span>
+<span id="cb163-607"><a href="#cb163-607"></a>  <span class="st">&quot;axis specification&quot;</span>,</span>
+<span id="cb163-608"><a href="#cb163-608"></a>  <span class="st">&quot;negative regulation of mitotic cell cycle&quot;</span></span>
+<span id="cb163-609"><a href="#cb163-609"></a>  </span>
+<span id="cb163-610"><a href="#cb163-610"></a>  )</span>
+<span id="cb163-611"><a href="#cb163-611"></a></span>
+<span id="cb163-612"><a href="#cb163-612"></a><span class="fu">custom_ego</span>(k3_c2_ego, interesting_pathways, </span>
+<span id="cb163-613"><a href="#cb163-613"></a>           <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 2&quot;</span>, </span>
+<span id="cb163-614"><a href="#cb163-614"></a>           <span class="at">font_size =</span> <span class="dv">12</span>)</span>
+<span id="cb163-615"><a href="#cb163-615"></a></span>
+<span id="cb163-616"><a href="#cb163-616"></a>c2_go_table <span class="ot">&lt;-</span> <span class="fu">custom_ego_table</span>(k3_c2_ego, interesting_pathways)</span>
+<span id="cb163-617"><a href="#cb163-617"></a></span>
+<span id="cb163-618"><a href="#cb163-618"></a>c2_go_table</span>
+<span id="cb163-619"><a href="#cb163-619"></a><span class="in">```</span></span>
+<span id="cb163-620"><a href="#cb163-620"></a></span>
+<span id="cb163-621"><a href="#cb163-621"></a></span>
+<span id="cb163-622"><a href="#cb163-622"></a></span>
+<span id="cb163-625"><a href="#cb163-625"></a><span class="in">```{r}</span></span>
+<span id="cb163-626"><a href="#cb163-626"></a><span class="fu">write.csv</span>(k3_c2_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ego.csv&quot;</span>))</span>
+<span id="cb163-627"><a href="#cb163-627"></a><span class="in">```</span></span>
+<span id="cb163-628"><a href="#cb163-628"></a></span>
+<span id="cb163-629"><a href="#cb163-629"></a><span class="fu">### KEGG - c2</span></span>
+<span id="cb163-632"><a href="#cb163-632"></a><span class="in">```{r}</span></span>
+<span id="cb163-633"><a href="#cb163-633"></a><span class="co">#| label: c2-ekegg</span></span>
+<span id="cb163-634"><a href="#cb163-634"></a><span class="co">#| fig-height: 10</span></span>
+<span id="cb163-635"><a href="#cb163-635"></a><span class="co"># Get the entrez IDs</span></span>
+<span id="cb163-636"><a href="#cb163-636"></a>c2_entrez <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(ensembl.genes[ensembl.genes<span class="sc">$</span>gene_id <span class="sc">%in%</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">2</span>]]), ]<span class="sc">$</span>entrezgene_id)</span>
+<span id="cb163-637"><a href="#cb163-637"></a><span class="co"># Run KEGG</span></span>
+<span id="cb163-638"><a href="#cb163-638"></a>k3_c2_ekegg <span class="ot">&lt;-</span> <span class="fu">plotKEGG_dm</span>(c2_entrez, </span>
+<span id="cb163-639"><a href="#cb163-639"></a>                           <span class="at">universe =</span> kegg_universe, </span>
+<span id="cb163-640"><a href="#cb163-640"></a>                           <span class="at">title =</span> <span class="st">&quot;KEGG, cluster 2&quot;</span>)</span>
+<span id="cb163-641"><a href="#cb163-641"></a><span class="in">```</span></span>
+<span id="cb163-642"><a href="#cb163-642"></a></span>
+<span id="cb163-645"><a href="#cb163-645"></a><span class="in">```{r}</span></span>
+<span id="cb163-646"><a href="#cb163-646"></a><span class="fu">nrow</span>(k3_c2_ekegg)</span>
+<span id="cb163-647"><a href="#cb163-647"></a></span>
+<span id="cb163-648"><a href="#cb163-648"></a>k3_c2_ekegg</span>
+<span id="cb163-649"><a href="#cb163-649"></a><span class="in">```</span></span>
+<span id="cb163-650"><a href="#cb163-650"></a></span>
+<span id="cb163-651"><a href="#cb163-651"></a></span>
+<span id="cb163-654"><a href="#cb163-654"></a><span class="in">```{r}</span></span>
+<span id="cb163-655"><a href="#cb163-655"></a>interesting_pathways <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Notch signaling pathway&quot;</span>,</span>
+<span id="cb163-656"><a href="#cb163-656"></a>                         <span class="st">&quot;Nucleotide excision repair&quot;</span>)</span>
+<span id="cb163-657"><a href="#cb163-657"></a></span>
+<span id="cb163-658"><a href="#cb163-658"></a>c2_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c2_ekegg, </span>
+<span id="cb163-659"><a href="#cb163-659"></a>                                   interesting_pathways)</span>
+<span id="cb163-660"><a href="#cb163-660"></a></span>
+<span id="cb163-661"><a href="#cb163-661"></a>c2_kegg_table</span>
+<span id="cb163-662"><a href="#cb163-662"></a><span class="in">```</span></span>
+<span id="cb163-663"><a href="#cb163-663"></a></span>
+<span id="cb163-664"><a href="#cb163-664"></a></span>
+<span id="cb163-667"><a href="#cb163-667"></a><span class="in">```{r}</span></span>
+<span id="cb163-668"><a href="#cb163-668"></a><span class="fu">write.csv</span>(k3_c2_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c2_ekegg.csv&quot;</span>),</span>
+<span id="cb163-669"><a href="#cb163-669"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-670"><a href="#cb163-670"></a><span class="in">```</span></span>
+<span id="cb163-671"><a href="#cb163-671"></a></span>
+<span id="cb163-672"><a href="#cb163-672"></a><span class="fu">### Summary</span></span>
+<span id="cb163-673"><a href="#cb163-673"></a></span>
+<span id="cb163-674"><a href="#cb163-674"></a></span>
+<span id="cb163-675"><a href="#cb163-675"></a></span>
+<span id="cb163-676"><a href="#cb163-676"></a>:::</span>
+<span id="cb163-677"><a href="#cb163-677"></a></span>
+<span id="cb163-678"><a href="#cb163-678"></a></span>
+<span id="cb163-679"><a href="#cb163-679"></a></span>
+<span id="cb163-680"><a href="#cb163-680"></a><span class="fu">## Cluster 3</span></span>
+<span id="cb163-681"><a href="#cb163-681"></a></span>
+<span id="cb163-684"><a href="#cb163-684"></a><span class="in">```{r}</span></span>
+<span id="cb163-685"><a href="#cb163-685"></a><span class="co">#| label: c3-heatmap</span></span>
+<span id="cb163-686"><a href="#cb163-686"></a><span class="fu">clusterHeatmap</span>(rld_z, <span class="at">kmeans_cl =</span> kmeans_cl, </span>
+<span id="cb163-687"><a href="#cb163-687"></a>               <span class="at">clust_num =</span> <span class="dv">3</span>, <span class="at">sample_order =</span> sample_order,</span>
+<span id="cb163-688"><a href="#cb163-688"></a>              <span class="at">cluster_rows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb163-689"><a href="#cb163-689"></a>              <span class="at">font_size =</span> <span class="dv">8</span>, </span>
+<span id="cb163-690"><a href="#cb163-690"></a>              <span class="at">top_annotation =</span> ha)</span>
+<span id="cb163-691"><a href="#cb163-691"></a><span class="in">```</span></span>
+<span id="cb163-692"><a href="#cb163-692"></a></span>
+<span id="cb163-693"><a href="#cb163-693"></a>:::{.panel-tabset}</span>
+<span id="cb163-694"><a href="#cb163-694"></a></span>
+<span id="cb163-695"><a href="#cb163-695"></a><span class="fu">### Zscore boxplot</span></span>
+<span id="cb163-696"><a href="#cb163-696"></a></span>
+<span id="cb163-699"><a href="#cb163-699"></a><span class="in">```{r}</span></span>
+<span id="cb163-700"><a href="#cb163-700"></a><span class="co">#| label: c3-zscorebox</span></span>
+<span id="cb163-701"><a href="#cb163-701"></a></span>
+<span id="cb163-702"><a href="#cb163-702"></a><span class="fu">zscore_boxcondition</span>(kmeans_cl, <span class="at">clust_num =</span> <span class="dv">3</span>, condition_order)</span>
+<span id="cb163-703"><a href="#cb163-703"></a><span class="in">```</span></span>
+<span id="cb163-704"><a href="#cb163-704"></a><span class="fu">### GO - c3</span></span>
+<span id="cb163-705"><a href="#cb163-705"></a></span>
+<span id="cb163-708"><a href="#cb163-708"></a><span class="in">```{r}</span></span>
+<span id="cb163-709"><a href="#cb163-709"></a><span class="co">#| label: c3-ego</span></span>
+<span id="cb163-710"><a href="#cb163-710"></a>k3_c3_ego <span class="ot">&lt;-</span> <span class="fu">plotEGO_dm</span>(<span class="at">clust_target_genes =</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">3</span>]]), </span>
+<span id="cb163-711"><a href="#cb163-711"></a>                     <span class="at">universe =</span> <span class="fu">rownames</span>(dds), </span>
+<span id="cb163-712"><a href="#cb163-712"></a>                     <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 3&quot;</span>)</span>
+<span id="cb163-713"><a href="#cb163-713"></a><span class="in">```</span></span>
+<span id="cb163-714"><a href="#cb163-714"></a></span>
+<span id="cb163-715"><a href="#cb163-715"></a></span>
+<span id="cb163-716"><a href="#cb163-716"></a><span class="fu">### Finding enrichments</span></span>
+<span id="cb163-719"><a href="#cb163-719"></a><span class="in">```{r}</span></span>
+<span id="cb163-720"><a href="#cb163-720"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;Wnt&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-721"><a href="#cb163-721"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;hippo&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-722"><a href="#cb163-722"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;signaling&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-723"><a href="#cb163-723"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;mito[st]&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-724"><a href="#cb163-724"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;senes|apop|death&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-725"><a href="#cb163-725"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;transcript|transl&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-726"><a href="#cb163-726"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;adhes&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-727"><a href="#cb163-727"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;diff|prolif&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-728"><a href="#cb163-728"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;migrat|taxi&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-729"><a href="#cb163-729"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;devel&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-730"><a href="#cb163-730"></a><span class="fu">findEGO</span>(k3_c3_ego, <span class="st">&quot;junc&quot;</span>, <span class="at">print_top_matches =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-731"><a href="#cb163-731"></a><span class="in">```</span></span>
+<span id="cb163-732"><a href="#cb163-732"></a></span>
+<span id="cb163-733"><a href="#cb163-733"></a><span class="fu">### Custom EGO</span></span>
+<span id="cb163-734"><a href="#cb163-734"></a></span>
+<span id="cb163-737"><a href="#cb163-737"></a><span class="in">```{r}</span></span>
+<span id="cb163-738"><a href="#cb163-738"></a><span class="co">#| label: c3-ego-custom</span></span>
+<span id="cb163-739"><a href="#cb163-739"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;cell adhesion&quot;</span>, </span>
+<span id="cb163-740"><a href="#cb163-740"></a>                          <span class="st">&quot;chemotaxis&quot;</span>, </span>
+<span id="cb163-741"><a href="#cb163-741"></a>                          <span class="st">&quot;cuticle development&quot;</span>,</span>
+<span id="cb163-742"><a href="#cb163-742"></a>                          <span class="st">&quot;tight junction assembly&quot;</span>,</span>
+<span id="cb163-743"><a href="#cb163-743"></a>                          <span class="st">&quot;apical junction assembly&quot;</span>,</span>
+<span id="cb163-744"><a href="#cb163-744"></a>                          <span class="st">&quot;septate junction assembly&quot;</span>)</span>
+<span id="cb163-745"><a href="#cb163-745"></a></span>
+<span id="cb163-746"><a href="#cb163-746"></a>c3_go_table <span class="ot">&lt;-</span> <span class="fu">custom_ego_table</span>(k3_c3_ego, interesting_pathways)</span>
+<span id="cb163-747"><a href="#cb163-747"></a></span>
+<span id="cb163-748"><a href="#cb163-748"></a>c3_go_table</span>
+<span id="cb163-749"><a href="#cb163-749"></a></span>
+<span id="cb163-750"><a href="#cb163-750"></a><span class="fu">custom_ego</span>(k3_c3_ego, interesting_pathways, </span>
+<span id="cb163-751"><a href="#cb163-751"></a>           <span class="at">title =</span> <span class="st">&quot;GO, k=3, cluster 3&quot;</span>)</span>
+<span id="cb163-752"><a href="#cb163-752"></a><span class="in">```</span></span>
+<span id="cb163-753"><a href="#cb163-753"></a></span>
+<span id="cb163-754"><a href="#cb163-754"></a></span>
+<span id="cb163-755"><a href="#cb163-755"></a></span>
+<span id="cb163-758"><a href="#cb163-758"></a><span class="in">```{r}</span></span>
+<span id="cb163-759"><a href="#cb163-759"></a><span class="fu">write_csv</span>(k3_c3_ego, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c3_ego.csv&quot;</span>))</span>
+<span id="cb163-760"><a href="#cb163-760"></a><span class="in">```</span></span>
+<span id="cb163-761"><a href="#cb163-761"></a></span>
+<span id="cb163-762"><a href="#cb163-762"></a><span class="fu">### KEGG - c3</span></span>
+<span id="cb163-763"><a href="#cb163-763"></a></span>
+<span id="cb163-764"><a href="#cb163-764"></a></span>
+<span id="cb163-765"><a href="#cb163-765"></a> Run KEGG enrichment</span>
+<span id="cb163-768"><a href="#cb163-768"></a><span class="in">```{r}</span></span>
+<span id="cb163-769"><a href="#cb163-769"></a><span class="co">#| label: c3-ekegg</span></span>
+<span id="cb163-770"><a href="#cb163-770"></a><span class="co">#| fig-height: 10</span></span>
+<span id="cb163-771"><a href="#cb163-771"></a></span>
+<span id="cb163-772"><a href="#cb163-772"></a>c3_entrez <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(ensembl.genes[ensembl.genes<span class="sc">$</span>gene_id <span class="sc">%in%</span> <span class="fu">names</span>((kmeans_cl)[[<span class="dv">3</span>]]), ]<span class="sc">$</span>entrezgene_id)</span>
+<span id="cb163-773"><a href="#cb163-773"></a></span>
+<span id="cb163-774"><a href="#cb163-774"></a>k3_c3_ekegg <span class="ot">&lt;-</span> <span class="fu">plotKEGG_dm</span>(c3_entrez, <span class="at">title =</span> <span class="st">&quot;KEGG, cluster 3&quot;</span>, </span>
+<span id="cb163-775"><a href="#cb163-775"></a>                           <span class="at">universe =</span> kegg_universe)</span>
+<span id="cb163-776"><a href="#cb163-776"></a></span>
+<span id="cb163-777"><a href="#cb163-777"></a><span class="in">```</span></span>
+<span id="cb163-778"><a href="#cb163-778"></a></span>
+<span id="cb163-781"><a href="#cb163-781"></a><span class="in">```{r}</span></span>
+<span id="cb163-782"><a href="#cb163-782"></a><span class="fu">nrow</span>(k3_c3_ekegg)</span>
+<span id="cb163-783"><a href="#cb163-783"></a></span>
+<span id="cb163-784"><a href="#cb163-784"></a>k3_c3_ekegg</span>
+<span id="cb163-785"><a href="#cb163-785"></a></span>
+<span id="cb163-786"><a href="#cb163-786"></a><span class="fu">write.csv</span>(k3_c3_ekegg, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;k3_c3_ekegg.csv&quot;</span>),</span>
+<span id="cb163-787"><a href="#cb163-787"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-788"><a href="#cb163-788"></a><span class="in">```</span></span>
+<span id="cb163-789"><a href="#cb163-789"></a></span>
+<span id="cb163-790"><a href="#cb163-790"></a></span>
+<span id="cb163-791"><a href="#cb163-791"></a><span class="fu">### Custom KEGG</span></span>
+<span id="cb163-792"><a href="#cb163-792"></a></span>
+<span id="cb163-793"><a href="#cb163-793"></a></span>
+<span id="cb163-796"><a href="#cb163-796"></a><span class="in">```{r}</span></span>
+<span id="cb163-797"><a href="#cb163-797"></a>interesting_pathways <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ECM-receptor interaction&quot;</span>,</span>
+<span id="cb163-798"><a href="#cb163-798"></a>                          <span class="st">&quot;Neuroactive ligand-receptor interaction&quot;</span>,</span>
+<span id="cb163-799"><a href="#cb163-799"></a>                          <span class="st">&quot;Lysosome&quot;</span>, </span>
+<span id="cb163-800"><a href="#cb163-800"></a>                          <span class="st">&quot;Fatty acid metabolism&quot;</span>)</span>
+<span id="cb163-801"><a href="#cb163-801"></a></span>
+<span id="cb163-802"><a href="#cb163-802"></a>c3_kegg_table <span class="ot">&lt;-</span> <span class="fu">custom_kegg_table</span>(k3_c3_ekegg, interesting_pathways)</span>
+<span id="cb163-803"><a href="#cb163-803"></a></span>
+<span id="cb163-804"><a href="#cb163-804"></a>c3_kegg_table</span>
+<span id="cb163-805"><a href="#cb163-805"></a><span class="in">```</span></span>
+<span id="cb163-806"><a href="#cb163-806"></a></span>
+<span id="cb163-807"><a href="#cb163-807"></a></span>
+<span id="cb163-808"><a href="#cb163-808"></a><span class="fu">### Summary</span></span>
+<span id="cb163-809"><a href="#cb163-809"></a></span>
+<span id="cb163-810"><a href="#cb163-810"></a></span>
+<span id="cb163-811"><a href="#cb163-811"></a></span>
+<span id="cb163-812"><a href="#cb163-812"></a>:::</span>
+<span id="cb163-813"><a href="#cb163-813"></a></span>
+<span id="cb163-814"><a href="#cb163-814"></a><span class="fu"># Exports</span></span>
+<span id="cb163-815"><a href="#cb163-815"></a></span>
+<span id="cb163-818"><a href="#cb163-818"></a><span class="in">```{r}</span></span>
+<span id="cb163-819"><a href="#cb163-819"></a><span class="co"># to make the plots</span></span>
+<span id="cb163-820"><a href="#cb163-820"></a><span class="fu">saveRDS</span>(rld_z, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;rld_z.RDS&quot;</span>))</span>
+<span id="cb163-821"><a href="#cb163-821"></a><span class="fu">saveRDS</span>(kmeans_cl, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;kmeans_cl.RDS&quot;</span>))</span>
+<span id="cb163-822"><a href="#cb163-822"></a><span class="in">```</span></span>
+<span id="cb163-823"><a href="#cb163-823"></a></span>
+<span id="cb163-824"><a href="#cb163-824"></a><span class="fu"># Export cluster genes for compilation </span></span>
+<span id="cb163-825"><a href="#cb163-825"></a></span>
+<span id="cb163-828"><a href="#cb163-828"></a><span class="in">```{r}</span></span>
+<span id="cb163-829"><a href="#cb163-829"></a><span class="co"># Convert cluster genes to data frame</span></span>
+<span id="cb163-830"><a href="#cb163-830"></a>df_cluster <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">unlist</span>(kmeans_cl))</span>
+<span id="cb163-831"><a href="#cb163-831"></a><span class="fu">colnames</span>(df_cluster) <span class="ot">&lt;-</span> <span class="st">&quot;cluster&quot;</span></span>
+<span id="cb163-832"><a href="#cb163-832"></a>df_cluster<span class="sc">$</span>ensembl_gene_id <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df_cluster)</span>
+<span id="cb163-833"><a href="#cb163-833"></a></span>
+<span id="cb163-834"><a href="#cb163-834"></a><span class="co"># Genes that are expressed but not in cluster - not significant. </span></span>
+<span id="cb163-835"><a href="#cb163-835"></a>not_signif <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dds)[<span class="sc">!</span><span class="fu">rownames</span>(dds) <span class="sc">%in%</span> df_cluster<span class="sc">$</span>ensembl_gene_id]</span>
+<span id="cb163-836"><a href="#cb163-836"></a>df_ns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ensembl_gene_id =</span> not_signif, </span>
+<span id="cb163-837"><a href="#cb163-837"></a>                    <span class="at">cluster =</span> <span class="st">&quot;NS&quot;</span>)</span>
+<span id="cb163-838"><a href="#cb163-838"></a></span>
+<span id="cb163-839"><a href="#cb163-839"></a><span class="co"># Combine both</span></span>
+<span id="cb163-840"><a href="#cb163-840"></a>df_combined <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_cluster, df_ns)</span>
+<span id="cb163-841"><a href="#cb163-841"></a></span>
+<span id="cb163-842"><a href="#cb163-842"></a><span class="co"># Add gene biotype</span></span>
+<span id="cb163-843"><a href="#cb163-843"></a>df_combined<span class="sc">$</span>gene_biotype <span class="ot">=</span> ensembl.genes<span class="sc">$</span>gene_biotype[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb163-844"><a href="#cb163-844"></a>                                                            ensembl.genes<span class="sc">$</span>gene_id)]</span>
+<span id="cb163-845"><a href="#cb163-845"></a><span class="co"># Add gene name</span></span>
+<span id="cb163-846"><a href="#cb163-846"></a>df_combined<span class="sc">$</span>gene_name <span class="ot">=</span> ensembl.genes<span class="sc">$</span>external_gene_name[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb163-847"><a href="#cb163-847"></a>                                                               ensembl.genes<span class="sc">$</span>gene_id)]</span>
+<span id="cb163-848"><a href="#cb163-848"></a></span>
+<span id="cb163-849"><a href="#cb163-849"></a><span class="co"># Add pvalue</span></span>
+<span id="cb163-850"><a href="#cb163-850"></a>df_combined<span class="sc">$</span>pvalue <span class="ot">=</span> res_lrt<span class="sc">$</span>pvalue[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb163-851"><a href="#cb163-851"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
+<span id="cb163-852"><a href="#cb163-852"></a><span class="co"># Add padj</span></span>
+<span id="cb163-853"><a href="#cb163-853"></a>df_combined<span class="sc">$</span>padj <span class="ot">=</span> res_lrt<span class="sc">$</span>padj[<span class="fu">match</span>(df_combined<span class="sc">$</span>ensembl_gene_id, </span>
+<span id="cb163-854"><a href="#cb163-854"></a>                                          res_lrt<span class="sc">$</span>ensembl_gene_id)]</span>
+<span id="cb163-855"><a href="#cb163-855"></a></span>
+<span id="cb163-856"><a href="#cb163-856"></a><span class="co"># Arrange</span></span>
+<span id="cb163-857"><a href="#cb163-857"></a>df_combined <span class="ot">&lt;-</span> df_combined <span class="sc">%&gt;%</span> </span>
+<span id="cb163-858"><a href="#cb163-858"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ensembl_gene_id, pvalue, padj, </span>
+<span id="cb163-859"><a href="#cb163-859"></a>                gene_biotype, gene_name, cluster)</span>
+<span id="cb163-860"><a href="#cb163-860"></a></span>
+<span id="cb163-861"><a href="#cb163-861"></a><span class="co"># Export</span></span>
+<span id="cb163-862"><a href="#cb163-862"></a><span class="fu">write.csv</span>(df_combined, <span class="at">file =</span> <span class="fu">paste0</span>(output_dir, <span class="st">&quot;cluster_genes.csv&quot;</span>),</span>
+<span id="cb163-863"><a href="#cb163-863"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb163-864"><a href="#cb163-864"></a><span class="in">```</span></span>
+<span id="cb163-865"><a href="#cb163-865"></a></span>
+<span id="cb163-866"><a href="#cb163-866"></a><span class="fu"># Summary and discussion</span></span>
+<span id="cb163-867"><a href="#cb163-867"></a></span>
+<span id="cb163-868"><a href="#cb163-868"></a></span>
+<span id="cb163-869"><a href="#cb163-869"></a><span class="fu"># Session info</span></span>
+<span id="cb163-870"><a href="#cb163-870"></a></span>
+<span id="cb163-873"><a href="#cb163-873"></a><span class="in">```{r}</span></span>
+<span id="cb163-874"><a href="#cb163-874"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb163-875"><a href="#cb163-875"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

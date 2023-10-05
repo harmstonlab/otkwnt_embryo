@@ -438,7 +438,8 @@ k3_c1_ekegg <- plotKEGG_dm(c1_entrez,
 ```{r}
 nrow(k3_c1_ekegg)
 
-write_csv(k3_c1_ekegg, file = paste0(output_dir, "k3_c1_ekegg.csv"))
+write.csv(k3_c1_ekegg, file = paste0(output_dir, "k3_c1_ekegg.csv"),
+          row.names = FALSE)
 ```
 
 ### Custom KEGG
@@ -542,7 +543,7 @@ c2_go_table
 
 
 ```{r}
-write_csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
+write.csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
 ```
 
 ### KEGG - c2
@@ -576,7 +577,8 @@ c2_kegg_table
 
 
 ```{r}
-write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"))
+write.csv(k3_c2_ekegg, file = paste0(output_dir, "k3_c2_ekegg.csv"),
+          row.names = FALSE)
 ```
 
 ### Summary
@@ -672,11 +674,17 @@ k3_c3_ekegg <- plotKEGG_dm(c3_entrez, title = "KEGG, cluster 3",
 
 ```
 
-### Custom KEGG
-
 ```{r}
+nrow(k3_c3_ekegg)
+
 k3_c3_ekegg
+
+write.csv(k3_c3_ekegg, file = paste0(output_dir, "k3_c3_ekegg.csv"),
+          row.names = FALSE)
 ```
+
+
+### Custom KEGG
 
 
 ```{r}
