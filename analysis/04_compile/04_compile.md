@@ -520,8 +520,8 @@ otk2_plot
 ``` r
 ggsave(paste0(output_dir, "counts_otk2.pdf"), otk2_plot, 
        device = "pdf", 
-       width = 260, 
-       height = 80, 
+       width = 200, 
+       height = 100, 
        units = "mm"
        )
 ```
