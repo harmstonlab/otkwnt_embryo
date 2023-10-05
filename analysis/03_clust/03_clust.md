@@ -588,7 +588,8 @@ c1_go_table
 | negative regulation of canonical Wnt signaling pathway                    | 11/1268   | 0.0777024 | aop/nkd/otk/wts/phyl/Apc/Sin3A/fz4/SoxN/HUWE1/Duba                                                                                                                                                                                                                                                                                                                      |
 
 ``` r
-write_csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"))
+write.csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"),
+          row.names = FALSE)
 ```
 
 ### KEGG - c1
@@ -914,7 +915,8 @@ c2_go_table
 | canonical Wnt signaling pathway           | 47/3002   | 0.0538860 | arm/dsh/flw/gro/dco/hyd/Pp1alpha-96A/Pp1-87B/mts/tws/Eip63E/Ssdp/nmo/Rho1/CkIalpha/Cul1/Usp47/spen/CtBP/SkpA/Roc1a/Cdc16/Axn/Apc2/Tnks/botv/Nulp1/sotv/Nek2/CycY/Gint3/Rnf146/CG11523/hyx/RanBP3/lgs/rept/pont/dlp/pygo/tum/gish/hpo/lic/nej/ttv/RpS12                                                                                                                                                                                                                                                                     |
 
 ``` r
-write.csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
+write.csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"),
+          row.names = FALSE)
 ```
 
 ### KEGG - c2
@@ -1170,7 +1172,7 @@ custom_ego(k3_c3_ego, interesting_pathways,
 ![](../figures/03_clust/c3-ego-custom-1.png)
 
 ``` r
-write_csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"))
+write.csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"), row.names = FALSE)
 ```
 
 ### KEGG - c3
@@ -1366,39 +1368,39 @@ sessionInfo()
      [28] R6_2.5.1               doParallel_1.0.17      clue_0.3-64           
      [31] graphlayouts_1.0.0     locfit_1.5-9.7         flexmix_2.3-18        
      [34] bitops_1.0-7           cachem_1.0.8           fgsea_1.24.0          
-     [37] gridGraphics_0.5-1     DelayedArray_0.24.0    vroom_1.6.1           
-     [40] scales_1.2.1           ggraph_2.1.0           nnet_7.3-18           
-     [43] enrichplot_1.18.4      googlesheets4_1.0.1    gtable_0.3.3          
-     [46] tidygraph_1.2.3        rlang_1.1.1            systemfonts_1.0.4     
-     [49] GlobalOptions_0.1.2    splines_4.2.2          lazyeval_0.2.2        
-     [52] gargle_1.3.0           broom_1.0.3            yaml_2.3.7            
-     [55] modelr_0.1.10          backports_1.4.1        qvalue_2.30.0         
-     [58] tools_4.2.2            ggplotify_0.1.1        Rcpp_1.0.11           
-     [61] plyr_1.8.8             zlibbioc_1.44.0        RCurl_1.98-1.12       
-     [64] GetoptLong_1.0.5       viridis_0.6.3          cowplot_1.1.1         
-     [67] haven_2.5.1            ggrepel_0.9.3          cluster_2.1.4         
-     [70] fs_1.6.2               magrittr_2.0.3         data.table_1.14.8     
-     [73] reprex_2.0.2           googledrive_2.0.0      hms_1.1.3             
-     [76] patchwork_1.1.2        evaluate_0.20          xtable_1.8-4          
-     [79] HDO.db_0.99.1          XML_3.99-0.14          mclust_6.0.0          
-     [82] readxl_1.4.1           gridExtra_2.3          shape_1.4.6           
-     [85] compiler_4.2.2         crayon_1.5.2           shadowtext_0.1.2      
-     [88] htmltools_0.5.4        ggfun_0.1.1            tzdb_0.3.0            
-     [91] geneplotter_1.76.0     aplot_0.1.10           lubridate_1.9.1       
-     [94] DBI_1.1.3              tweenr_2.0.2           dbplyr_2.3.3          
-     [97] MASS_7.3-58.2          fpc_2.2-10             Matrix_1.5-4.1        
-    [100] cli_3.6.1              parallel_4.2.2         igraph_1.5.0          
-    [103] pkgconfig_2.0.3        xml2_1.3.5             foreach_1.5.2         
-    [106] svglite_2.1.1          ggtree_3.6.2           annotate_1.76.0       
-    [109] XVector_0.38.0         rvest_1.0.3            yulab.utils_0.0.6     
-    [112] digest_0.6.33          Biostrings_2.66.0      rmarkdown_2.20        
-    [115] cellranger_1.1.0       fastmatch_1.1-3        tidytree_0.4.4        
-    [118] kernlab_0.9-32         modeltools_0.2-23      rjson_0.2.21          
-    [121] lifecycle_1.0.3        nlme_3.1-162           jsonlite_1.8.7        
-    [124] viridisLite_0.4.2      fansi_1.0.4            pillar_1.9.0          
-    [127] lattice_0.20-45        KEGGREST_1.38.0        fastmap_1.1.1         
-    [130] httr_1.4.6             DEoptimR_1.0-11        GO.db_3.16.0          
-    [133] glue_1.6.2             png_0.1-8              prabclus_2.3-2        
-    [136] iterators_1.0.14       bit_4.0.5              ggforce_0.4.1         
-    [139] class_7.3-21           stringi_1.7.12         blob_1.2.4            
-    [142] textshaping_0.3.6      memoise_2.0.1          ape_5.7-1             
+     [37] gridGraphics_0.5-1     DelayedArray_0.24.0    scales_1.2.1          
+     [40] ggraph_2.1.0           nnet_7.3-18            enrichplot_1.18.4     
+     [43] googlesheets4_1.0.1    gtable_0.3.3           tidygraph_1.2.3       
+     [46] rlang_1.1.1            systemfonts_1.0.4      GlobalOptions_0.1.2   
+     [49] splines_4.2.2          lazyeval_0.2.2         gargle_1.3.0          
+     [52] broom_1.0.3            yaml_2.3.7             modelr_0.1.10         
+     [55] backports_1.4.1        qvalue_2.30.0          tools_4.2.2           
+     [58] ggplotify_0.1.1        Rcpp_1.0.11            plyr_1.8.8            
+     [61] zlibbioc_1.44.0        RCurl_1.98-1.12        GetoptLong_1.0.5      
+     [64] viridis_0.6.3          cowplot_1.1.1          haven_2.5.1           
+     [67] ggrepel_0.9.3          cluster_2.1.4          fs_1.6.2              
+     [70] magrittr_2.0.3         data.table_1.14.8      reprex_2.0.2          
+     [73] googledrive_2.0.0      hms_1.1.3              patchwork_1.1.2       
+     [76] evaluate_0.20          xtable_1.8-4           HDO.db_0.99.1         
+     [79] XML_3.99-0.14          mclust_6.0.0           readxl_1.4.1          
+     [82] gridExtra_2.3          shape_1.4.6            compiler_4.2.2        
+     [85] crayon_1.5.2           shadowtext_0.1.2       htmltools_0.5.4       
+     [88] ggfun_0.1.1            tzdb_0.3.0             geneplotter_1.76.0    
+     [91] aplot_0.1.10           lubridate_1.9.1        DBI_1.1.3             
+     [94] tweenr_2.0.2           dbplyr_2.3.3           MASS_7.3-58.2         
+     [97] fpc_2.2-10             Matrix_1.5-4.1         cli_3.6.1             
+    [100] parallel_4.2.2         igraph_1.5.0           pkgconfig_2.0.3       
+    [103] xml2_1.3.5             foreach_1.5.2          svglite_2.1.1         
+    [106] ggtree_3.6.2           annotate_1.76.0        XVector_0.38.0        
+    [109] rvest_1.0.3            yulab.utils_0.0.6      digest_0.6.33         
+    [112] Biostrings_2.66.0      rmarkdown_2.20         cellranger_1.1.0      
+    [115] fastmatch_1.1-3        tidytree_0.4.4         kernlab_0.9-32        
+    [118] modeltools_0.2-23      rjson_0.2.21           lifecycle_1.0.3       
+    [121] nlme_3.1-162           jsonlite_1.8.7         viridisLite_0.4.2     
+    [124] fansi_1.0.4            pillar_1.9.0           lattice_0.20-45       
+    [127] KEGGREST_1.38.0        fastmap_1.1.1          httr_1.4.6            
+    [130] DEoptimR_1.0-11        GO.db_3.16.0           glue_1.6.2            
+    [133] png_0.1-8              prabclus_2.3-2         iterators_1.0.14      
+    [136] bit_4.0.5              ggforce_0.4.1          class_7.3-21          
+    [139] stringi_1.7.12         blob_1.2.4             textshaping_0.3.6     
+    [142] memoise_2.0.1          ape_5.7-1             

@@ -415,7 +415,8 @@ c1_go_table
 ```
 
 ```{r}
-write_csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"))
+write.csv(k3_c1_ego, file = paste0(output_dir, "k3_c1_ego.csv"),
+          row.names = FALSE)
 ```
 
 
@@ -543,7 +544,8 @@ c2_go_table
 
 
 ```{r}
-write.csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"))
+write.csv(k3_c2_ego, file = paste0(output_dir, "k3_c2_ego.csv"),
+          row.names = FALSE)
 ```
 
 ### KEGG - c2
@@ -656,7 +658,7 @@ custom_ego(k3_c3_ego, interesting_pathways,
 
 
 ```{r}
-write_csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"))
+write.csv(k3_c3_ego, file = paste0(output_dir, "k3_c3_ego.csv"), row.names = FALSE)
 ```
 
 ### KEGG - c3
