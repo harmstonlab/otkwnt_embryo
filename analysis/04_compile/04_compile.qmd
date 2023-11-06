@@ -326,7 +326,7 @@ kegg_plot
 
 ```{r}
 gene_boxplot <- function(gene_of_interest, dds, title = "title",
-                         axis_labels = FALSE) {
+                         axis_labels = FALSE, ...) {
   
   # Get normalized counts
   df_norm <- as.data.frame(counts(dds, normalized = TRUE)[gene_of_interest, ])
@@ -354,13 +354,15 @@ gene_boxplot <- function(gene_of_interest, dds, title = "title",
     )) %>% 
     mutate(group = case_when(
       condition == "Ctrl" ~ "WT", 
-      condition %in% c("W4_OE", "O1_OE", "O1W4_OE", "O2_KO") ~ "A",
-      condition %in% c("W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO") ~ "B"
+      condition %in% c("W4_OE", "O1_OE", "O1W4_OE", "O2_KO") ~ "Activating",
+      condition %in% c("W4_KO", "O1_KO", "O1W4_KO", "O2W4_KO", "O1O2_KO") ~ "Deactivating"
     ))
   
     df_norm$condition_full <- factor(df_norm$condition_full, 
                                   levels = (condition_full_order))
-    df_norm$group = factor(df_norm$group, levels = c("WT", "A", "B"))
+    df_norm$group = factor(df_norm$group, levels = c("WT", 
+                                                     "Activating", 
+                                                     "Deactivating"))
   
   # Plot
   gene_plot <- ggplot(df_norm, aes(x = condition_full, y = counts, 
@@ -368,7 +370,8 @@ gene_boxplot <- function(gene_of_interest, dds, title = "title",
     geom_boxplot(linewidth = 0.1) +
     geom_point(size = 0.5) +
     labs(title = title, 
-         x = "", y = "Normalized counts") +
+         x = "", y = "Normalized counts", 
+         ...) +
     scale_fill_manual(values = (col_colors)) +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
     #scale_y_continuous(expand = c(0, NA), limits = c(0, NA)) +
@@ -781,7 +784,9 @@ cluster_genes <- read.csv("../output/03_clust/cluster_genes.csv")
 
 ths <- "FBgn0033652" #thisbe, FGF ligand
 
-c1_ths <- gene_boxplot(ths, dds, title = "Ths")
+c1_ths <- gene_boxplot(ths, dds, 
+                       title = "ths",
+                       subtitle = "Cluster I")
 c1_ths
 ```
 
@@ -790,7 +795,8 @@ c1_ths
 #| label: c1-egfr
 egfr <- "FBgn0003731"
 
-c1_egfr <- gene_boxplot(egfr, dds, title = "Egfr")
+c1_egfr <- gene_boxplot(egfr, dds, 
+                        title = "egfr (Cluster I)")
 
 c1_egfr
 ```
@@ -820,7 +826,7 @@ gene_boxplot(Myc, dds, title = "Myc")
 
 ea <- "FBgn0000533" # easter - dorsoventral patterning of embryo
 
-c2_ea <- gene_boxplot(ea, dds, "Ea")
+c2_ea <- gene_boxplot(ea, dds, title = "ea (Cluster II)")
 
 c2_ea
 ```
@@ -831,7 +837,8 @@ c2_ea
 #| label: c2-dsh
 
 dsh <- "FBgn0000499"
-c2_dsh <- gene_boxplot(dsh, dds, title = "Dsh")
+c2_dsh <- gene_boxplot(dsh, dds, 
+                       title = "dsh", subtitle = "Cluster II")
 
 c2_dsh
 ```
