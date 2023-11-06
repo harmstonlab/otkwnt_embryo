@@ -1,5 +1,5 @@
 <!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️--><p align="center">
-  <img src="readme_images/ccser1_title.png" alt="Logo" width="auto" height="auto" />
+  <img src="readme_images/embryo_otk1_title.jpeg" alt="Logo" width="auto" height="auto" />
 </p>
 <h1 align="center">otkwnt_embryo</h1>
 <p align="center">
@@ -74,6 +74,11 @@ W4_OE   | UAS-wnt4             | Drosophila embryos overexpressing Wnt4
 O1_OE   |  UAS-otk1             | Drosophila embryos that overexpress Otk1
 O1W4_OE | UAS-otk1, UAS-wnt4 | Drosophila embryos overexpressing both Otk1 and Wnt4
 O2_KO   | otk2RNAi             | Drosophila embryos downregulating Otk2
+W4_KO   | wnt4RNAi             | Drosophila embryos downregulating Wnt4
+O1_KO   | otk1RNAi             | Drosophila embryos downregulating Otk1
+O1W4_KO   | otk1RNAi, wnt4RNAi | Drosophila embryos downregulating Otk1 and Wnt4
+O2W4_KO   | otk2RNAi, wnt4RNAi | Drosophila embryos downregulating Otk2 and Wnt4
+O1O2_KO   | otk1RNAi, otk2RNAi | Drosophila embryos downregulating Otk1 and Otk2
 
 ________________________________________________________________________________________________
 
