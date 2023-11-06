@@ -4,7 +4,8 @@
     "line": "vintage",
     "logo": 
         {
-          "src": "readme_images/embryo_otk1_title.jpeg"
+          "src": "readme_images/embryo_otk1_title.jpeg",
+          "height": "300"
         },
     "badges":   [
         {

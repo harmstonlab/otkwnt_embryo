@@ -1,5 +1,5 @@
 <!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️--><p align="center">
-  <img src="readme_images/embryo_otk1_title.jpeg" alt="Logo" width="auto" height="auto" />
+  <img src="readme_images/embryo_otk1_title.jpeg" alt="Logo" width="auto" height="300" />
 </p>
 <h1 align="center">otkwnt_embryo</h1>
 <p align="center">
