@@ -12,8 +12,10 @@
 # Mac-specific files that can be ignored
 .DS_Store
 
-# Raw gene read files
-*.genes.results
+# Raw data folders
+data/*.zip
+data/X401SC20100446-Z01-F008_final_20210209000218
+data/Rawdata_Readme.pdf
 
 # Large files
 *.gtf
@@ -30,3 +32,8 @@ results/
 */*/*/figure-html/*
 data/02_aligned/03_multiqc/*.html
 data/01_data_raw/data_raw/*
+analysis/output/04_compile/*.indd
+analysis/output/04_compile/*.idlk
+
+geo_submission/*
+
