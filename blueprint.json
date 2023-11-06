@@ -1,0 +1,25 @@
+{
+    "title": "otkwnt_embryo", 
+    "description": "Analysis of Otk1, Otk2 and Wnt4 embryos",
+    "line": "vintage",
+    "logo": 
+        {
+          "src": "readme_images/ccser1_title.png"
+        },
+    "badges":   [
+        {
+            "alt": "R 4.2.2",
+            "img": "https://img.shields.io/badge/R-4.2.2-blue"
+        },
+        {
+            "alt": "Quarto v1.3.340",
+            "img": "https://img.shields.io/badge/Quarto-1.3.340-orange"
+        },
+        {
+            "alt": "Status:in-progress",
+            "img": "https://img.shields.io/badge/status-in--progress-yellow"
+        }
+    ]
+}
+
+
